@@ -19,9 +19,27 @@ const Timer = () => {
           ...state,
           ...vals,
         });
-      };
+    };
 
-    const toggleTimer = () => {
+    // THIS APPROACH WORKS - https://stackoverflow.com/questions/53981593/react-hooks-and-setinterval
+    const [counter, setCounter] = useState(0);
+
+    useEffect(() => {
+        const timerId = setInterval(() => {
+            
+            setCounter((count) => count + 1);
+
+            // PLACE INCREMENT TIMER FUNCTION HERE --> Needs to use functional setState
+            updateStateObject((csec) => csec + 1);
+
+        }, 1000);
+
+        return () => {
+            clearInterval(timerId);
+        };
+    }, []);
+
+    const incrementTimer = () => {
         if (!active) {
             console.log('TIMER START');
             setTimerInterval(setInterval(() => {
@@ -42,6 +60,10 @@ const Timer = () => {
         }
     }
 
+    const toggleTimer = () => {
+        (active) ? setActive(false) : setActive(true);
+    }
+
     function padZeros(number) {
         return (number < 10) ? "0" + number.toString() : number.toString();
     }
@@ -50,12 +72,13 @@ const Timer = () => {
         <View style={styles.container}>
             <View style={styles.timerRow}>
                 <Text style={styles.timerText}>
-                    {padZeros(state.min)}:{padZeros(state.sec)}.{padZeros(state.csec)}
+                    {padZeros(state.min)}:{padZeros(state.sec)}.{padZeros(counter)}
                 </Text>
             </View>
             <TouchableOpacity style={styles.button}
                 onPress={() => {
                     toggleTimer();
+                    console.log(active);
                 }}
                 >
                     <Text style={styles.buttonText}> Start </Text>
