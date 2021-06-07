@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
 import Timer from './utils/Timer';
 import { createStackNavigator } from '@react-navigation/stack';
 

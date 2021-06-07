@@ -1,87 +1,73 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import Component from 'react';
-
 const Timer = () => {
-
-    const [state, setState] = useState({
-        min: 0, 
-        sec: 0,
-        csec: 0,
-    });
-
+   
+    const [clock, setClock] = useState(0);
     const [active, setActive] = useState(false);
-    const [timerInterval, setTimerInterval] = useState(null);
+    const [paused, setPaused] = useState(false);
 
-    const updateStateObject = (vals) => {
-        setState({
-          ...state,
-          ...vals,
-        });
-    };
-
-    // THIS APPROACH WORKS - https://stackoverflow.com/questions/53981593/react-hooks-and-setinterval
-    const [counter, setCounter] = useState(0);
-
+    // TODO: Iterative counting via setInterval is not accurate - need to figure out how to use Date.now();
     useEffect(() => {
         const timerId = setInterval(() => {
-            
-            setCounter((count) => count + 1);
-
-            // PLACE INCREMENT TIMER FUNCTION HERE --> Needs to use functional setState
-            updateStateObject((csec) => csec + 1);
-
-        }, 1000);
+            if (active && !paused) {
+                setClock((count) => count + 1);
+            }
+        }, 10);
 
         return () => {
             clearInterval(timerId);
         };
-    }, []);
-
-    const incrementTimer = () => {
-        if (!active) {
-            console.log('TIMER START');
-            setTimerInterval(setInterval(() => {
-                if (state.csec <= 99) {
-                    console.log('<99');
-                    updateStateObject({csec: state.csec + 1});
-                }
-                 else {
-                    console.log('else');
-                    updateStateObject({csec: 0});
-                }    
-            }, 100));
-            setActive(true);         
-        } else {
-            console.log('TIMER STOP');
-            clearInterval(timerInterval);
-            setActive(false);
-        }
-    }
+    }, [active, paused]);
 
     const toggleTimer = () => {
-        (active) ? setActive(false) : setActive(true);
+        if (active) {
+            (paused) ? setPaused(false) : setPaused(true);
+        } else {
+            setActive(true);
+        };
     }
 
-    function padZeros(number) {
-        return (number < 10) ? "0" + number.toString() : number.toString();
+    const resetTimer = () => {
+        setClock(0);
+        setActive(false);
+        setPaused(false);
+    }
+
+    const getStartTime = () => {
+        return Date.now();
+    }
+
+    // TODO: Apply formatting to Date object (elapsed milliseconds) for timer display
+    const outputTime = () => {
+        const hours = 0;
+        const minutes = 0;
+        const seconds = 0;
+        const centiseconds = 0;
+
+        return `${hours}:${minutes}:${seconds}.${centiseconds}`;
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.timerRow}>
-                <Text style={styles.timerText}>
-                    {padZeros(state.min)}:{padZeros(state.sec)}.{padZeros(counter)}
-                </Text>
+                <Text style={styles.timerText}> {clock} </Text>
+                <Text style={styles.timerText}>{outputTime()}</Text>
+                <Text style={styles.timerText}>{getStartTime()}</Text>
             </View>
+            
+            <TouchableOpacity style={styles.button} 
+                onPress={() => {toggleTimer()}}
+            >
+                <Text style={styles.buttonText}> Toggle Timer </Text>
+            </TouchableOpacity>
+            
             <TouchableOpacity style={styles.button}
                 onPress={() => {
-                    toggleTimer();
-                    console.log(active);
+                    resetTimer();
                 }}
                 >
-                    <Text style={styles.buttonText}> Start </Text>
+                    <Text style={styles.buttonText}> Reset Timer </Text>
                 </TouchableOpacity>
         </View>
     )
@@ -98,6 +84,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: 'silver',
         flex: 1,
+        borderWidth: 2,
     },
     timerRow: {
         alignContent: 'center',
@@ -105,7 +92,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     timerText: {
-        fontSize: 50,
+        fontSize: 40,
         fontWeight: 'bold',
         color: 'green',
     },
