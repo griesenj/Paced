@@ -4,21 +4,44 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 const Timer = () => {
    
     const [clock, setClock] = useState(0);
+    const [startTime, setStartTime] = useState(0);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
 
-    // TODO: Iterative counting via setInterval is not accurate - need to figure out how to use Date.now();
+    // TODO: Using custom interval improved accuracy (but rapid pausing might be an issue)
     useEffect(() => {
-        const timerId = setInterval(() => {
-            if (active && !paused) {
-                setClock((count) => count + 1);
-            }
-        }, 10);
+        const interval = setTimerInterval(intervalTick, 100)
 
         return () => {
-            clearInterval(timerId);
+            clearTimeout(interval.id);
         };
-    }, [active, paused]);
+    }, [paused, active]);
+
+    const intervalTick = () => {        
+        if (active && !paused) {
+            setClock((count) => count + 1);
+        }
+    }
+
+    function setTimerInterval(executeFunction, time){
+        var priorTime = Date.now();
+        var priorDelay = time;
+        var output = {};
+    
+        function tick(){
+            executeFunction();
+    
+            var now = Date.now(),
+                deltaTime = now - priorTime;
+    
+            priorTime = now;
+            priorDelay = time + priorDelay - deltaTime;
+            output.id = setTimeout(tick, priorDelay);
+        }
+        output.id = setTimeout(tick, time);
+        
+        return output;
+    }
 
     const toggleTimer = () => {
         if (active) {
@@ -34,26 +57,25 @@ const Timer = () => {
         setPaused(false);
     }
 
-    const getStartTime = () => {
-        return Date.now();
-    }
-
-    // TODO: Apply formatting to Date object (elapsed milliseconds) for timer display
+    // TODO: Apply formatting to Date object (elapsed centiseconds) for timer display
     const outputTime = () => {
-        const hours = 0;
-        const minutes = 0;
-        const seconds = 0;
-        const centiseconds = 0;
+        const hours = Math.floor(clock / 36000);
+        const minutes = padNumber((Math.floor(clock / 600) % 60));
+        const seconds = padNumber((Math.floor(clock / 10) % 60).toString());
+        const centiseconds = clock.toString().slice(-1);
 
         return `${hours}:${minutes}:${seconds}.${centiseconds}`;
+    }
+
+    const padNumber = (num) => {
+        return (num < 10) ? `0${num}` : num;
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.timerRow}>
-                <Text style={styles.timerText}> {clock} </Text>
+                <Text style={styles.timerText}>{clock}</Text>
                 <Text style={styles.timerText}>{outputTime()}</Text>
-                <Text style={styles.timerText}>{getStartTime()}</Text>
             </View>
             
             <TouchableOpacity style={styles.button} 
@@ -76,29 +98,33 @@ const Timer = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
         backgroundColor: 'black',
         // alignSelf: 'center',
         // justifyContent: 'center',
         // width: "100%",
     },
     button: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: 'silver',
         flex: 1,
         borderWidth: 2,
+        borderColor: 'black',
     },
     timerRow: {
-        alignContent: 'center',
         backgroundColor: 'black',
-        flex: 1,
+        flex: 3,
     },
     timerText: {
-        fontSize: 40,
+        fontSize: 60,
         fontWeight: 'bold',
         color: 'green',
     },
     buttonText: {
         fontSize: 40,
-        justifyContent: 'center',        
+        textAlign: 'center',
+        width: '100%',
     }
 });
 
