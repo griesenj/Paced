@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const Timer = () => {
+const TimerScreen = () => {
    
-    const [clock, setClock] = useState(0);
+    const [timer, setTimer] = useState(0);
     const [startTime, setStartTime] = useState(0);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
 
     // TODO: Using custom interval improved accuracy (but rapid pausing might be an issue)
     useEffect(() => {
-        const interval = setTimerInterval(intervalTick, 100)
+        const interval = getTimerInterval(onIntervalTick, 100);
 
         return () => {
             clearTimeout(interval.id);
         };
     }, [paused, active]);
 
-    const intervalTick = () => {        
-        if (active && !paused) {
-            setClock((count) => count + 1);
-        }
-    }
-
-    function setTimerInterval(executeFunction, time){
+    function getTimerInterval(executeFunction, time){
         var priorTime = Date.now();
         var priorDelay = time;
         var output = {};
@@ -43,6 +37,12 @@ const Timer = () => {
         return output;
     }
 
+    const onIntervalTick = () => {        
+        if (active && !paused) {
+            setTimer((count) => count + 1);
+        }
+    }
+
     const toggleTimer = () => {
         if (active) {
             (paused) ? setPaused(false) : setPaused(true);
@@ -52,19 +52,23 @@ const Timer = () => {
     }
 
     const resetTimer = () => {
-        setClock(0);
+        setTimer(0);
         setActive(false);
         setPaused(false);
     }
 
-    // TODO: Apply formatting to Date object (elapsed centiseconds) for timer display
     const outputTime = () => {
-        const hours = Math.floor(clock / 36000);
-        const minutes = padNumber((Math.floor(clock / 600) % 60));
-        const seconds = padNumber((Math.floor(clock / 10) % 60).toString());
-        const centiseconds = clock.toString().slice(-1);
+        const hours = Math.floor(timer / 36000);
+        const minutes = Math.floor(timer / 600) % 60;
+        const seconds = Math.floor(timer / 10) % 60;
+        const centiseconds = parseInt(timer.toString().slice(-1));
 
-        return `${hours}:${minutes}:${seconds}.${centiseconds}`;
+        if (hours == 0 && minutes == 0) {
+            return `${seconds}.${centiseconds}`;
+        } else if (hours == 0) {
+            return `${minutes}:${padNumber(seconds)}.${centiseconds}`;
+        }
+        return `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${centiseconds}`;
     }
 
     const padNumber = (num) => {
@@ -74,7 +78,7 @@ const Timer = () => {
     return (
         <View style={styles.container}>
             <View style={styles.timerRow}>
-                <Text style={styles.timerText}>{clock}</Text>
+                <Text style={styles.timerText}>{timer}</Text>
                 <Text style={styles.timerText}>{outputTime()}</Text>
             </View>
             
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
         flex: 3,
     },
     timerText: {
-        fontSize: 60,
+        fontSize: 80,
         fontWeight: 'bold',
         color: 'green',
     },
@@ -128,4 +132,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Timer;
+export default TimerScreen;

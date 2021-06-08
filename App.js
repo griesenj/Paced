@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import Timer from './utils/Timer';
+import TimerScreen from './screens/TimerScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 
 export default function App() {
@@ -12,7 +12,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={navigatorOptions}>
-        <Stack.Screen name="Timer" component={Timer}/>
+        <Stack.Screen name="Timer" component={TimerScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
