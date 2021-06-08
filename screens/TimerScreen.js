@@ -1,5 +1,8 @@
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import { withTheme } from 'react-native-elements';
 
 const TimerScreen = () => {
    
@@ -7,6 +10,15 @@ const TimerScreen = () => {
     const [startTime, setStartTime] = useState(0);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
+
+    const data = [
+        { splitName: 'Sword', splitBest: 1075, activeSplit: null },
+        { splitName: 'Escape', splitBest: 2376, activeSplit: null },
+        { splitName: 'Bottle', splitBest: 3795, activeSplit: null },
+        { splitName: 'Bugs', splitBest: 4580, activeSplit: null },
+        { splitName: 'Wrong Warp', splitBest: 5987, activeSplit: null },
+        { splitName: 'Ganon', splitBest: 6702, activeSplit: null },
+    ];
 
     // TODO: Using custom interval improved accuracy (but rapid pausing might be an issue)
     useEffect(() => {
@@ -57,11 +69,11 @@ const TimerScreen = () => {
         setPaused(false);
     }
 
-    const outputTime = () => {
-        const hours = Math.floor(timer / 36000);
-        const minutes = Math.floor(timer / 600) % 60;
-        const seconds = Math.floor(timer / 10) % 60;
-        const centiseconds = parseInt(timer.toString().slice(-1));
+    const outputTime = (time) => {
+        const hours = Math.floor(time / 36000);
+        const minutes = Math.floor(time / 600) % 60;
+        const seconds = Math.floor(time / 10) % 60;
+        const centiseconds = parseInt(time.toString().slice(-1));
 
         if (hours == 0 && minutes == 0) {
             return `${seconds}.${centiseconds}`;
@@ -75,61 +87,94 @@ const TimerScreen = () => {
         return (num < 10) ? `0${num}` : num;
     }
 
+    const renderSplit = ({item}) => {
+        return (
+
+            <TouchableHighlight
+            activeOpacity={1.0}
+            underlayColor={"#ffefd5"}
+            >
+                <View>
+                    <Text style={styles.splitText}> {item.splitName} : {outputTime(item.splitBest)} </Text>
+                </View>
+
+
+            </TouchableHighlight>
+
+
+        )
+    }
+
+    const renderSeparator = () => {
+        return (
+            <View style={{
+                height: 2,
+                backgroundColor: "#a9a9a9",
+                // width: "98%",
+                // marginLeft: "1%",
+            }}/>
+        );
+    }
+
     return (
         <View style={styles.container}>
-            <View style={styles.timerRow}>
-                <Text style={styles.timerText}>{timer}</Text>
-                <Text style={styles.timerText}>{outputTime()}</Text>
+            <View style={styles.splitsContainer}>
+
+
+                <FlatList
+                    ItemSeparatorComponent={renderSeparator}
+                    keyExtractor={(item) => item.id}
+                    data={data}
+                    renderItem={renderSplit}
+                />
+
             </View>
-            
-            <TouchableOpacity style={styles.button} 
-                onPress={() => {toggleTimer()}}
-            >
-                <Text style={styles.buttonText}> Toggle Timer </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.button}
-                onPress={() => {
-                    resetTimer();
-                }}
+
+            <View style={styles.timerContainer}>
+                <TouchableOpacity
+                    onPress={() => {toggleTimer()}}
+                    onLongPress={() => {resetTimer()}}
                 >
-                    <Text style={styles.buttonText}> Reset Timer </Text>
+                    <Text style={styles.timerText}>{outputTime(timer)}</Text>
                 </TouchableOpacity>
+
+            </View>
+
         </View>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        justifyContent: 'flex-start',
         flexDirection: 'column',
-        backgroundColor: 'black',
-        // alignSelf: 'center',
-        // justifyContent: 'center',
-        // width: "100%",
-    },
-    button: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'silver',
+        alignItems: 'stretch',
         flex: 1,
-        borderWidth: 2,
-        borderColor: 'black',
+        backgroundColor: 'pink',
     },
-    timerRow: {
-        backgroundColor: 'black',
+    splitsContainer: {
         flex: 3,
+        backgroundColor: '#111112',
+    },
+    splitRow: {
+    },
+    splitText: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'white',
+        padding: 10,
+    },
+    timerContainer: {
+        flex: 1,
+        backgroundColor: 'black',
+        borderTopColor: '#a9a9a9',
+        borderTopWidth: 2,
     },
     timerText: {
         fontSize: 80,
         fontWeight: 'bold',
         color: 'green',
     },
-    buttonText: {
-        fontSize: 40,
-        textAlign: 'center',
-        width: '100%',
-    }
 });
 
 export default TimerScreen;
