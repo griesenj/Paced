@@ -39,7 +39,7 @@ const TimerScreen = () => {
     ]);
 
     // TODO: Temporary local data store for golds / PB? Push to firebase after user affirmation
-    const [tempData, setTempData] = useState([]);
+    const [splitDifferences, setSplitDifferences] = useState([]);
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
@@ -56,13 +56,15 @@ const TimerScreen = () => {
     };
 
     // TODO: Add method that accounts for logic of updating split data on FB at end of run.
+    // Iterate through entire dataset --> 
+    // --- If any given segment is better than goldSeg, UPDATE
+    // --- If PB has taken place, overwrite pbSeg & pbTotal with runSeg & runTotal
     const updateDataOnSave = () => {
 
     };
 
-
     useEffect(() => {
-        console.log(data);
+        // console.log(data);
     }, [data]);
 
     useEffect(() => {
@@ -73,16 +75,16 @@ const TimerScreen = () => {
         };
     }, [paused, active]);
 
-    function getTimerInterval(executeFunction, time){
+    const getTimerInterval = (executeFunction, time) => {
         var priorTime = Date.now();
         var priorDelay = time;
         var output = {};
     
-        function tick(){
+        const tick = () => {
             executeFunction();
     
-            var now = Date.now(),
-                deltaTime = now - priorTime;
+            var now = Date.now();
+            var deltaTime = now - priorTime;
     
             priorTime = now;
             priorDelay = time + priorDelay - deltaTime;
@@ -111,13 +113,12 @@ const TimerScreen = () => {
         setTimer(0);
         setActive(false);
         setPaused(false);
+        setSplitPosition(0);
     };
 
     const processSplit = () => {
         if (active && !paused) {
-            // Updating run segments and total throughout active speedrun
             updateDataOnSplit(splitPosition, {runTotal: timer, runSeg: getSegmentTime()})
-            
             setSplitPosition(splitPosition + 1);
 
             if (splitPosition == data.length - 1) {
@@ -130,39 +131,49 @@ const TimerScreen = () => {
 
     const getSegmentTime = () => {
         // Subtract prior split runTotal value from timer (current time) to get segment time.
-
-        console.log(splitPosition);
-
         if (splitPosition > 0) {
             return timer - data[splitPosition - 1].runTotal;
         }
-
         return timer;
     };
 
-    // TODO: Ensure this accounts for negative numbers (not formatting correctly currently)
     const outputTime = (time) => {
-        const hours = Math.floor(time / 36000);
-        const minutes = Math.floor(time / 600) % 60;
-        const seconds = Math.floor(time / 10) % 60;
-        const centiseconds = parseInt(time.toString().slice(-1));
+        var hours, minutes, seconds, centiseconds = 0;
+
+        if (time < 0) {
+            hours = Math.abs(Math.ceil(time / 36000));
+            minutes = Math.abs(Math.ceil(time / 600) % 60);
+            seconds = Math.abs(Math.ceil(time / 10) % 60);
+            centiseconds = parseInt(time.toString().slice(-1));
+        } else {
+            hours = Math.floor(time / 36000);
+            minutes = Math.floor(time / 600) % 60;
+            seconds = Math.floor(time / 10) % 60;
+            centiseconds = parseInt(time.toString().slice(-1));
+        }
 
         if (hours == 0 && minutes == 0) {
-            return `${seconds}.${centiseconds}`;
+            return (time < 0) ? `-${seconds}.${centiseconds}` : 
+            `${seconds}.${centiseconds}`;
         } else if (hours == 0) {
-            return `${minutes}:${padNumber(seconds)}.${centiseconds}`;
+            return (time < 0) ? `-${minutes}:${padNumber(seconds)}.${centiseconds}` : 
+            `${minutes}:${padNumber(seconds)}.${centiseconds}`;
+        } else {
+            return (time < 0) ? `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${centiseconds}` : 
+            `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${centiseconds}`;
         }
-        return `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${centiseconds}`;
     };
 
     const padNumber = (num) => {
-        return (num < 10) ? `0${num}` : num;
+        return ((num) < 10) ? `0${num}` : num;
     };
 
-    // TODO: Add method that returns comparison data between PB/SoB and current run
-
+    // TODO: Add method that returns comparison data between PB/SoB and current run (WITHIN 30 SEC)
     const getPaceDifferencePb = () => {
-        return data[splitPosition];
+        if (splitPosition < data.length) {
+            return timer - data[splitPosition].pbTotal;
+        }
+        return 0;
     };
 
     const getPaceDifferenceGold = () => {
@@ -177,9 +188,13 @@ const TimerScreen = () => {
                 <View style={{flexDirection: 'row'}}>
                     <Text style={styles.splitNameText}>{item.name}</Text>
                     <Text style={styles.splitTimeText}> 
-                        {/* Gold  |  Seg: {outputTime(item.goldSeg)}{'\n'}
-                        PB  |  Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}{'\n'} */}
-                        Run  |  Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
+                        Gold  |  Seg: {outputTime(item.goldSeg)}{'\n'}
+                        PB  |  Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}{'\n'}
+                        Run  |  Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}{'\n'}
+                        DIFF: {outputTime(getPaceDifferencePb())} 
+                        
+                        {/* | ACTUAL DIFF: {getPaceDifferencePb()} */}
+
                     </Text>
                 </View>
             </TouchableHighlight>
