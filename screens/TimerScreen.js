@@ -8,6 +8,7 @@ const TimerScreen = () => {
     const [timer, setTimer] = useState(0);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
+    // TODO: When run completed, should not be able to restart timer or split
     const [completed, setCompleted] = useState(false);
     const [splitPosition, setSplitPosition] = useState(0);
 
@@ -25,34 +26,44 @@ const TimerScreen = () => {
     // --> If runTotal < pbTotal : NEW PB; SAVE? If so, update any gold splits as well
     // --> If runSeg < goldSeg for ANY split : YOU HAVE BEATEN SOME PRIOR BEST SPLITS; SAVE?
 
+
+    //FIXME: Might need to ultimately add another attribute for goldTotal for SoB split comparison?
     const [data, setData] = useState([
-        { name: 'Sword', goldSeg: 0, pbSeg: 50, pbTotal: 0, runSeg: 0, runTotal: 0},
-        { name: 'Escape', goldSeg: 0, pbSeg: 100, pbTotal: 0, runSeg: 0, runTotal: 0},
-        { name: 'Bottle', goldSeg: 0, pbSeg: 150, pbTotal: 0, runSeg: 0, runTotal: 0},
-        { name: 'Bugs', goldSeg: 0, pbSeg: 200, pbTotal: 0, runSeg: 0, runTotal: 0},
-        { name: 'Deku', goldSeg: 0, pbSeg: 250, pbTotal: 0, runSeg: 0, runTotal: 0},
-        { name: 'Collapse', goldSeg: 0, pbSeg: 250, pbTotal: 0, runSeg: 0, runTotal: 0},
-        { name: 'Ganon', goldSeg: 0, pbSeg: 300, pbTotal: 0, runSeg: 0, runTotal: 0 },
+        { name: 'Sword', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+        { name: 'Escape', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+        { name: 'Bottle', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
+        { name: 'Bugs', goldSeg: 200, pbSeg: 200, pbTotal: 500, runSeg: 0, runTotal: 0},
+        { name: 'Deku', goldSeg: 250, pbSeg: 250, pbTotal: 750, runSeg: 0, runTotal: 0},
+        { name: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
+        { name: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
     ]);
 
     // TODO: Temporary local data store for golds / PB? Push to firebase after user affirmation
     const [tempData, setTempData] = useState([]);
 
-    const updateDataObject = (index, targetAttribute) => {
+    const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
             if (index == data.indexOf(item)) {
-                theKey = Object.keys(targetAttribute)[0];
-                theValue = Object.values(targetAttribute)[0];
-                return {...item, [theKey]: theValue};
+                segKey = Object.keys(currentRunAttributes)[0];
+                segValue = Object.values(currentRunAttributes)[0];
+                totalKey = Object.keys(currentRunAttributes)[1];
+                totalValue = Object.values(currentRunAttributes)[1];
+                return {...item, [segKey]: segValue, [totalKey]: totalValue};
             }
             return item;
         });    
         setData(updatedData);
-    }
+    };
+
+    // TODO: Add method that accounts for logic of updating split data on FB at end of run.
+    const updateDataOnSave = () => {
+
+    };
+
 
     useEffect(() => {
         console.log(data);
-    }, [data])
+    }, [data]);
 
     useEffect(() => {
         const interval = getTimerInterval(onIntervalTick, 100);
@@ -79,13 +90,13 @@ const TimerScreen = () => {
         }
         output.id = setTimeout(tick, time);      
         return output;
-    }
+    };
 
     const onIntervalTick = () => {        
         if (active && !paused) {
             setTimer((count) => count + 1);
         }
-    }
+    };
 
     const toggleTimer = () => {
         if (active) {
@@ -93,32 +104,41 @@ const TimerScreen = () => {
         } else {
             setActive(true);
         };
-    }
+    };
 
+    // TODO: If reset pressed, reset data object to existing firebase splits? (zeroed out)
     const resetTimer = () => {
         setTimer(0);
         setActive(false);
         setPaused(false);
-    }
+    };
 
     const processSplit = () => {
         if (active && !paused) {
-            updateDataObject(splitPosition, {runTotal: timer});      
+            // Updating run segments and total throughout active speedrun
+            updateDataOnSplit(splitPosition, {runTotal: timer, runSeg: getSegmentTime()})
+            
             setSplitPosition(splitPosition + 1);
 
             if (splitPosition == data.length - 1) {
                 setActive(false);
             }
         } else {
-            console.log("Cannot split - speedrun completed");
+            console.log("Cannot split - speedrun completed (or timer paused)");
         }
-    }
+    };
 
-    // TODO: Add methods that account for logic of updating existing splits at end of run.
+    const getSegmentTime = () => {
+        // Subtract prior split runTotal value from timer (current time) to get segment time.
 
-    
+        console.log(splitPosition);
 
+        if (splitPosition > 0) {
+            return timer - data[splitPosition - 1].runTotal;
+        }
 
+        return timer;
+    };
 
     // TODO: Ensure this accounts for negative numbers (not formatting correctly currently)
     const outputTime = (time) => {
@@ -133,11 +153,20 @@ const TimerScreen = () => {
             return `${minutes}:${padNumber(seconds)}.${centiseconds}`;
         }
         return `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${centiseconds}`;
-    }
+    };
 
     const padNumber = (num) => {
         return (num < 10) ? `0${num}` : num;
-    }
+    };
+
+    // TODO: Add method that returns comparison data between PB/SoB and current run
+
+    const getPaceDifferencePb = () => {
+        return data[splitPosition];
+    };
+
+    const getPaceDifferenceGold = () => {
+    };
 
     const renderSplit = ({item}) => {
         return (
@@ -148,14 +177,14 @@ const TimerScreen = () => {
                 <View style={{flexDirection: 'row'}}>
                     <Text style={styles.splitNameText}>{item.name}</Text>
                     <Text style={styles.splitTimeText}> 
-                        Gold | Seg: {outputTime(item.goldSeg)}{'\n'}
-                        PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}{'\n'}
-                        Active | Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
+                        {/* Gold  |  Seg: {outputTime(item.goldSeg)}{'\n'}
+                        PB  |  Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}{'\n'} */}
+                        Run  |  Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
                     </Text>
                 </View>
             </TouchableHighlight>
         )
-    }
+    };
 
     const renderSeparator = () => {
         return (
@@ -164,9 +193,9 @@ const TimerScreen = () => {
                 backgroundColor: "#a9a9a9",
             }}/>
         );
-    }
+    };
 
-    // CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
+    // TODO: CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
 
     return (
         <View style={styles.container}>
@@ -200,7 +229,7 @@ const TimerScreen = () => {
             </View>
             
         </View>
-    )
+    );
 };
 
 const styles = StyleSheet.create({
