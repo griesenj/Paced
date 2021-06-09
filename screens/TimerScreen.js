@@ -8,14 +8,10 @@ const TimerScreen = () => {
     const [timer, setTimer] = useState(0);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
-
-    // Once completed is triggered - Overwrite 
     const [completed, setCompleted] = useState(false);
-
-    // TESTING SPLIT MECHANIC
     const [splitPosition, setSplitPosition] = useState(0);
 
-    // Need to write setState function that only sets a single value?
+    // TODO: Need to write setState function that only sets a single value
     const [data, setData] = useState([
         { name: 'Sword', goldSeg: 0, pbSeg: 50, pbTotal: 0, runSeg: 0, runTotal: 0},
         { name: 'Escape', goldSeg: 0, pbSeg: 100, pbTotal: 0, runSeg: 0, runTotal: 0},
@@ -26,9 +22,24 @@ const TimerScreen = () => {
         { name: 'Ganon', goldSeg: 0, pbSeg: 300, pbTotal: 0, runSeg: 0, runTotal: 0 },
     ]);
 
-    // Temporary local data store for golds / PB? Push to firebase if successful?
+    // TODO: Temporary local data store for golds / PB? Push to firebase after user affirmation
+    const [tempData, setTempData] = useState([]);
 
-    // TODO: Using custom interval improved accuracy (but rapid pausing might be an issue)
+    // TODO: This is successfully updating the data, but now the flatlist won't rerender. How to deal
+    // with this given the component is functional? (nothing to pass into Flatlist 'extradata' attribute)
+    const updateDataObject = (splitName, targetAttribute) => {
+        const updatedData = data.map(item => {
+            if (item.name == splitName) {
+                theKey = Object.keys(targetAttribute)[0];
+                theValue = Object.values(targetAttribute)[0];
+                return {...item, theKey: theValue};
+            }
+            return item;
+        })
+        setData(updatedData);
+    }
+
+
     useEffect(() => {
         const interval = getTimerInterval(onIntervalTick, 100);
 
@@ -75,13 +86,29 @@ const TimerScreen = () => {
         setTimer(0);
         setActive(false);
         setPaused(false);
+
+        
     }
 
     const processSplit = () => {
         if (active && !paused) {
             
-            // TODO - Is it okay to update this without using a setState function? Probably not.
-            data[splitPosition].runTotal = timer;
+            // TODO: - This needs to be swapped out with a "setState" approach - bad practice
+            // data[splitPosition].runTotal = timer;
+
+            // TESTING SETSTATE APPROACH
+            targetSplit = data[splitPosition].name;
+            updateDataObject(targetSplit, {runTotal: timer});
+
+
+
+
+
+
+
+
+
+            
             setSplitPosition(splitPosition + 1);
 
             if (splitPosition == data.length - 1) {
@@ -111,6 +138,9 @@ const TimerScreen = () => {
         return (num < 10) ? `0${num}` : num;
     }
 
+    useEffect(() => {
+
+    }, [data]);
     const renderSplit = ({item}) => {
         return (
             <TouchableHighlight
@@ -148,23 +178,28 @@ const TimerScreen = () => {
                     ItemSeparatorComponent={renderSeparator}
                     keyExtractor={(item) => item.name}
                     data={data}
+                    // extraData={data}
                     renderItem={renderSplit}
                 />
             </View>
 
             <View style={styles.timerContainer}>
-                <TouchableOpacity
+                <TouchableOpacity style={{backgroundColor: 'red'}}
                     onPress={() => {toggleTimer()}}
                     onLongPress={() => {resetTimer()}}
                 >
                     <Text style={styles.timerText}>{outputTime(timer)}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{backgroundColor: 'gray', flex: 1, alignItems: 'center'}}
-                    onPress={() => {processSplit()}}
+                <TouchableOpacity style={{backgroundColor: '#a67c00', flex: 1, alignItems: 'center'}}
+                    onPress={() => {
+                        processSplit();
+                        console.log(data);
+                    }}
                 >
                     <Text style={styles.splitButtonText}>Split</Text>
                 </TouchableOpacity>
+                
             </View>
             
         </View>
@@ -189,7 +224,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
-        padding: 10,
+        padding: 20,
     },
     splitTimeText: {
         fontSize: 14,
@@ -200,19 +235,19 @@ const styles = StyleSheet.create({
     timerContainer: {
         flex: 1,
         backgroundColor: 'black',
-        borderTopColor: '#a9a9a9',
-        borderTopWidth: 2,
+        borderTopColor: 'white',
+        borderTopWidth: 1,
     },
     timerText: {
         fontSize: 80,
         fontWeight: 'bold',
-        color: 'green',
-        backgroundColor: 'white',
+        color: '#149414',
+        backgroundColor: '#242424',
     },
     splitButtonText: {
-        fontSize: 30,
-        color: 'white',
-
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'black',
         flexDirection: 'row',
     }
 });

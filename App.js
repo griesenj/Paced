@@ -28,6 +28,6 @@ export default function App() {
 
 const navigatorOptions = {
   headerTitleAlign: 'center',
-  headerStyle: {backgroundColor: '#085480'},
-  headerTitleStyle: {color: 'white'}
+  headerStyle: {backgroundColor: '#242424'},
+  headerTitleStyle: {color: 'white', fontWeight: 'bold'},
 };
