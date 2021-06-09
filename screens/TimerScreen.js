@@ -11,11 +11,10 @@ const TimerScreen = () => {
     const [completed, setCompleted] = useState(false);
     const [splitPosition, setSplitPosition] = useState(0);
 
-    // TODO: Need to write setState function that only sets a single value
     const [data, setData] = useState([
         { name: 'Sword', goldSeg: 0, pbSeg: 50, pbTotal: 0, runSeg: 0, runTotal: 0},
         { name: 'Escape', goldSeg: 0, pbSeg: 100, pbTotal: 0, runSeg: 0, runTotal: 0},
-        { name: 'Bottle', goldSeg: 0, pbSeg: 150, pbTotal :0, runSeg: 0, runTotal: 0},
+        { name: 'Bottle', goldSeg: 0, pbSeg: 150, pbTotal: 0, runSeg: 0, runTotal: 0},
         { name: 'Bugs', goldSeg: 0, pbSeg: 200, pbTotal: 0, runSeg: 0, runTotal: 0},
         { name: 'Deku', goldSeg: 0, pbSeg: 250, pbTotal: 0, runSeg: 0, runTotal: 0},
         { name: 'Collapse', goldSeg: 0, pbSeg: 250, pbTotal: 0, runSeg: 0, runTotal: 0},
@@ -25,20 +24,21 @@ const TimerScreen = () => {
     // TODO: Temporary local data store for golds / PB? Push to firebase after user affirmation
     const [tempData, setTempData] = useState([]);
 
-    // TODO: This is successfully updating the data, but now the flatlist won't rerender. How to deal
-    // with this given the component is functional? (nothing to pass into Flatlist 'extradata' attribute)
-    const updateDataObject = (splitName, targetAttribute) => {
+    const updateDataObject = (index, targetAttribute) => {
         const updatedData = data.map(item => {
-            if (item.name == splitName) {
+            if (index == data.indexOf(item)) {
                 theKey = Object.keys(targetAttribute)[0];
                 theValue = Object.values(targetAttribute)[0];
-                return {...item, theKey: theValue};
+                return {...item, [theKey]: theValue};
             }
             return item;
-        })
+        });    
         setData(updatedData);
     }
 
+    useEffect(() => {
+        console.log(data);
+    }, [data])
 
     useEffect(() => {
         const interval = getTimerInterval(onIntervalTick, 100);
@@ -63,8 +63,7 @@ const TimerScreen = () => {
             priorDelay = time + priorDelay - deltaTime;
             output.id = setTimeout(tick, priorDelay);
         }
-        output.id = setTimeout(tick, time);
-        
+        output.id = setTimeout(tick, time);      
         return output;
     }
 
@@ -86,29 +85,11 @@ const TimerScreen = () => {
         setTimer(0);
         setActive(false);
         setPaused(false);
-
-        
     }
 
     const processSplit = () => {
         if (active && !paused) {
-            
-            // TODO: - This needs to be swapped out with a "setState" approach - bad practice
-            // data[splitPosition].runTotal = timer;
-
-            // TESTING SETSTATE APPROACH
-            targetSplit = data[splitPosition].name;
-            updateDataObject(targetSplit, {runTotal: timer});
-
-
-
-
-
-
-
-
-
-            
+            updateDataObject(splitPosition, {runTotal: timer});      
             setSplitPosition(splitPosition + 1);
 
             if (splitPosition == data.length - 1) {
@@ -138,9 +119,6 @@ const TimerScreen = () => {
         return (num < 10) ? `0${num}` : num;
     }
 
-    useEffect(() => {
-
-    }, [data]);
     const renderSplit = ({item}) => {
         return (
             <TouchableHighlight
@@ -178,7 +156,7 @@ const TimerScreen = () => {
                     ItemSeparatorComponent={renderSeparator}
                     keyExtractor={(item) => item.name}
                     data={data}
-                    // extraData={data}
+                    extraData={data}
                     renderItem={renderSplit}
                 />
             </View>
@@ -194,7 +172,6 @@ const TimerScreen = () => {
                 <TouchableOpacity style={{backgroundColor: '#a67c00', flex: 1, alignItems: 'center'}}
                     onPress={() => {
                         processSplit();
-                        console.log(data);
                     }}
                 >
                     <Text style={styles.splitButtonText}>Split</Text>
@@ -224,13 +201,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
-        padding: 20,
+        padding: 18,
     },
     splitTimeText: {
         fontSize: 14,
         fontWeight: 'bold',
         color: 'white',
-        alignSelf: 'flex-end',
+        alignSelf: 'center',
     },
     timerContainer: {
         flex: 1,
