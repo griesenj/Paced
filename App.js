@@ -12,7 +12,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={navigatorOptions}>
+        {/* GAME SCREEN (preferences [left] - gameSettings [right])
+        PREFERENCES
+        GAMESETTINGSSCREEN
+        CATEGORY SCREEN (back [left] - categorySettings [right])
+        CATEGORYSETTINGSSCREEN
+        TIMER SCREEN (back [left] - timerSettings [right]) */}
         <Stack.Screen name="Timer" component={TimerScreen}/>
+        {/* TIMERSETTINGSSCREEN */}
+
       </Stack.Navigator>
     </NavigationContainer>
   );

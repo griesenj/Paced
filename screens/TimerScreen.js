@@ -2,39 +2,31 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import React, { useEffect, useState } from 'react';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { withTheme } from 'react-native-elements';
 
 const TimerScreen = () => {
    
     const [timer, setTimer] = useState(0);
-    const [startTime, setStartTime] = useState(0);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
 
+    // Once completed is triggered - Overwrite 
+    const [completed, setCompleted] = useState(false);
+
     // TESTING SPLIT MECHANIC
-    const [currentSplitValue, setCurrentSplitValue] = useState(0);
+    const [splitPosition, setSplitPosition] = useState(0);
 
     // Need to write setState function that only sets a single value?
     const [data, setData] = useState([
-        { splitName: 'Sword', splitBest: 1075, splitActive: 937 },
-        { splitName: 'Escape', splitBest: 2376, splitActive: 2000 },
-        { splitName: 'Bottle', splitBest: 3795, splitActive: 3175 },
-        { splitName: 'Bugs', splitBest: 4580, splitActive: 4270 },
-        { splitName: 'Wrong Warp', splitBest: 5987, splitActive: 5980 },
-        { splitName: 'Ganon', splitBest: 6702, splitActive: 6570 },
-        { splitName: 'Sword2', splitBest: 1075, splitActive: 937 },
-        { splitName: 'Escape2', splitBest: 2376, splitActive: 2000 },
-        { splitName: 'Bottle2', splitBest: 3795, splitActive: 3175 },
-        { splitName: 'Bugs2', splitBest: 4580, splitActive: 4270 },
-        { splitName: 'Wrong Warp2', splitBest: 5987, splitActive: 5980 },
-        { splitName: 'Ganon2', splitBest: 6702, splitActive: 6570 },
-        { splitName: 'Sword3', splitBest: 1075, splitActive: 937 },
-        { splitName: 'Escape3', splitBest: 2376, splitActive: 2000 },
-        { splitName: 'Bottle3', splitBest: 3795, splitActive: 3175 },
-        { splitName: 'Bugs3', splitBest: 4580, splitActive: 4270 },
-        { splitName: 'Wrong Warp3', splitBest: 5987, splitActive: 5980 },
-        { splitName: 'Ganon3', splitBest: 6702, splitActive: 6570 },
+        { name: 'Sword', goldSeg: 0, pbSeg: 50, pbTotal: 0, runSeg: 0, runTotal: 0},
+        { name: 'Escape', goldSeg: 0, pbSeg: 100, pbTotal: 0, runSeg: 0, runTotal: 0},
+        { name: 'Bottle', goldSeg: 0, pbSeg: 150, pbTotal :0, runSeg: 0, runTotal: 0},
+        { name: 'Bugs', goldSeg: 0, pbSeg: 200, pbTotal: 0, runSeg: 0, runTotal: 0},
+        { name: 'Deku', goldSeg: 0, pbSeg: 250, pbTotal: 0, runSeg: 0, runTotal: 0},
+        { name: 'Collapse', goldSeg: 0, pbSeg: 250, pbTotal: 0, runSeg: 0, runTotal: 0},
+        { name: 'Ganon', goldSeg: 0, pbSeg: 300, pbTotal: 0, runSeg: 0, runTotal: 0 },
     ]);
+
+    // Temporary local data store for golds / PB? Push to firebase if successful?
 
     // TODO: Using custom interval improved accuracy (but rapid pausing might be an issue)
     useEffect(() => {
@@ -88,17 +80,19 @@ const TimerScreen = () => {
     const processSplit = () => {
         if (active && !paused) {
             
-            var currentTime = timer;
-            data[currentSplitValue].splitActive = currentTime;
+            // TODO - Is it okay to update this without using a setState function? Probably not.
+            data[splitPosition].runTotal = timer;
+            setSplitPosition(splitPosition + 1);
 
-            console.log(data[currentSplitValue].splitActive);
-            
-            console.log(currentTime);
-            setCurrentSplitValue(currentSplitValue + 1);
+            if (splitPosition == data.length - 1) {
+                setActive(false);
+            }
+        } else {
+            console.log("Cannot split - speedrun completed");
         }
     }
 
-    // TODO: Esnure this accounts for negative numbers (not formatting correctly currently)
+    // TODO: Ensure this accounts for negative numbers (not formatting correctly currently)
     const outputTime = (time) => {
         const hours = Math.floor(time / 36000);
         const minutes = Math.floor(time / 600) % 60;
@@ -120,14 +114,15 @@ const TimerScreen = () => {
     const renderSplit = ({item}) => {
         return (
             <TouchableHighlight
-            activeOpacity={1.0}
-            underlayColor={"#ffefd5"}
+                activeOpacity={1.0}
+                underlayColor={"#ffefd5"}
             >
                 <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.splitNameText}>{item.splitName}</Text>
+                    <Text style={styles.splitNameText}>{item.name}</Text>
                     <Text style={styles.splitTimeText}> 
-                        {outputTime(item.splitBest)} : {outputTime(item.splitBest - item.splitActive)}
-                          :  {currentSplitValue} | {item.splitActive}
+                        Gold | Seg: {outputTime(item.goldSeg)}{'\n'}
+                        PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}{'\n'}
+                        Active | Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
                     </Text>
                 </View>
             </TouchableHighlight>
@@ -143,13 +138,15 @@ const TimerScreen = () => {
         );
     }
 
+    // CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
+
     return (
         <View style={styles.container}>
 
             <View style={styles.splitsContainer}>
                 <FlatList
                     ItemSeparatorComponent={renderSeparator}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.name}
                     data={data}
                     renderItem={renderSplit}
                 />
@@ -189,13 +186,13 @@ const styles = StyleSheet.create({
     splitRow: {
     },
     splitNameText: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
         padding: 10,
     },
     splitTimeText: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'white',
         alignSelf: 'flex-end',
