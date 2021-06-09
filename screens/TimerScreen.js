@@ -11,6 +11,20 @@ const TimerScreen = () => {
     const [completed, setCompleted] = useState(false);
     const [splitPosition, setSplitPosition] = useState(0);
 
+    // TODO: Data accessor planning
+    // 1. Category screen pulls game data from game screen
+    // 2. Timer screen pulls game and category data from category screen
+    // 3. Timer screen uses this info to determine what split data to pull from firebase
+
+    // TODO: Timer logic planning
+    // Can run against PB or SUM OF BEST depending on selected option in TIMERSETTINGS menu
+    // runTotal and runSeg will always initialize with values of zero (updated throughout run)
+    // pbTotal and pbSeg will reconcile with eachother (pbSeg BASED OFF OF pbTotal)
+
+    // at end of speedrun, pbTotal of final split is compared to runTotal of final split
+    // --> If runTotal < pbTotal : NEW PB; SAVE? If so, update any gold splits as well
+    // --> If runSeg < goldSeg for ANY split : YOU HAVE BEATEN SOME PRIOR BEST SPLITS; SAVE?
+
     const [data, setData] = useState([
         { name: 'Sword', goldSeg: 0, pbSeg: 50, pbTotal: 0, runSeg: 0, runTotal: 0},
         { name: 'Escape', goldSeg: 0, pbSeg: 100, pbTotal: 0, runSeg: 0, runTotal: 0},
@@ -99,6 +113,12 @@ const TimerScreen = () => {
             console.log("Cannot split - speedrun completed");
         }
     }
+
+    // TODO: Add methods that account for logic of updating existing splits at end of run.
+
+    
+
+
 
     // TODO: Ensure this accounts for negative numbers (not formatting correctly currently)
     const outputTime = (time) => {

@@ -20,7 +20,6 @@ export default function App() {
         TIMER SCREEN (back [left] - timerSettings [right]) */}
         <Stack.Screen name="Timer" component={TimerScreen}/>
         {/* TIMERSETTINGSSCREEN */}
-
       </Stack.Navigator>
     </NavigationContainer>
   );
