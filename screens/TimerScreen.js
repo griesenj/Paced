@@ -69,6 +69,10 @@ const TimerScreen = () => {
         setDifferentials(updatedDifferentials)
     }
 
+    const clearDifferentials = () => {
+        setDifferentials([]);
+    }
+
     useEffect(() => {
         // console.log(data);
     }, [data]);
@@ -125,6 +129,7 @@ const TimerScreen = () => {
         setActive(false);
         setPaused(false);
         setSplitPosition(0);
+        clearDifferentials();
     };
 
     const processSplit = () => {
@@ -180,7 +185,7 @@ const TimerScreen = () => {
         return (num < 10) ? `0${num}` : num;
     };
 
-    // FIXME: This should most likely
+    // FIXME: Should consolidate into a single function that checks settings for PB / SoB comparison
     const getDifferentialPb = () => {
         if (splitPosition < data.length) {
             return timer - data[splitPosition].pbTotal;
@@ -191,8 +196,10 @@ const TimerScreen = () => {
     const getDifferentialGold = () => {
     };
 
-    // TODO: CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
     // FIXME: TESTING CONDITIONAL RENDERING
+    // CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
+
+    // TODO: Add logic here for for gold splits (compare goldSeg to runSeg)
     function ViewDifferential(props) {
         const currentIndex = props.currentIndex;
         if (currentIndex < splitPosition) {
@@ -230,7 +237,6 @@ const TimerScreen = () => {
         }
     };
 
-    // TODO: If index of rendered item < currentSplitPosition ? display from data : display function
     const renderSplit = ({item}) => {
         return (
             <TouchableHighlight
@@ -285,12 +291,12 @@ const TimerScreen = () => {
                     <Text style={styles.timerText}>{outputTime(timer)}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{backgroundColor: '#a67c00', flex: 1, alignItems: 'center'}}
+                <TouchableOpacity style={styles.splitButton}
                     onPress={() => {                       
                         processSplit();
                     }}
                 >
-                    <Text style={styles.splitButtonText}>Split</Text>
+                    <Text style={styles.splitButtonText}>SPLIT</Text>
                 </TouchableOpacity>
                 
             </View>
@@ -317,11 +323,11 @@ const styles = StyleSheet.create({
     },
     splitLeft: {
         flexDirection: 'column',
-        flex: 5,
+        flex: 3,
     },
     splitRight: {
         justifyContent: 'center',
-        flex: 2,
+        flex: 1,
     },
     splitNameText: {
         fontSize: 24,
@@ -347,11 +353,18 @@ const styles = StyleSheet.create({
         color: '#76b1e3',
         backgroundColor: '#242424',
     },
+    splitButton: {
+        backgroundColor: '#a67c00',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     splitButtonText: {
         fontSize: 40,
         fontWeight: 'bold',
         color: 'black',
         flexDirection: 'row',
+        marginBottom: 10,
     },
     differentialText: {
         color: 'white',
