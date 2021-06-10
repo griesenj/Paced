@@ -39,7 +39,7 @@ const TimerScreen = () => {
     ]);
 
     // TODO: Temporary local data store for golds / PB? Push to firebase after user affirmation
-    const [splitDifferences, setSplitDifferences] = useState([]);
+    const [paceDifferentials, setPaceDifferentials] = useState([]);
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
@@ -165,37 +165,58 @@ const TimerScreen = () => {
     };
 
     const padNumber = (num) => {
-        return ((num) < 10) ? `0${num}` : num;
+        return (num < 10) ? `0${num}` : num;
     };
 
     // TODO: Add method that returns comparison data between PB/SoB and current run (WITHIN 30 SEC)
-    const getPaceDifferencePb = () => {
+    const getPaceDifferentialPb = () => {
         if (splitPosition < data.length) {
             return timer - data[splitPosition].pbTotal;
         }
         return 0;
     };
 
-    const getPaceDifferenceGold = () => {
+    const getPaceDifferentialGold = () => {
     };
 
+    // TODO: CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
+    // FIXME: TESTING CONDITIONAL RENDERING
+    function RunDifferential(props) {
+        const currentIndex = props.currentIndex;
+        if (currentIndex < splitPosition) {
+            return (<Text style={styles.differentialText}>VAL</Text>);
+        }
+
+        if (getPaceDifferentialPb() < 0) {
+            return (
+                <Text style={[styles.differentialText, {color: 'green'}]}>{
+                    outputTime(getPaceDifferentialPb())
+                    }</Text>
+            );
+        } else {
+            return (
+                <Text style={[styles.differentialText, {color: 'red'}]}>+{
+                    outputTime(getPaceDifferentialPb())
+                    }</Text>
+            );
+        }
+    };
+
+    // TODO: If index of rendered item < currentSplitPosition ? display from data : display function
     const renderSplit = ({item}) => {
         return (
             <TouchableHighlight
                 activeOpacity={1.0}
                 underlayColor={"#ffefd5"}
             >
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'column'}}>
                     <Text style={styles.splitNameText}>{item.name}</Text>
                     <Text style={styles.splitTimeText}> 
-                        Gold  |  Seg: {outputTime(item.goldSeg)}{'\n'}
+                        {/* Gold  |  Seg: {outputTime(item.goldSeg)}{'\n'} */}
                         PB  |  Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}{'\n'}
-                        Run  |  Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}{'\n'}
-                        DIFF: {outputTime(getPaceDifferencePb())} 
-                        
-                        {/* | ACTUAL DIFF: {getPaceDifferencePb()} */}
-
+                        Run  |  Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
                     </Text>
+                    <RunDifferential currentIndex={data.indexOf(item)}/>
                 </View>
             </TouchableHighlight>
         )
@@ -209,8 +230,6 @@ const TimerScreen = () => {
             }}/>
         );
     };
-
-    // TODO: CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
 
     return (
         <View style={styles.container}>
@@ -234,7 +253,7 @@ const TimerScreen = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{backgroundColor: '#a67c00', flex: 1, alignItems: 'center'}}
-                    onPress={() => {
+                    onPress={() => {                       
                         processSplit();
                     }}
                 >
@@ -290,6 +309,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
         flexDirection: 'row',
+    },
+
+    differentialText: {
+        color: 'white',
+        fontSize: 30,
+        fontWeight: 'bold',
     }
 });
 
