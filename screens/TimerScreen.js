@@ -39,7 +39,7 @@ const TimerScreen = () => {
     ]);
 
     // TODO: Temporary local data store for golds / PB? Push to firebase after user affirmation
-    const [paceDifferentials, setPaceDifferentials] = useState([]);
+    const [differentials, setDifferentials] = useState([]);
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
@@ -63,9 +63,20 @@ const TimerScreen = () => {
 
     };
 
+    const updateDifferentialsOnSplit = (differential) => {
+        updatedDifferentials = differentials.map((item) => (item));
+        updatedDifferentials.push(differential);
+        setDifferentials(updatedDifferentials)
+    }
+
     useEffect(() => {
         // console.log(data);
     }, [data]);
+
+    useEffect(() => {
+        console.log(differentials);
+        console.log(differentials[splitPosition - 1])
+    }, [differentials]);
 
     useEffect(() => {
         const interval = getTimerInterval(onIntervalTick, 100);
@@ -119,6 +130,7 @@ const TimerScreen = () => {
     const processSplit = () => {
         if (active && !paused) {
             updateDataOnSplit(splitPosition, {runTotal: timer, runSeg: getSegmentTime()})
+            updateDifferentialsOnSplit(getDifferentialPb());
             setSplitPosition(splitPosition + 1);
 
             if (splitPosition == data.length - 1) {
@@ -168,37 +180,53 @@ const TimerScreen = () => {
         return (num < 10) ? `0${num}` : num;
     };
 
-    // TODO: Add method that returns comparison data between PB/SoB and current run (WITHIN 30 SEC)
-    const getPaceDifferentialPb = () => {
+    // FIXME: This should most likely
+    const getDifferentialPb = () => {
         if (splitPosition < data.length) {
             return timer - data[splitPosition].pbTotal;
         }
         return 0;
     };
 
-    const getPaceDifferentialGold = () => {
+    const getDifferentialGold = () => {
     };
 
     // TODO: CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
     // FIXME: TESTING CONDITIONAL RENDERING
-    function RunDifferential(props) {
+    function ViewDifferential(props) {
         const currentIndex = props.currentIndex;
         if (currentIndex < splitPosition) {
-            return (<Text style={styles.differentialText}>VAL</Text>);
-        }
-
-        if (getPaceDifferentialPb() < 0) {
-            return (
-                <Text style={[styles.differentialText, {color: 'green'}]}>{
-                    outputTime(getPaceDifferentialPb())
+            if (differentials[currentIndex] < 0) {
+                return (
+                    <Text style={[styles.differentialText, {color: 'green'}]}>{
+                        outputTime(differentials[currentIndex])
                     }</Text>
-            );
+                );
+            } else {
+                return (
+                    <Text style={[styles.differentialText, {color: 'red'}]}>+{
+                        outputTime(differentials[currentIndex])
+                    }</Text>
+                );
+            }
+        } else if (currentIndex == splitPosition) {
+            if (getDifferentialPb() < 0) {
+                return (
+                    <Text style={[styles.differentialText, {color: 'green'}]}>{
+                        outputTime(getDifferentialPb())
+                    }</Text>
+                );
+            } else {
+                return (
+                    <Text style={[styles.differentialText, {color: 'red'}]}>+{
+                        outputTime(getDifferentialPb())
+                    }</Text>
+                );
+            }
         } else {
             return (
-                <Text style={[styles.differentialText, {color: 'red'}]}>+{
-                    outputTime(getPaceDifferentialPb())
-                    }</Text>
-            );
+                <Text style={styles.differentialText}> </Text>
+            )
         }
     };
 
@@ -209,14 +237,19 @@ const TimerScreen = () => {
                 activeOpacity={1.0}
                 underlayColor={"#ffefd5"}
             >
-                <View style={{flexDirection: 'column'}}>
-                    <Text style={styles.splitNameText}>{item.name}</Text>
-                    <Text style={styles.splitTimeText}> 
-                        {/* Gold  |  Seg: {outputTime(item.goldSeg)}{'\n'} */}
-                        PB  |  Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}{'\n'}
-                        Run  |  Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
-                    </Text>
-                    <RunDifferential currentIndex={data.indexOf(item)}/>
+                <View style={styles.splitRow}>
+                    <View style={styles.splitLeft}>
+                        <Text style={styles.splitNameText}>{item.name}</Text>
+                        <Text style={styles.splitTimeText}> 
+                            PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}
+                        </Text>
+                        <Text style={styles.splitTimeText}> 
+                            Run | Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
+                        </Text>
+                    </View>
+                    <View style={styles.splitRight}>
+                        <ViewDifferential currentIndex={data.indexOf(item)}/>
+                    </View>
                 </View>
             </TouchableHighlight>
         )
@@ -279,18 +312,28 @@ const styles = StyleSheet.create({
         backgroundColor: '#111112',
     },
     splitRow: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    splitLeft: {
+        flexDirection: 'column',
+        flex: 5,
+    },
+    splitRight: {
+        justifyContent: 'center',
+        flex: 2,
     },
     splitNameText: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
-        padding: 18,
+        padding: 2,
     },
     splitTimeText: {
         fontSize: 14,
-        fontWeight: 'bold',
         color: 'white',
-        alignSelf: 'center',
+        // marginLeft: 5,
+        padding: 3,
     },
     timerContainer: {
         flex: 1,
@@ -301,7 +344,7 @@ const styles = StyleSheet.create({
     timerText: {
         fontSize: 80,
         fontWeight: 'bold',
-        color: '#149414',
+        color: '#76b1e3',
         backgroundColor: '#242424',
     },
     splitButtonText: {
@@ -310,10 +353,9 @@ const styles = StyleSheet.create({
         color: 'black',
         flexDirection: 'row',
     },
-
     differentialText: {
         color: 'white',
-        fontSize: 30,
+        fontSize: 26,
         fontWeight: 'bold',
     }
 });
