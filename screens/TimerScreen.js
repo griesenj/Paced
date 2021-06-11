@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
-const TimerScreen = () => {
+const TimerScreen = ({ route, navigation }) => {
    
     const [timer, setTimer] = useState(0);
     const [active, setActive] = useState(false);
@@ -15,6 +15,7 @@ const TimerScreen = () => {
     const [differentials, setDifferentials] = useState([]);
 
     // TODO: Route params from settings screen?
+    // TODO: When timer is active, should NOT be able to go back to category screen (hide back button)
 
     // TODO: Data accessor planning
     // 1. Category screen pulls game data from game screen
@@ -278,6 +279,28 @@ const TimerScreen = () => {
         );
     };
 
+
+    // TODO: NAVIGATION SETUP HERE
+    useEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity
+                    onPress={() => {navigation.navigate('Category')}}
+                >
+                    <Text style={styles.navHeaderButtons}> Back </Text>
+                </TouchableOpacity>
+            ),
+            headerRight: () => (
+                <TouchableOpacity
+                onPress={() => {navigation.navigate('TimerSettings')}}
+                >
+                <Text style={styles.navHeaderButtons}> Edit </Text>
+                </TouchableOpacity> 
+            ),
+        });
+    });
+
+
     return (
         <View style={styles.container}>
 
@@ -381,7 +404,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 26,
         fontWeight: 'bold',
-    }
+    }, 
+    navHeaderButtons: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 14,
+        padding: 10,
+    },
 });
 
 export default TimerScreen;
