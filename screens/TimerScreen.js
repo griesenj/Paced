@@ -12,6 +12,8 @@ const TimerScreen = () => {
     const [completed, setCompleted] = useState(false);
     const [splitPosition, setSplitPosition] = useState(0);
 
+    // TODO: Route params from settings screen?
+
     // TODO: Data accessor planning
     // 1. Category screen pulls game data from game screen
     // 2. Timer screen pulls game and category data from category screen
@@ -69,6 +71,12 @@ const TimerScreen = () => {
         setDifferentials(updatedDifferentials)
     }
 
+    const updateDifferentialsOnUnsplit = () => {
+        updatedDifferentials = differentials.map((item) => (item));
+        updatedDifferentials.pop();
+        setDifferentials(updatedDifferentials);
+    }
+
     const clearDifferentials = () => {
         setDifferentials([]);
     }
@@ -78,8 +86,8 @@ const TimerScreen = () => {
     }, [data]);
 
     useEffect(() => {
-        console.log(differentials);
-        console.log(differentials[splitPosition - 1])
+        // console.log(differentials);
+        // console.log(differentials[splitPosition - 1])
     }, [differentials]);
 
     useEffect(() => {
@@ -145,6 +153,16 @@ const TimerScreen = () => {
             console.log("Cannot split - speedrun completed (or timer paused)");
         }
     };
+
+    const processUnSplit = () => {
+        if (active && !paused && splitPosition > 0) {
+            updateDataOnSplit(splitPosition - 1, {runTotal: 0, runSeg: 0});
+            setSplitPosition(splitPosition - 1);
+            updateDifferentialsOnUnsplit();
+        } else {
+            console.log("Cannot unsplit - no prior splits processed");
+        }
+    }
 
     const getSegmentTime = () => {
         // Subtract prior split runTotal value from timer (current time) to get segment time.
@@ -295,6 +313,9 @@ const TimerScreen = () => {
                     onPress={() => {                       
                         processSplit();
                     }}
+                    onLongPress={() => {
+                        processUnSplit();
+                    }}
                 >
                     <Text style={styles.splitButtonText}>SPLIT</Text>
                 </TouchableOpacity>
@@ -323,11 +344,11 @@ const styles = StyleSheet.create({
     },
     splitLeft: {
         flexDirection: 'column',
-        flex: 3,
+        flex: 5,
     },
     splitRight: {
         justifyContent: 'center',
-        flex: 1,
+        flex: 2,
     },
     splitNameText: {
         fontSize: 24,
