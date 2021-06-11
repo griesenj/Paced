@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
@@ -298,8 +298,7 @@ const TimerScreen = ({ route, navigation }) => {
                 </TouchableOpacity> 
             ),
         });
-    });
-
+    }, []);
 
     return (
         <View style={styles.container}>

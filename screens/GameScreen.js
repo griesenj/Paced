@@ -21,8 +21,8 @@ const GameScreen = ({ route, navigation }) => {
                 <Text style={styles.headerButtons}> Edit </Text>
                 </TouchableOpacity> 
             ),
-        });
-    });
+        }, []);
+    }, []);
 
     return (
         <TouchableOpacity onPress={() => {navigation.navigate("Category")}}>

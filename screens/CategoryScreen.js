@@ -22,7 +22,7 @@ const CategoryScreen = ({ route, navigation }) => {
                 </TouchableOpacity> 
             ),
         });
-    });
+    }, []);
 
     return (
         <TouchableOpacity onPress={() => {navigation.navigate("Timer")}}>

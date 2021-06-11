@@ -21,8 +21,8 @@ const Preferences = ({ route, navigation }) => {
                 <Text style={styles.headerButtons}> Save </Text>
                 </TouchableOpacity> 
             ),
-        });
-    });
+        }, []);
+    }, []);
 
     return (
         <Text style={styles.preferencesText}> PREFERENCES </Text>
