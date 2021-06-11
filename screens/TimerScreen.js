@@ -8,9 +8,11 @@ const TimerScreen = () => {
     const [timer, setTimer] = useState(0);
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
-    // TODO: When run completed, should not be able to restart timer or split
     const [completed, setCompleted] = useState(false);
     const [splitPosition, setSplitPosition] = useState(0);
+    const [compareAgainst, setCompareAgainst] = useState('PB');
+
+    const [differentials, setDifferentials] = useState([]);
 
     // TODO: Route params from settings screen?
 
@@ -28,8 +30,7 @@ const TimerScreen = () => {
     // --> If runTotal < pbTotal : NEW PB; SAVE? If so, update any gold splits as well
     // --> If runSeg < goldSeg for ANY split : YOU HAVE BEATEN SOME PRIOR BEST SPLITS; SAVE?
 
-
-    //FIXME: Might need to ultimately add another attribute for goldTotal for SoB split comparison?
+    //FIXME: Attributes to consider adding (imageId, goldTotal)
     const [data, setData] = useState([
         { name: 'Sword', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
         { name: 'Escape', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
@@ -39,9 +40,6 @@ const TimerScreen = () => {
         { name: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
         { name: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
     ]);
-
-    // TODO: Temporary local data store for golds / PB? Push to firebase after user affirmation
-    const [differentials, setDifferentials] = useState([]);
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
@@ -57,12 +55,9 @@ const TimerScreen = () => {
         setData(updatedData);
     };
 
-    // TODO: Add method that accounts for logic of updating split data on FB at end of run.
-    // Iterate through entire dataset --> 
-    // --- If any given segment is better than goldSeg, UPDATE
-    // --- If PB has taken place, overwrite pbSeg & pbTotal with runSeg & runTotal
+    // TODO: Add method that accounts for logic of updating split data on PB at end of run.
+    // --> Iterate through entire dataset & update any gold segments / pbSeg & pbTotal
     const updateDataOnSave = () => {
-
     };
 
     const updateDifferentialsOnSplit = (differential) => {
@@ -82,17 +77,7 @@ const TimerScreen = () => {
     }
 
     useEffect(() => {
-        // console.log(data);
-    }, [data]);
-
-    useEffect(() => {
-        // console.log(differentials);
-        // console.log(differentials[splitPosition - 1])
-    }, [differentials]);
-
-    useEffect(() => {
         const interval = getTimerInterval(onIntervalTick, 100);
-
         return () => {
             clearTimeout(interval.id);
         };
@@ -127,15 +112,18 @@ const TimerScreen = () => {
         if (active) {
             (paused) ? setPaused(false) : setPaused(true);
         } else {
-            setActive(true);
+            if (!completed) {
+                setActive(true);
+            }
         };
     };
 
-    // TODO: If reset pressed, reset data object to existing firebase splits? (zeroed out)
+    // TODO: If reset pressed, reinitialize splits data object from firebase (current run zeroed out)
     const resetTimer = () => {
         setTimer(0);
         setActive(false);
         setPaused(false);
+        setCompleted(false);
         setSplitPosition(0);
         clearDifferentials();
     };
@@ -143,11 +131,12 @@ const TimerScreen = () => {
     const processSplit = () => {
         if (active && !paused) {
             updateDataOnSplit(splitPosition, {runTotal: timer, runSeg: getSegmentTime()})
-            updateDifferentialsOnSplit(getDifferentialPb());
+            updateDifferentialsOnSplit(getDifferential());
             setSplitPosition(splitPosition + 1);
 
             if (splitPosition == data.length - 1) {
                 setActive(false);
+                setCompleted(true);
             }
         } else {
             console.log("Cannot split - speedrun completed (or timer paused)");
@@ -203,19 +192,20 @@ const TimerScreen = () => {
         return (num < 10) ? `0${num}` : num;
     };
 
-    // FIXME: Should consolidate into a single function that checks settings for PB / SoB comparison
-    const getDifferentialPb = () => {
-        if (splitPosition < data.length) {
-            return timer - data[splitPosition].pbTotal;
+    // FIXME: How to handle "goldTotal"? Doesn't currently exist, would be a pain to iterate each time.
+    const getDifferential = () => {
+        if (compareAgainst == 'PB') {
+            if (splitPosition < data.length) {
+                return timer - data[splitPosition].pbTotal;
+            }
+            return 0;
+        } else {
+            if (splitPosition < data.length) {
+                return timer - data[splitPosition].goldTotal;
+            }
+            return 0;
         }
-        return 0;
     };
-
-    const getDifferentialGold = () => {
-    };
-
-    // FIXME: TESTING CONDITIONAL RENDERING
-    // CONDITIONAL RENDERING: https://reactjs.org/docs/conditional-rendering.html
 
     // TODO: Add logic here for for gold splits (compare goldSeg to runSeg)
     function ViewDifferential(props) {
@@ -235,16 +225,16 @@ const TimerScreen = () => {
                 );
             }
         } else if (currentIndex == splitPosition) {
-            if (getDifferentialPb() < 0) {
+            if (getDifferential() < 0) {
                 return (
                     <Text style={[styles.differentialText, {color: 'green'}]}>{
-                        outputTime(getDifferentialPb())
+                        outputTime(getDifferential())
                     }</Text>
                 );
             } else {
                 return (
                     <Text style={[styles.differentialText, {color: 'red'}]}>+{
-                        outputTime(getDifferentialPb())
+                        outputTime(getDifferential())
                     }</Text>
                 );
             }
