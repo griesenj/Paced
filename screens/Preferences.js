@@ -25,7 +25,12 @@ const Preferences = ({ route, navigation }) => {
     }, []);
 
     return (
-        <Text style={styles.preferencesText}> PREFERENCES </Text>
+        <View>
+            <Text style={styles.preferencesText}> PREFERENCES </Text>
+            <Text style={styles.preferencesText}> Instructions here?
+            </Text>
+        </View>
+
     );
 }
 

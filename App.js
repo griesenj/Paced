@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import CategoryScreen from './screens/CategoryScreen';
 import GameScreen from './screens/GameScreen';
+import GameSettings from './screens/GameSettings';
 import { NavigationContainer } from '@react-navigation/native';
 import Preferences from './screens/Preferences';
 import React from 'react';
@@ -23,6 +24,7 @@ export default function App() {
         TIMER SCREEN (back [left] - timerSettings [right]) */}
 
         <Stack.Screen name="Game" component={GameScreen}/>
+        <Stack.Screen name="Game Settings" component={GameSettings}/>
         <Stack.Screen name="Preferences" component={Preferences}/>
         <Stack.Screen name="Category" component={CategoryScreen}/>
         <Stack.Screen name="Timer" component={TimerScreen}/>

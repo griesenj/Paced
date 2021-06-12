@@ -23,13 +23,13 @@ const TimerScreen = ({ route, navigation }) => {
 
     //FIXME: Attributes to consider adding (imageId)
     const [data, setData] = useState([
-        { name: 'Sword', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
-        { name: 'Escape', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
-        { name: 'Bottle', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
-        { name: 'Bugs', goldSeg: 200, pbSeg: 200, pbTotal: 500, runSeg: 0, runTotal: 0},
-        { name: 'Deku', goldSeg: 250, pbSeg: 250, pbTotal: 750, runSeg: 0, runTotal: 0},
-        { name: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
-        { name: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
+        { split: 'Sword', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+        { split: 'Escape', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+        { split: 'Bottle', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
+        { split: 'Bugs', goldSeg: 200, pbSeg: 200, pbTotal: 500, runSeg: 0, runTotal: 0},
+        { split: 'Deku', goldSeg: 250, pbSeg: 250, pbTotal: 750, runSeg: 0, runTotal: 0},
+        { split: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
+        { split: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
     ]);
     const [goldChecks, setGoldChecks] = useState([]);
     const [differentials, setDifferentials] = useState([]);
@@ -247,8 +247,6 @@ const TimerScreen = ({ route, navigation }) => {
 
     const isGoldSplit = () => {
         const goldDifferential = getSegmentTime() - data[splitPosition].goldSeg;
-        
-        console.log('isGoldSplit: ', getSegmentTime() - data[splitPosition].goldSeg);
         return (goldDifferential < 0) ? true : false;
     }
 
@@ -326,7 +324,7 @@ const TimerScreen = ({ route, navigation }) => {
             >
                 <View style={styles.splitRow}>
                     <View style={styles.splitLeft}>
-                        <Text style={styles.splitNameText}>{item.name}</Text>
+                        <Text style={styles.splitNameText}>{item.split}</Text>
                         <Text style={styles.splitTimeText}> 
                             PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}
                         </Text>
@@ -378,7 +376,7 @@ const TimerScreen = ({ route, navigation }) => {
             <View style={styles.splitsContainer}>
                 <FlatList
                     ItemSeparatorComponent={renderSeparator}
-                    keyExtractor={(item) => item.name}
+                    keyExtractor={(item) => item.split}
                     data={data}
                     extraData={data}
                     renderItem={renderSplit}
