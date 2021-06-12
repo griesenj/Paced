@@ -10,15 +10,11 @@ const TimerScreen = ({ route, navigation }) => {
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
     const [completed, setCompleted] = useState(false);
-
-    // // TODO: Test new variables (trying to do without these)
-    // const [personalBest, setPersonalBest] = useState(false);
-    // const [newGolds, setNewGolds] = useState(false);
-
     const [splitPosition, setSplitPosition] = useState(0);
-    const [compareAgainst, setCompareAgainst] = useState('PB');
 
     // TODO: Route params from settings screen?
+    // TODO: If time allows, determine how to unsplit after ending the run?
+    // Would probably need to leave timer running and log finish time as a new state
 
     // TODO: Data accessor planning
     // 1. Category screen pulls game data from game screen
@@ -100,6 +96,12 @@ const TimerScreen = ({ route, navigation }) => {
         updatedGoldChecks.push(isGoldSplit());
         setGoldChecks(updatedGoldChecks);
     };
+
+    updateGoldChecksOnUnsplit = () => {
+        updatedGoldChecks = goldChecks.map((item) => (item));
+        updatedGoldChecks.pop();
+        setGoldChecks(updatedGoldChecks);
+    }
 
     const clearGoldChecks = () => {
         setGoldChecks([]);
@@ -191,6 +193,7 @@ const TimerScreen = ({ route, navigation }) => {
             updateDataOnSplit(splitPosition - 1, {runTotal: 0, runSeg: 0});
             setSplitPosition(splitPosition - 1);
             updateDifferentialsOnUnsplit();
+            updateGoldChecksOnUnsplit();
         } else {
             console.log("Cannot unsplit - no prior splits processed");
         }
