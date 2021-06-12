@@ -19,21 +19,11 @@ const TimerScreen = ({ route, navigation }) => {
     const [compareAgainst, setCompareAgainst] = useState('PB');
 
     // TODO: Route params from settings screen?
-    // TODO: When timer is active, should NOT be able to go back to category screen (hide back button)
 
     // TODO: Data accessor planning
     // 1. Category screen pulls game data from game screen
     // 2. Timer screen pulls game and category data from category screen
     // 3. Timer screen uses this info to determine what split data to pull from firebase
-
-    // TODO: Timer logic planning
-    // Can run against PB or SUM OF BEST depending on selected option in TIMERSETTINGS menu
-    // runTotal and runSeg will always initialize with values of zero (updated throughout run)
-    // pbTotal and pbSeg will reconcile with eachother (pbSeg BASED OFF OF pbTotal)
-
-    // at end of speedrun, pbTotal of final split is compared to runTotal of final split
-    // --> If runTotal < pbTotal : NEW PB; SAVE? If so, update any gold splits as well
-    // --> If runSeg < goldSeg for ANY split : YOU HAVE BEATEN SOME PRIOR BEST SPLITS; SAVE?
 
     //FIXME: Attributes to consider adding (imageId)
     const [data, setData] = useState([
@@ -45,8 +35,8 @@ const TimerScreen = ({ route, navigation }) => {
         { name: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
         { name: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
     ]);
-    const [differentials, setDifferentials] = useState([]);
     const [goldChecks, setGoldChecks] = useState([]);
+    const [differentials, setDifferentials] = useState([]);
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
@@ -122,7 +112,8 @@ const TimerScreen = ({ route, navigation }) => {
           console.log(err);
         }
 
-        // TODO: Pull down data from firebase and call setData() with the
+        // TODO: Pull down data from firebase and call setData() on the correct set of splits
+        // to be specified via route params from prior screens
 
       }, []);
 
@@ -262,8 +253,6 @@ const TimerScreen = ({ route, navigation }) => {
         return timer < data[data.length - 1].pbTotal;
     }
 
-    // TODO: Add logic here for for gold splits (compare goldSeg to runSeg)
-    // TODO: Rework this code, can use conditional styling instead of full text component
     function ViewDifferential(props) {
         const currentIndex = props.currentIndex;
         if (currentIndex < splitPosition) {
@@ -302,7 +291,6 @@ const TimerScreen = ({ route, navigation }) => {
     };
 
     function TextBottomButton() {
-        // TODO: Add another state that just says "reset" if no PB or beaten golds?
         if (completed) {
             if (isPersonalBest() || goldChecks.includes(true)) {
                 return <Text style={styles.saveButtonText}>SAVE</Text>
@@ -313,9 +301,8 @@ const TimerScreen = ({ route, navigation }) => {
         return <Text style={styles.saveButtonText}>SPLIT</Text>
     }
 
-    // TODO: Condense this code
     const pressBottomButton =() => {
-        if (completed) { // (personalBest || newGolds)
+        if (completed) {
             if (isPersonalBest() || goldChecks.includes(true)) {
                 updateDataOnSave();
             }
@@ -361,8 +348,8 @@ const TimerScreen = ({ route, navigation }) => {
         );
     };
 
-
-    // TODO: NAVIGATION SETUP HERE
+    // TODO: When timer is active, should NOT be able to exit screen (hide back/edit buttons)
+    // Can watch active flag and update whenever that changes (add rending logic for touchableOpacity)
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
@@ -403,7 +390,9 @@ const TimerScreen = ({ route, navigation }) => {
                     <Text style={styles.timerText}>{outputTime(timer)}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[(completed) ? styles.saveButton : styles.splitButton]}
+                <TouchableOpacity style={[(!completed) ? styles.splitButton : 
+                    (isPersonalBest() || goldChecks.includes(true)) ? 
+                    styles.saveButton : styles.resetButton]}
                     onPress={() => {pressBottomButton()}}
                     onLongPress={() => {longPressBottomButton()}}
                 >
