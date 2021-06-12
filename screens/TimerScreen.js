@@ -1,5 +1,6 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { initPacedDB, storeDataItem } from '../helpers/fb-paced';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
@@ -9,6 +10,11 @@ const TimerScreen = ({ route, navigation }) => {
     const [active, setActive] = useState(false);
     const [paused, setPaused] = useState(false);
     const [completed, setCompleted] = useState(false);
+
+    // TODO: Test new variables
+    const [personalBest, setPersonalBest] = useState(false);
+    const [newGolds, setNewGolds] = useState(false);
+
     const [splitPosition, setSplitPosition] = useState(0);
     const [compareAgainst, setCompareAgainst] = useState('PB');
 
@@ -76,6 +82,14 @@ const TimerScreen = ({ route, navigation }) => {
     const clearDifferentials = () => {
         setDifferentials([]);
     }
+
+    useEffect(() => {
+        try {
+          initPacedDB();
+        } catch (err) {
+          console.log(err);
+        }
+      }, []);
 
     useEffect(() => {
         const interval = getTimerInterval(onIntervalTick, 100);
@@ -209,6 +223,7 @@ const TimerScreen = ({ route, navigation }) => {
     };
 
     // TODO: Add logic here for for gold splits (compare goldSeg to runSeg)
+    // TODO: Rework this code, can use conditional styling instead of full text component
     function ViewDifferential(props) {
         const currentIndex = props.currentIndex;
         if (currentIndex < splitPosition) {
@@ -244,6 +259,26 @@ const TimerScreen = ({ route, navigation }) => {
                 <Text style={styles.differentialText}> </Text>
             )
         }
+    };
+
+    function TextBottomButton() {
+        return (completed) ? <Text style={styles.saveButtonText}>SAVE</Text> : 
+        <Text style={styles.splitButtonText}>SPLIT</Text>
+    }
+
+    // TODO: Condense this code
+    const pressBottomButton =() => {
+        if (completed) { // (personalBest || newGolds)
+            storeDataItem(data);
+        }
+        processSplit();
+    };
+
+    const longPressBottomButton =() => {
+        if (completed) { // (personalBest || newGolds)
+            // code to save splits
+        }
+        processUnSplit();
     };
 
     const renderSplit = ({item}) => {
@@ -321,15 +356,11 @@ const TimerScreen = ({ route, navigation }) => {
                     <Text style={styles.timerText}>{outputTime(timer)}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.splitButton}
-                    onPress={() => {                       
-                        processSplit();
-                    }}
-                    onLongPress={() => {
-                        processUnSplit();
-                    }}
+                <TouchableOpacity style={[(completed) ? styles.saveButton : styles.splitButton]}
+                    onPress={() => {pressBottomButton()}}
+                    onLongPress={() => {longPressBottomButton()}}
                 >
-                    <Text style={styles.splitButtonText}>SPLIT</Text>
+                    <TextBottomButton/>
                 </TouchableOpacity>
                 
             </View>
@@ -396,6 +427,19 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         color: 'black',
+        flexDirection: 'row',
+        marginBottom: 10,
+    },
+    saveButton: {
+        backgroundColor: 'darkgreen',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    saveButtonText: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'white',
         flexDirection: 'row',
         marginBottom: 10,
     },
