@@ -11,14 +11,12 @@ const TimerScreen = ({ route, navigation }) => {
     const [paused, setPaused] = useState(false);
     const [completed, setCompleted] = useState(false);
 
-    // TODO: Test new variables
-    const [personalBest, setPersonalBest] = useState(false);
-    const [newGolds, setNewGolds] = useState(false);
+    // // TODO: Test new variables (trying to do without these)
+    // const [personalBest, setPersonalBest] = useState(false);
+    // const [newGolds, setNewGolds] = useState(false);
 
     const [splitPosition, setSplitPosition] = useState(0);
     const [compareAgainst, setCompareAgainst] = useState('PB');
-
-    const [differentials, setDifferentials] = useState([]);
 
     // TODO: Route params from settings screen?
     // TODO: When timer is active, should NOT be able to go back to category screen (hide back button)
@@ -37,7 +35,7 @@ const TimerScreen = ({ route, navigation }) => {
     // --> If runTotal < pbTotal : NEW PB; SAVE? If so, update any gold splits as well
     // --> If runSeg < goldSeg for ANY split : YOU HAVE BEATEN SOME PRIOR BEST SPLITS; SAVE?
 
-    //FIXME: Attributes to consider adding (imageId, goldTotal)
+    //FIXME: Attributes to consider adding (imageId)
     const [data, setData] = useState([
         { name: 'Sword', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
         { name: 'Escape', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
@@ -47,6 +45,8 @@ const TimerScreen = ({ route, navigation }) => {
         { name: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
         { name: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
     ]);
+    const [differentials, setDifferentials] = useState([]);
+    const [goldChecks, setGoldChecks] = useState([]);
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
@@ -62,42 +62,58 @@ const TimerScreen = ({ route, navigation }) => {
         setData(updatedData);
     };
 
-    // TODO: Add method that accounts for logic of updating split data on PB at end of run.
     const updateDataOnSave = () => {
-        
-        // Compare last index of runTotal to pbTotal --> If less, update pbSeg & pbTotal
-        // Iterate through each item, if runSeg < goldSeg --> Update goldSeg
-        if (data[splitPosition - 1].runTotal < data[splitPosition - 1].pbTotal) {
-            const saveData = data.map(item => {
+        const isPb = data[splitPosition - 1].runTotal < data[splitPosition - 1].pbTotal;
+        const beatGolds = goldChecks.includes(true);
+        var saveData = [];
+
+        if (isPb) {
+            saveData = data.map(item => {
                 if (item.runSeg < item.goldSeg) {
                     return {...item, goldSeg: item.runSeg, pbSeg: item.runSeg, pbTotal: item.runTotal}
                 }
                 return {...item, pbSeg: item.runSeg, pbTotal: item.runTotal}
             })
-
-            // TODO: Make sure state is updated (complete to false)
-            resetTimer();
-            setData(saveData);
-            storeDataItem(saveData);
-            // setCompleted(false);
+        } else if (beatGolds) {
+            saveData = data.map(item => {
+                if (item.runSeg < item.goldSeg) {
+                    return {...item, goldSeg: item.runSeg};
+                }
+                return {...item};
+            })
+        } else {
+            saveData = data;
         }
+        resetTimer();
+        setData(saveData);
+        storeDataItem(saveData);
     };
 
     const updateDifferentialsOnSplit = (differential) => {
         updatedDifferentials = differentials.map((item) => (item));
         updatedDifferentials.push(differential);
         setDifferentials(updatedDifferentials)
-    }
+    };
 
     const updateDifferentialsOnUnsplit = () => {
         updatedDifferentials = differentials.map((item) => (item));
         updatedDifferentials.pop();
         setDifferentials(updatedDifferentials);
-    }
+    };
 
     const clearDifferentials = () => {
         setDifferentials([]);
-    }
+    };
+
+    const updateGoldChecksOnSplit = () => {
+        updatedGoldChecks = goldChecks.map((item) => (item));
+        updatedGoldChecks.push(isGoldSplit());
+        setGoldChecks(updatedGoldChecks);
+    };
+
+    const clearGoldChecks = () => {
+        setGoldChecks([]);
+    };
 
     useEffect(() => {
         try {
@@ -160,12 +176,14 @@ const TimerScreen = ({ route, navigation }) => {
         setCompleted(false);
         setSplitPosition(0);
         clearDifferentials();
+        clearGoldChecks();
     };
 
     const processSplit = () => {
         if (active && !paused) {
             updateDataOnSplit(splitPosition, {runTotal: timer, runSeg: getSegmentTime()})
             updateDifferentialsOnSplit(getDifferential());
+            updateGoldChecksOnSplit();
             setSplitPosition(splitPosition + 1);
 
             if (splitPosition == data.length - 1) {
@@ -226,20 +244,23 @@ const TimerScreen = ({ route, navigation }) => {
         return (num < 10) ? `0${num}` : num;
     };
 
-    // FIXME: How to handle "goldTotal"? Doesn't currently exist, would be a pain to iterate each time.
     const getDifferential = () => {
-        if (compareAgainst == 'PB') {
-            if (splitPosition < data.length) {
-                return timer - data[splitPosition].pbTotal;
-            }
-            return 0;
-        } else {
-            if (splitPosition < data.length) {
-                return timer - data[splitPosition].goldTotal;
-            }
-            return 0;
+        if (splitPosition < data.length) {
+            return timer - data[splitPosition].pbTotal;
         }
+        return 0;
     };
+
+    const isGoldSplit = () => {
+        const goldDifferential = getSegmentTime() - data[splitPosition].goldSeg;
+        
+        console.log('isGoldSplit: ', getSegmentTime() - data[splitPosition].goldSeg);
+        return (goldDifferential < 0) ? true : false;
+    }
+
+    const isPersonalBest = () => {
+        return timer < data[data.length - 1].pbTotal;
+    }
 
     // TODO: Add logic here for for gold splits (compare goldSeg to runSeg)
     // TODO: Rework this code, can use conditional styling instead of full text component
@@ -248,14 +269,14 @@ const TimerScreen = ({ route, navigation }) => {
         if (currentIndex < splitPosition) {
             if (differentials[currentIndex] < 0) {
                 return (
-                    <Text style={[styles.differentialText, {color: 'green'}]}>{
-                        outputTime(differentials[currentIndex])
+                    <Text style={[styles.differentialText, goldChecks[currentIndex] ? 
+                        {color: 'gold'} : {color: 'green'}]}>{outputTime(differentials[currentIndex])
                     }</Text>
                 );
             } else {
                 return (
-                    <Text style={[styles.differentialText, {color: 'red'}]}>+{
-                        outputTime(differentials[currentIndex])
+                    <Text style={[styles.differentialText, goldChecks[currentIndex] ? 
+                        {color: 'gold'} : {color: 'red'}]}>+{outputTime(differentials[currentIndex])
                     }</Text>
                 );
             }
@@ -281,26 +302,29 @@ const TimerScreen = ({ route, navigation }) => {
     };
 
     function TextBottomButton() {
-
         // TODO: Add another state that just says "reset" if no PB or beaten golds?
-
-        return (completed) ? <Text style={styles.saveButtonText}>SAVE</Text> : 
-        <Text style={styles.splitButtonText}>SPLIT</Text>
+        if (completed) {
+            if (isPersonalBest() || goldChecks.includes(true)) {
+                return <Text style={styles.saveButtonText}>SAVE</Text>
+            } else {
+                return <Text style={styles.resetButtonText}>RESET</Text>
+            }
+        }
+        return <Text style={styles.saveButtonText}>SPLIT</Text>
     }
 
     // TODO: Condense this code
     const pressBottomButton =() => {
         if (completed) { // (personalBest || newGolds)
-            updateDataOnSave();
-            // setCompleted(false);
+            if (isPersonalBest() || goldChecks.includes(true)) {
+                updateDataOnSave();
+            }
+            resetTimer();
         }
         processSplit();
     };
 
     const longPressBottomButton =() => {
-        if (completed) { // (personalBest || newGolds)
-            // code to save splits
-        }
         processUnSplit();
     };
 
@@ -446,6 +470,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
+    // TODO: Consolidate duplicative styles for reuse
+    
     splitButtonText: {
         fontSize: 40,
         fontWeight: 'bold',
@@ -460,6 +487,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     saveButtonText: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'white',
+        flexDirection: 'row',
+        marginBottom: 10,
+    },
+    resetButton: {
+        backgroundColor: 'darkred',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    resetButtonText: {
         fontSize: 40,
         fontWeight: 'bold',
         color: 'white',
