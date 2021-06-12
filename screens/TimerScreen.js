@@ -63,8 +63,24 @@ const TimerScreen = ({ route, navigation }) => {
     };
 
     // TODO: Add method that accounts for logic of updating split data on PB at end of run.
-    // --> Iterate through entire dataset & update any gold segments / pbSeg & pbTotal
     const updateDataOnSave = () => {
+        
+        // Compare last index of runTotal to pbTotal --> If less, update pbSeg & pbTotal
+        // Iterate through each item, if runSeg < goldSeg --> Update goldSeg
+        if (data[splitPosition - 1].runTotal < data[splitPosition - 1].pbTotal) {
+            const saveData = data.map(item => {
+                if (item.runSeg < item.goldSeg) {
+                    return {...item, goldSeg: item.runSeg, pbSeg: item.runSeg, pbTotal: item.runTotal}
+                }
+                return {...item, pbSeg: item.runSeg, pbTotal: item.runTotal}
+            })
+
+            // TODO: Make sure state is updated (complete to false)
+            resetTimer();
+            setData(saveData);
+            storeDataItem(saveData);
+            // setCompleted(false);
+        }
     };
 
     const updateDifferentialsOnSplit = (differential) => {
@@ -89,6 +105,9 @@ const TimerScreen = ({ route, navigation }) => {
         } catch (err) {
           console.log(err);
         }
+
+        // TODO: Pull down data from firebase and call setData() with the
+
       }, []);
 
     useEffect(() => {
@@ -262,6 +281,9 @@ const TimerScreen = ({ route, navigation }) => {
     };
 
     function TextBottomButton() {
+
+        // TODO: Add another state that just says "reset" if no PB or beaten golds?
+
         return (completed) ? <Text style={styles.saveButtonText}>SAVE</Text> : 
         <Text style={styles.splitButtonText}>SPLIT</Text>
     }
@@ -269,7 +291,8 @@ const TimerScreen = ({ route, navigation }) => {
     // TODO: Condense this code
     const pressBottomButton =() => {
         if (completed) { // (personalBest || newGolds)
-            storeDataItem(data);
+            updateDataOnSave();
+            // setCompleted(false);
         }
         processSplit();
     };
