@@ -5,11 +5,13 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const CategoryScreen = ({ route, navigation }) => {
 
+    const { currentGame } = route.params;
+
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Game')}}
+                    onPress={() => {navigation.navigate('Games')}}
                 >
                     <Text style={styles.headerButtons}> Back </Text>
                 </TouchableOpacity>
@@ -18,7 +20,7 @@ const CategoryScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                 onPress={() => {navigation.navigate('CategorySettings')}}
                 >
-                <Text style={styles.headerButtons}> Edit </Text>
+                <Text style={styles.headerButtons}> Add / Edit </Text>
                 </TouchableOpacity> 
             ),
         });
@@ -26,7 +28,9 @@ const CategoryScreen = ({ route, navigation }) => {
 
     return (
         <TouchableOpacity onPress={() => {navigation.navigate("Timer")}}>
-            <Text style={styles.categoryText}>TO TIMER SCREEN </Text>
+            <Text style={styles.categoryText}> TO TIMER SCREEN </Text>
+
+            <Text> Current Game: {'\n' + currentGame} </Text>
         </TouchableOpacity>
     )
 }

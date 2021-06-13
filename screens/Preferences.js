@@ -9,14 +9,14 @@ const Preferences = ({ route, navigation }) => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Game')}}
+                    onPress={() => {navigation.navigate('Games')}}
                 >
                     <Text style={styles.headerButtons}> Back </Text>
                 </TouchableOpacity>
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('Game')}}
+                onPress={() => {navigation.navigate('Games')}}
                 >
                 <Text style={styles.headerButtons}> Save </Text>
                 </TouchableOpacity> 

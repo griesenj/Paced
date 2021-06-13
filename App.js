@@ -23,10 +23,10 @@ export default function App() {
         CATEGORYSETTINGSSCREEN
         TIMER SCREEN (back [left] - timerSettings [right]) */}
 
-        <Stack.Screen name="Game" component={GameScreen}/>
+        <Stack.Screen name="Games" component={GameScreen}/>
         <Stack.Screen name="Game Settings" component={GameSettings}/>
         <Stack.Screen name="Preferences" component={Preferences}/>
-        <Stack.Screen name="Category" component={CategoryScreen}/>
+        <Stack.Screen name="Categories" component={CategoryScreen}/>
         <Stack.Screen name="Timer" component={TimerScreen}/>
 
         {/* TIMERSETTINGSSCREEN */}

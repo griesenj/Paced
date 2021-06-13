@@ -11,7 +11,7 @@ export function initPacedDB() {
   }
 
 export function storeDataItem(item) {
-    console.log('storing ...', item)
+    // console.log('storing ...', item)
     firebase.database().ref("pacedData/").push(item);
   }
 

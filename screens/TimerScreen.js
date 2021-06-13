@@ -107,6 +107,8 @@ const TimerScreen = ({ route, navigation }) => {
         setGoldChecks([]);
     };
 
+
+    // FIXME: This will likely need to be moved into the games screen (starting screen)
     useEffect(() => {
         try {
           initPacedDB();
@@ -355,7 +357,7 @@ const TimerScreen = ({ route, navigation }) => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Category')}}
+                    onPress={() => {navigation.navigate('Categories')}}
                 >
                     <Text style={styles.navHeaderButtons}> Back </Text>
                 </TouchableOpacity>
