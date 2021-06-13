@@ -1,4 +1,4 @@
-export const findEntry = (arr, key, val) => {
+export const locateEntry = (arr, key, val) => {
     for (var index = 0; index < arr.length; index++) {
         var entry = arr[index];
         if (entry[key] == val) {
@@ -8,7 +8,7 @@ export const findEntry = (arr, key, val) => {
     return null;
 }
 
-export const findIndex = (arr, key, val) => {
+export const locateIndex = (arr, key, val) => {
     for (var index = 0; index < arr.length; index++) {
         var entry = arr[index];
         if (entry[key] == val) {

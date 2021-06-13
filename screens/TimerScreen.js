@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { initPacedDB, storeDataItem } from '../helpers/fb-paced';
+import { locateEntry, locateIndex } from '../helpers/finders';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
@@ -21,16 +22,15 @@ const TimerScreen = ({ route, navigation }) => {
     // 2. Timer screen pulls game and category data from category screen
     // 3. Timer screen uses this info to determine what split data to pull from firebase
 
+    const { currentGame } = route.params;
+    const { currentCategory } = route.params;
+    const { entireData } = route.params;
+
+    const categoryArray = entireData[locateIndex(entireData, 'title', currentGame)].category;
+    const splitsArray = categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
+
     //FIXME: Attributes to consider adding (imageId)
-    const [data, setData] = useState([
-        { split: 'Sword', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
-        { split: 'Escape', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
-        { split: 'Bottle', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
-        { split: 'Bugs', goldSeg: 200, pbSeg: 200, pbTotal: 500, runSeg: 0, runTotal: 0},
-        { split: 'Deku', goldSeg: 250, pbSeg: 250, pbTotal: 750, runSeg: 0, runTotal: 0},
-        { split: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
-        { split: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
-    ]);
+    const [data, setData] = useState(splitsArray);
     const [goldChecks, setGoldChecks] = useState([]);
     const [differentials, setDifferentials] = useState([]);
 
@@ -369,6 +369,11 @@ const TimerScreen = ({ route, navigation }) => {
                 <Text style={styles.navHeaderButtons}> Edit </Text>
                 </TouchableOpacity> 
             ),
+            headerTitle: () => (
+                <View>
+                    <Text style={styles.navHeaderTitle} numberOfLines={1}>{currentCategory}</Text>
+                </View>
+            ),
         });
     }, []);
 
@@ -396,7 +401,12 @@ const TimerScreen = ({ route, navigation }) => {
                 <TouchableOpacity style={[(!completed) ? styles.splitButton : 
                     (isPersonalBest() || goldChecks.includes(true)) ? 
                     styles.saveButton : styles.resetButton]}
-                    onPress={() => {pressBottomButton()}}
+                    onPress={() => {
+                        pressBottomButton()
+                        // TODO: REMOVE THIS LATER - TESTING
+                        console.log()
+                    
+                    }}
                     onLongPress={() => {longPressBottomButton()}}
                 >
                     <TextBottomButton/>
@@ -503,6 +513,11 @@ const styles = StyleSheet.create({
         fontSize: 26,
         fontWeight: 'bold',
     }, 
+    navHeaderTitle: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
     navHeaderButtons: {
         color: 'white',
         fontWeight: 'bold',

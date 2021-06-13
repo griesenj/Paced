@@ -1,8 +1,9 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { findEntry, findIndex } from '../helpers/finders';
 import { initPacedDB, storeDataItem } from '../helpers/fb-paced';
+import { locateEntry, locateIndex } from '../helpers/finders';
 
+import {HeaderTitle} from '@react-navigation/stack';
 import { Image } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
@@ -10,43 +11,57 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const GameScreen = ({ route, navigation }) => {
 
+    // TODO: Likely necessary to pass the entire data object between screens
     const [data, setData] = useState([
         {title: "The Legend of Zelda: Majora's Mask",
         category: [
-            {run: 'Any% - MM', splits: [
-                // splits go here
+            {run: 'Any%', splits: [
+                { split: 'MM Any% 1', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+                { split: 'MM Any% 2', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+                { split: 'MM Any% 3', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
             ]},
-            {run: "100% - MM", splits: [
-                // splits go here
+            {run: "100%", splits: [
+                { split: 'MM Hundo 1', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+                { split: 'MM Hundo 2', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+                { split: 'MM Hundo 3', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
             ]},
-            {run: "All Masks - MM", splits: [
-                // splits go here
+            {run: "All Masks", splits: [
+                { split: 'Mask 1', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+                { split: 'Mask 2', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+                { split: 'Mask 3', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
             ]},
         ],
         imageUrl: "https://upload.wikimedia.org/wikipedia/en/6/60/The_Legend_of_Zelda_-_Majora%27s_Mask_Box_Art.jpg"},
         {title: "The Legend of Zelda: Ocarina of Time",
         category: [
-            {run: 'Any% - OOT', splits: [
-                // splits go here
+            {run: 'Any%', splits: [
+                { split: 'Sword', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+                { split: 'Escape', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+                { split: 'Bottle', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},
+                { split: 'Bugs', goldSeg: 200, pbSeg: 200, pbTotal: 500, runSeg: 0, runTotal: 0},
+                { split: 'Deku', goldSeg: 250, pbSeg: 250, pbTotal: 750, runSeg: 0, runTotal: 0},
+                { split: 'Collapse', goldSeg: 250, pbSeg: 250, pbTotal: 1000, runSeg: 0, runTotal: 0},
+                { split: 'Ganon', goldSeg: 300, pbSeg: 300, pbTotal: 1300, runSeg: 0, runTotal: 0 },
             ]},
-            {run: "100% - OOT", splits: [
-                // splits go here
-            ]},
-            {run: "All Cows - OOT", splits: [
-                // splits go here
+            {run: "All Cows", splits: [
+                { split: 'Moo 1', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+                { split: 'Moo 2', goldSeg: 50, pbSeg: 50, pbTotal: 100, runSeg: 0, runTotal: 0},
+                { split: 'Moo 3', goldSeg: 50, pbSeg: 50, pbTotal: 150, runSeg: 0, runTotal: 0},
+                { split: 'MOO!', goldSeg: 50, pbSeg: 50, pbTotal: 200, runSeg: 0, runTotal: 0},
             ]},
         ],
         imageUrl: "https://upload.wikimedia.org/wikipedia/en/8/8e/The_Legend_of_Zelda_Ocarina_of_Time_box_art.png"},
         {title: "The Legend of Zelda: The Wind Waker",
         category: [
-            {run: 'Any% - OOT', splits: [
-                // splits go here
+            {run: 'Any%', splits: [
+                { split: 'WW Any% 1', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+                { split: 'WW Any% 2', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+                { split: 'WW Any% 3', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},            
             ]},
-            {run: "100% - OOT", splits: [
-                // splits go here
-            ]},
-            {run: "All Cows - OOT", splits: [
-                // splits go here
+            {run: "100%", splits: [
+                { split: 'WW Hundo 1', goldSeg: 50, pbSeg: 50, pbTotal: 50, runSeg: 0, runTotal: 0},
+                { split: 'WW Hundo 2', goldSeg: 100, pbSeg: 100, pbTotal: 150, runSeg: 0, runTotal: 0},
+                { split: 'WW Hundo 3', goldSeg: 150, pbSeg: 150, pbTotal: 300, runSeg: 0, runTotal: 0},            
             ]},
         ],
         imageUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/7/79/The_Legend_of_Zelda_The_Wind_Waker.jpg/220px-The_Legend_of_Zelda_The_Wind_Waker.jpg"},
@@ -98,12 +113,12 @@ const GameScreen = ({ route, navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    {navigation.navigate('Categories', { currentGame: item.title })};
+                    {navigation.navigate('Categories', { data: data, currentGame: item.title })};
                     // FIXME: TESTING ONLY - ACCESSING PROPERTIES OF OBJECTS
-                    // console.log(findEntry(data, "title", "The Legend of Zelda: Majora's Mask"));
-                    // console.log(findEntry(data, "title", "The Legend of Zelda: Ocarina of Time"));
-                    // console.log(findIndex(data, "title", "The Legend of Zelda: Majora's Mask"));
-                    // console.log(findIndex(data, "title", "The Legend of Zelda: Ocarina of Time"));
+                    // console.log(locateEntry(data, "title", "The Legend of Zelda: Majora's Mask"));
+                    // console.log(locateEntry(data, "title", "The Legend of Zelda: Ocarina of Time"));
+                    // console.log(locateIndex(data, "title", "The Legend of Zelda: Majora's Mask"));
+                    // console.log(locateIndex(data, "title", "The Legend of Zelda: Ocarina of Time"));
 
                     // storeDataItem(testEntryArray);
                     // storeDataItem(testEntryObjects);
@@ -172,10 +187,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
         padding: 10,
-    },
-    gamesContainer: {
-        fontSize: 24,
-        flex: 1,
     },
     imagePlaceholder: {
         height: 75,
