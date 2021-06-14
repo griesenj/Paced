@@ -4,6 +4,7 @@ import { locateEntry, locateIndex } from '../helpers/finders';
 
 import { Image } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { initLocalData } from '../helpers/fb-paced';
 
 const CategoryScreen = ({ route, navigation }) => {
 
@@ -12,13 +13,22 @@ const CategoryScreen = ({ route, navigation }) => {
     const [currentGame, setCurrentGame] = useState(receivedCurrentGame); // TODO: Remove setter? Probably not needed
 
     useEffect(() => {
+        try {
+            console.log('SETTING CATEGORY PACED DATA');
+            initLocalData(setCategoryPacedData);
+        } catch (err) {
+          console.log(err);
+        }
+    }, [route.params.timerPacedData]);
+
+    useEffect(() => {
         if (route.params?.receivedPacedData) {
-            console.log('Setting data from GAMESCREEN: ', route.params.receivedPacedData)
-            setCategoryPacedData(route.params.receivedPacedData);
+            // console.log('Setting data from GAMESCREEN: ', route.params.receivedPacedData)
+            // setCategoryPacedData(route.params.receivedPacedData);
         }
         if (route.params?.timerPacedData) {
-            console.log('Setting data from TIMERSCREEN: ', route.params.timerPacedData)
-            setCategoryPacedData(route.params.timerPacedData);
+            // console.log('Setting data from TIMERSCREEN: ', route.params.timerPacedData)
+            // setCategoryPacedData(route.params.timerPacedData);
         }
     }, [route.params?.receivedPacedData, route.params?.timerPacedData]);
 
