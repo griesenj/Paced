@@ -7,13 +7,13 @@ import { firebaseConfig } from "./fb-credentials";
 // FIXME: STARTED REALTIME DB IN TEST MODE - WOULD NEED TO UPDATE READ/WRITE RULES (30 day limit)
 
 export function initPacedDB() {
-    firebase.initializeApp(firebaseConfig);
-  }
+  firebase.initializeApp(firebaseConfig);
+}
 
 export function storeDataItem(item) {
-    // console.log('storing ...', item)
-    firebase.database().ref("pacedData/").push(item);
-  }
+  // console.log('storing ...', item)
+  firebase.database().ref("pacedData/").push(item);
+}
 
 // TODO: Determine best way to structure data (nested JSON) --> Can write to specific paths, etc.
 // https://firebase.google.com/docs/database/unity/save-data

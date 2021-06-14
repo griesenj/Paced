@@ -13,23 +13,16 @@ const TimerScreen = ({ route, navigation }) => {
     const [completed, setCompleted] = useState(false);
     const [splitPosition, setSplitPosition] = useState(0);
 
-    // TODO: Route params from settings screen?
     // TODO: If time allows, determine how to unsplit after ending the run?
     // Would probably need to leave timer running and log finish time as a new state
 
-    // TODO: Data accessor planning
-    // 1. Category screen pulls game data from game screen
-    // 2. Timer screen pulls game and category data from category screen
-    // 3. Timer screen uses this info to determine what split data to pull from firebase
+    const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;  // TODO: Remove setter?
+    const [currentGame, setCurrentGame] = useState(receivedCurrentGame);  // TODO: Remove setter?
+    const [currentCategory, setCurrentCategory] = useState(receivedCurrentCategory);  // TODO: Remove setter?
+    const [pacedData, setPacedData] = useState(receivedPacedData);
 
-    const { currentGame } = route.params;
-    const { currentCategory } = route.params;
-    const { entireData } = route.params;
-
-    const categoryArray = entireData[locateIndex(entireData, 'title', currentGame)].category;
+    const categoryArray = pacedData[locateIndex(pacedData, 'title', currentGame)].category;
     const splitsArray = categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
-
-    //FIXME: Attributes to consider adding (imageId)
     const [data, setData] = useState(splitsArray);
     const [goldChecks, setGoldChecks] = useState([]);
     const [differentials, setDifferentials] = useState([]);
@@ -111,7 +104,7 @@ const TimerScreen = ({ route, navigation }) => {
     // FIXME: This will likely need to be moved into the games screen (starting screen)
     useEffect(() => {
         try {
-          initPacedDB();
+        //   initPacedDB();
         } catch (err) {
           console.log(err);
         }
@@ -357,14 +350,14 @@ const TimerScreen = ({ route, navigation }) => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Categories')}}
+                    onPress={() => {navigation.navigate('Categories', { pacedData })}}
                 >
                     <Text style={styles.navHeaderButtons}> Back </Text>
                 </TouchableOpacity>
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('TimerSettings')}}
+                onPress={() => {navigation.navigate('TimerSettings', { receivedPacedData: pacedData })}}
                 >
                 <Text style={styles.navHeaderButtons}> Edit </Text>
                 </TouchableOpacity> 
@@ -393,7 +386,12 @@ const TimerScreen = ({ route, navigation }) => {
             <View style={styles.timerContainer}>
                 <TouchableOpacity style={{backgroundColor: 'red'}}
                     onPress={() => {toggleTimer()}}
-                    onLongPress={() => {resetTimer()}}
+                    onLongPress={() => {
+                                                
+                        // // FIXME: REMOVE LATER
+                        // route.params.pacedData = data;
+                        
+                        resetTimer()}}
                 >
                     <Text style={styles.timerText}>{outputTime(timer)}</Text>
                 </TouchableOpacity>
@@ -401,12 +399,7 @@ const TimerScreen = ({ route, navigation }) => {
                 <TouchableOpacity style={[(!completed) ? styles.splitButton : 
                     (isPersonalBest() || goldChecks.includes(true)) ? 
                     styles.saveButton : styles.resetButton]}
-                    onPress={() => {
-                        pressBottomButton()
-                        // TODO: REMOVE THIS LATER - TESTING
-                        console.log()
-                    
-                    }}
+                    onPress={() => {pressBottomButton()}}
                     onLongPress={() => {longPressBottomButton()}}
                 >
                     <TextBottomButton/>
@@ -516,7 +509,7 @@ const styles = StyleSheet.create({
     navHeaderTitle: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 17,
     },
     navHeaderButtons: {
         color: 'white',

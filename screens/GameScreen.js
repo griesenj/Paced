@@ -12,7 +12,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 const GameScreen = ({ route, navigation }) => {
 
     // TODO: Likely necessary to pass the entire data object between screens
-    const [data, setData] = useState([
+    const [pacedData, setPacedData] = useState([
         {title: "The Legend of Zelda: Majora's Mask",
         category: [
             {run: 'Any%', splits: [
@@ -88,7 +88,16 @@ const GameScreen = ({ route, navigation }) => {
         } catch (err) {
           console.log(err);
         }
+        // TODO: Initialize the value of paced data via existing firebase object
+        // setPacedData();
       }, []);
+
+    useEffect(() => {
+        if (route.params?.pacedData) {
+            console.log('Setting new value (pacedData): ', route.params.pacedData)
+            setPacedData(route.params.pacedData);
+        }
+    }, [route.params?.pacedData])
 
     useEffect(() => {
         navigation.setOptions({
@@ -113,15 +122,7 @@ const GameScreen = ({ route, navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    {navigation.navigate('Categories', { data: data, currentGame: item.title })};
-                    // FIXME: TESTING ONLY - ACCESSING PROPERTIES OF OBJECTS
-                    // console.log(locateEntry(data, "title", "The Legend of Zelda: Majora's Mask"));
-                    // console.log(locateEntry(data, "title", "The Legend of Zelda: Ocarina of Time"));
-                    // console.log(locateIndex(data, "title", "The Legend of Zelda: Majora's Mask"));
-                    // console.log(locateIndex(data, "title", "The Legend of Zelda: Ocarina of Time"));
-
-                    // storeDataItem(testEntryArray);
-                    // storeDataItem(testEntryObjects);
+                    {navigation.navigate('Categories', { receivedPacedData: pacedData, receivedCurrentGame: item.title })};
                 }}
             >
                 <View style={styles.gameRow}>
@@ -150,8 +151,8 @@ const GameScreen = ({ route, navigation }) => {
                 <FlatList
                     ItemSeparatorComponent={renderSeparator}
                     keyExtractor={(item) => item.title}
-                    data={data}
-                    extraData={data}
+                    data={pacedData}
+                    extraData={pacedData}
                     renderItem={renderGames}
                 />
             </View>

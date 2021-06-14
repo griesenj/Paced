@@ -7,14 +7,22 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const CategoryScreen = ({ route, navigation }) => {
 
-    const { currentGame } = route.params;
-    const { data } = route.params;
+    const { receivedPacedData, receivedCurrentGame } = route.params;
+    const [pacedData, setPacedData] = useState(receivedPacedData);
+    const [currentGame, setCurrentGame] = useState(receivedCurrentGame); // TODO: Remove setter? Probably not needed
+
+    useEffect(() => {
+        if (route.params?.pacedData) {
+            console.log('Setting new value (pacedData): ', route.params.pacedData)
+            setPacedData(route.params.pacedData);
+        }
+    }, [route.params?.pacedData])
 
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Games')}}
+                    onPress={() => {navigation.navigate('Games', { pacedData })}}
                 >
                     <Text style={styles.headerButtons}> Back </Text>
                 </TouchableOpacity>
@@ -32,14 +40,20 @@ const CategoryScreen = ({ route, navigation }) => {
     const renderCategories = ({item}) => {
         return (           
             <TouchableOpacity
-                onPress={() => {
-                    {navigation.navigate('Timer', { entireData: data, currentGame: currentGame, currentCategory: item.run })};
+                onPress={() => {{
+
+                    // TODO: REMOVE
+                    // console.log(route.params);
+
+                    navigation.navigate('Timer', { receivedPacedData: pacedData, receivedCurrentGame: currentGame, 
+                        receivedCurrentCategory: item.run })
+                };
                 }}
             >
                 <View style={styles.categoryRow}>
                     <Image 
                         style={styles.imagePlaceholder}
-                        source={{uri: data[locateIndex(data, 'title', currentGame)].imageUrl}}
+                        source={{uri: pacedData[locateIndex(pacedData, 'title', currentGame)].imageUrl}}
                         resizeMode={'contain'}
                         />
                     <Text style={styles.categoryText}>{item.run}</Text>
@@ -62,8 +76,8 @@ const CategoryScreen = ({ route, navigation }) => {
                     <FlatList
                         ItemSeparatorComponent={renderSeparator}
                         keyExtractor={(item) => item.run}
-                        data={data[locateIndex(data, 'title', currentGame)].category}
-                        extraData={data[locateIndex(data, 'title', currentGame)].category}
+                        data={pacedData[locateIndex(pacedData, 'title', currentGame)].category}
+                        extraData={pacedData[locateIndex(pacedData, 'title', currentGame)].category}
                         renderItem={renderCategories}
                     />
                 </View>
