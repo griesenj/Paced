@@ -12,7 +12,7 @@ export function initPacedDB() {
 
 export function storeDataItem(item) {
   // console.log('storing ...', item)
-  firebase.database().ref("pacedData/").push(item);
+  firebase.database().ref("pacedData/").set(item);
 }
 
 // TODO: Determine best way to structure data (nested JSON) --> Can write to specific paths, etc.

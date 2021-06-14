@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { initPacedDB, storeDataItem } from '../helpers/fb-paced';
-import { locateEntry, locateIndex } from '../helpers/finders';
+import React, { useEffect, useState } from 'react';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { locateIndex } from '../helpers/finders';
+import { storeDataItem } from '../helpers/fb-paced';
 
 const TimerScreen = ({ route, navigation }) => {
    
@@ -63,9 +63,26 @@ const TimerScreen = ({ route, navigation }) => {
         } else {
             saveData = data;
         }
+
+        // TODO: TESTING ONLY
+        // console.log("DATA TO SAVE: ", saveData);
+        updatePacedData(saveData);
+
         resetTimer();
         setData(saveData);
-        storeDataItem(saveData);
+        // storeDataItem(saveData);
+    };
+
+    // TODO: Make sure this works properly - adds saved splits to paced object passed between
+    const updatePacedData = (savedData) => {
+        var pacedCopy = JSON.parse(JSON.stringify(pacedData));
+        var gameIndex = locateIndex(pacedCopy, 'title', currentGame);
+        var categoryIndex = locateIndex(pacedCopy[gameIndex].category, 'run', currentCategory);
+
+
+        pacedCopy[gameIndex].category[categoryIndex].splits = savedData;
+        setPacedData(pacedCopy);
+        storeDataItem(pacedCopy);
     };
 
     const updateDifferentialsOnSplit = (differential) => {
@@ -99,20 +116,6 @@ const TimerScreen = ({ route, navigation }) => {
     const clearGoldChecks = () => {
         setGoldChecks([]);
     };
-
-
-    // FIXME: This will likely need to be moved into the games screen (starting screen)
-    useEffect(() => {
-        try {
-        //   initPacedDB();
-        } catch (err) {
-          console.log(err);
-        }
-
-        // TODO: Pull down data from firebase and call setData() on the correct set of splits
-        // to be specified via route params from prior screens
-
-      }, []);
 
     useEffect(() => {
         const interval = getTimerInterval(onIntervalTick, 100);

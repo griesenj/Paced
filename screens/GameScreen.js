@@ -94,7 +94,7 @@ const GameScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (route.params?.pacedData) {
-            console.log('Setting new value (pacedData): ', route.params.pacedData)
+            // console.log('Setting new value (pacedData): ', route.params.pacedData)
             setPacedData(route.params.pacedData);
         }
     }, [route.params?.pacedData])
