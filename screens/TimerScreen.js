@@ -19,9 +19,9 @@ const TimerScreen = ({ route, navigation }) => {
     const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;  // TODO: Remove setter?
     const [currentGame, setCurrentGame] = useState(receivedCurrentGame);  // TODO: Remove setter?
     const [currentCategory, setCurrentCategory] = useState(receivedCurrentCategory);  // TODO: Remove setter?
-    const [pacedData, setPacedData] = useState(receivedPacedData);
+    const [timerPacedData, setTimerPacedData] = useState(receivedPacedData);
 
-    const categoryArray = pacedData[locateIndex(pacedData, 'title', currentGame)].category;
+    const categoryArray = timerPacedData[locateIndex(timerPacedData, 'title', currentGame)].category;
     const splitsArray = categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
     const [data, setData] = useState(splitsArray);
     const [goldChecks, setGoldChecks] = useState([]);
@@ -66,22 +66,20 @@ const TimerScreen = ({ route, navigation }) => {
 
         // TODO: TESTING ONLY
         // console.log("DATA TO SAVE: ", saveData);
-        updatePacedData(saveData);
-
-        resetTimer();
+        updateTimerPacedData(saveData);
         setData(saveData);
+        resetTimer();
         // storeDataItem(saveData);
     };
 
     // TODO: Make sure this works properly - adds saved splits to paced object passed between
-    const updatePacedData = (savedData) => {
-        var pacedCopy = JSON.parse(JSON.stringify(pacedData));
+    const updateTimerPacedData = (savedData) => {
+        var pacedCopy = JSON.parse(JSON.stringify(timerPacedData));
         var gameIndex = locateIndex(pacedCopy, 'title', currentGame);
         var categoryIndex = locateIndex(pacedCopy[gameIndex].category, 'run', currentCategory);
 
-
         pacedCopy[gameIndex].category[categoryIndex].splits = savedData;
-        setPacedData(pacedCopy);
+        setTimerPacedData(pacedCopy);
         storeDataItem(pacedCopy);
     };
 
@@ -107,7 +105,7 @@ const TimerScreen = ({ route, navigation }) => {
         setGoldChecks(updatedGoldChecks);
     };
 
-    updateGoldChecksOnUnsplit = () => {
+    const updateGoldChecksOnUnsplit = () => {
         updatedGoldChecks = goldChecks.map((item) => (item));
         updatedGoldChecks.pop();
         setGoldChecks(updatedGoldChecks);
@@ -319,6 +317,11 @@ const TimerScreen = ({ route, navigation }) => {
             <TouchableHighlight
                 activeOpacity={1.0}
                 underlayColor={"#ffefd5"}
+                
+                //FIXME: TESTING REMOVE LATER
+                onPress={() => {
+                    console.log("TIMERpacedData: ", timerPacedData);
+                }}
             >
                 <View style={styles.splitRow}>
                     <View style={styles.splitLeft}>
@@ -349,18 +352,20 @@ const TimerScreen = ({ route, navigation }) => {
 
     // TODO: When timer is active, should NOT be able to exit screen (hide back/edit buttons)
     // Can watch active flag and update whenever that changes (add rending logic for touchableOpacity)
+
+    // FIXME: Route params not currently working in reverse direction
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Categories', { pacedData })}}
+                    onPress={() => {navigation.navigate('Categories', { timerPacedData })}}
                 >
                     <Text style={styles.navHeaderButtons}> Back </Text>
                 </TouchableOpacity>
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('TimerSettings', { receivedPacedData: pacedData })}}
+                onPress={() => {navigation.navigate('TimerSettings', { })}}
                 >
                 <Text style={styles.navHeaderButtons}> Edit </Text>
                 </TouchableOpacity> 
@@ -389,12 +394,7 @@ const TimerScreen = ({ route, navigation }) => {
             <View style={styles.timerContainer}>
                 <TouchableOpacity style={{backgroundColor: 'red'}}
                     onPress={() => {toggleTimer()}}
-                    onLongPress={() => {
-                                                
-                        // // FIXME: REMOVE LATER
-                        // route.params.pacedData = data;
-                        
-                        resetTimer()}}
+                    onLongPress={() => {resetTimer()}}
                 >
                     <Text style={styles.timerText}>{outputTime(timer)}</Text>
                 </TouchableOpacity>

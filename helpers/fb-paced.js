@@ -10,6 +10,13 @@ export function initPacedDB() {
   firebase.initializeApp(firebaseConfig);
 }
 
+export function initLocalData(updateFunc) {
+  const ref = firebase.database().ref('pacedData/');
+  ref.on('value', (snapshot) => {
+    updateFunc(snapshot.val());
+  });
+}
+
 export function storeDataItem(item) {
   // console.log('storing ...', item)
   firebase.database().ref("pacedData/").set(item);

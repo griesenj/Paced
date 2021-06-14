@@ -8,31 +8,35 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 const CategoryScreen = ({ route, navigation }) => {
 
     const { receivedPacedData, receivedCurrentGame } = route.params;
-    const [pacedData, setPacedData] = useState(receivedPacedData);
+    const [categoryPacedData, setCategoryPacedData] = useState(receivedPacedData);
     const [currentGame, setCurrentGame] = useState(receivedCurrentGame); // TODO: Remove setter? Probably not needed
 
     useEffect(() => {
-        if (route.params?.pacedData) {
-            // console.log('Setting new value (pacedData): ', route.params.pacedData)
-            console.log('CATEGORY SCREEN setPacedData CALLED')
-            console.log('CATEGORY SCREEN receivedPacedData', receivedPacedData);
-            console.log('CATEGORY SCREEN route.params pacedData', route.params.pacedData);
-            setPacedData(route.params.pacedData);
+        if (route.params?.receivedPacedData) {
+            console.log('Setting data from GAMESCREEN: ', route.params.receivedPacedData)
+            setCategoryPacedData(route.params.receivedPacedData);
         }
-    }, [route.params?.pacedData])
+        if (route.params?.timerPacedData) {
+            console.log('Setting data from TIMERSCREEN: ', route.params.timerPacedData)
+            setCategoryPacedData(route.params.timerPacedData);
+        }
+    }, [route.params?.receivedPacedData, route.params?.timerPacedData]);
 
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Games', { pacedData })}}
+                    onPress={() => {navigation.navigate('Games', { categoryPacedData })}}
                 >
                     <Text style={styles.headerButtons}> Back </Text>
                 </TouchableOpacity>
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('CategorySettings')}}
+                onPress={() => {
+                    console.log('categoryPacedData: ', categoryPacedData);
+                    // navigation.navigate('CategorySettings')
+                }}
                 >
                 <Text style={styles.headerButtons}> Add / Edit </Text>
                 </TouchableOpacity> 
@@ -48,7 +52,7 @@ const CategoryScreen = ({ route, navigation }) => {
                     // TODO: REMOVE
                     // console.log(route.params);
 
-                    navigation.navigate('Timer', { receivedPacedData: pacedData, receivedCurrentGame: currentGame, 
+                    navigation.navigate('Timer', { receivedPacedData: categoryPacedData, receivedCurrentGame: currentGame, 
                         receivedCurrentCategory: item.run })
                 };
                 }}
@@ -56,7 +60,7 @@ const CategoryScreen = ({ route, navigation }) => {
                 <View style={styles.categoryRow}>
                     <Image 
                         style={styles.imagePlaceholder}
-                        source={{uri: pacedData[locateIndex(pacedData, 'title', currentGame)].imageUrl}}
+                        source={{uri: categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].imageUrl}}
                         resizeMode={'contain'}
                         />
                     <Text style={styles.categoryText}>{item.run}</Text>
@@ -79,8 +83,8 @@ const CategoryScreen = ({ route, navigation }) => {
                     <FlatList
                         ItemSeparatorComponent={renderSeparator}
                         keyExtractor={(item) => item.run}
-                        data={pacedData[locateIndex(pacedData, 'title', currentGame)].category}
-                        extraData={pacedData[locateIndex(pacedData, 'title', currentGame)].category}
+                        data={categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].category}
+                        extraData={categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].category}
                         renderItem={renderCategories}
                     />
                 </View>
