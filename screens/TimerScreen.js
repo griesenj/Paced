@@ -47,7 +47,6 @@ const TimerScreen = ({ route, navigation }) => {
         setData(updatedData);
     };
 
-    // FIXME: TESTING RESET OF RUN DATA TO ZERO UPON SAVE
     const updateDataOnSave = () => {
         const isPb = data[splitPosition - 1].runTotal < data[splitPosition - 1].pbTotal;
         const beatGolds = goldChecks.includes(true);
@@ -71,13 +70,19 @@ const TimerScreen = ({ route, navigation }) => {
             saveData = data;
         }
 
-        // TODO: TESTING ONLY
+        saveData = wipeCurrentRunValues(saveData);
         updateTimerPacedData(saveData);
         setData(saveData);
-        resetTimer();
+        resetTimerNoWipe();
     };
 
-    // TODO: Make sure this works properly - adds saved splits to paced object passed between
+    const wipeCurrentRunValues = (splitsToWipe) => {
+        wipedSplits = splitsToWipe.map(item => {
+            return {...item, runSeg: 0, runTotal: 0}
+        })
+        return wipedSplits;
+    }
+
     const updateTimerPacedData = (savedData) => {
         var pacedCopy = JSON.parse(JSON.stringify(timerPacedData));
         var gameIndex = locateIndex(pacedCopy, 'title', currentGame);
@@ -162,8 +167,12 @@ const TimerScreen = ({ route, navigation }) => {
         };
     };
 
-    // TODO: If reset pressed, reinitialize splits data object from firebase (current run zeroed out)
     const resetTimer = () => {
+        resetTimerNoWipe();
+        setData(wipeCurrentRunValues(data));
+    };
+
+    const resetTimerNoWipe = () => {
         setTimer(0);
         setActive(false);
         setPaused(false);
@@ -171,7 +180,7 @@ const TimerScreen = ({ route, navigation }) => {
         setSplitPosition(0);
         clearDifferentials();
         clearGoldChecks();
-    };
+    }
 
     const processSplit = () => {
         if (active && !paused) {
@@ -201,7 +210,6 @@ const TimerScreen = ({ route, navigation }) => {
     }
 
     const getSegmentTime = () => {
-        // Subtract prior split runTotal value from timer (current time) to get segment time.
         if (splitPosition > 0) {
             return timer - data[splitPosition - 1].runTotal;
         }
@@ -255,6 +263,32 @@ const TimerScreen = ({ route, navigation }) => {
         return timer < data[data.length - 1].pbTotal;
     }
 
+    const pressBottomButton =() => {
+        if (completed) {
+            if (isPersonalBest() || goldChecks.includes(true)) {
+                updateDataOnSave();
+            } else {
+                resetTimer();
+            }
+        }
+        processSplit();
+    };
+
+    const longPressBottomButton =() => {
+        processUnSplit();
+    };
+
+    function TextBottomButton() {
+        if (completed) {
+            if (isPersonalBest() || goldChecks.includes(true)) {
+                return <Text style={styles.saveButtonText}>SAVE</Text>
+            } else {
+                return <Text style={styles.resetButtonText}>RESET</Text>
+            }
+        }
+        return <Text style={styles.saveButtonText}>SPLIT</Text>
+    }
+
     function ViewDifferential(props) {
         const currentIndex = props.currentIndex;
         if (currentIndex < splitPosition) {
@@ -290,31 +324,6 @@ const TimerScreen = ({ route, navigation }) => {
                 <Text style={styles.differentialText}> </Text>
             )
         }
-    };
-
-    function TextBottomButton() {
-        if (completed) {
-            if (isPersonalBest() || goldChecks.includes(true)) {
-                return <Text style={styles.saveButtonText}>SAVE</Text>
-            } else {
-                return <Text style={styles.resetButtonText}>RESET</Text>
-            }
-        }
-        return <Text style={styles.saveButtonText}>SPLIT</Text>
-    }
-
-    const pressBottomButton =() => {
-        if (completed) {
-            if (isPersonalBest() || goldChecks.includes(true)) {
-                updateDataOnSave();
-            }
-            resetTimer();
-        }
-        processSplit();
-    };
-
-    const longPressBottomButton =() => {
-        processUnSplit();
     };
 
     const renderSplit = ({item}) => {
