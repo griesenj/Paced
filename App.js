@@ -1,39 +1,32 @@
-import { StyleSheet, Text, View } from 'react-native';
-
 import CategoryScreen from './screens/CategoryScreen';
 import CategorySettings from './screens/CategorySettings';
 import GameScreen from './screens/GameScreen';
 import GameSettings from './screens/GameSettings';
+import Help from './screens/Help';
+import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import Preferences from './screens/Preferences';
 import React from 'react';
 import TimerScreen from './screens/TimerScreen';
+import TimerSettings from './screens/TimerSettings';
 import { createStackNavigator } from '@react-navigation/stack';
 
 export default function App() {
 
   const Stack = createStackNavigator();
 
-  // TODO: Change preferences to "help" with instructions given time constraints?
+  // FIXME: Temporarily disabling unmounted component warnings for presentation purposes.
+  // LogBox.ignoreAllLogs();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={navigatorOptions}>
-        {/* GAME SCREEN (instructions / preferences [left] - gameSettings [right])
-                PREFERENCES
-        GAMESETTINGSSCREEN
-        CATEGORY SCREEN (back [left] - categorySettings [right])
-        CATEGORYSETTINGSSCREEN
-        TIMER SCREEN (back [left] - timerSettings [right]) */}
-
+      <Stack.Navigator screenOptions={navigatorOptions}>        
         <Stack.Screen name="Games" component={GameScreen}/>
+        <Stack.Screen name="Help" component={Help}/>
         <Stack.Screen name="Game Settings" component={GameSettings}/>
-        <Stack.Screen name="Preferences" component={Preferences}/>
         <Stack.Screen name="Categories" component={CategoryScreen}/>
         <Stack.Screen name="Category Settings" component={CategorySettings}/>
         <Stack.Screen name="Timer" component={TimerScreen}/>
-
-        {/* TIMERSETTINGSSCREEN */}
+        <Stack.Screen name="Timer Settings" component={TimerSettings}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

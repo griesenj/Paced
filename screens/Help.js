@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
-const Preferences = ({ route, navigation }) => {
+const Help = ({ route, navigation }) => {
 
     useEffect(() => {
         navigation.setOptions({
@@ -26,9 +26,7 @@ const Preferences = ({ route, navigation }) => {
 
     return (
         <View>
-            <Text style={styles.preferencesText}> PREFERENCES </Text>
-            <Text style={styles.preferencesText}> Instructions here?
-            </Text>
+            <Text style={styles.preferencesText}> Instructions here</Text>
         </View>
 
     );
@@ -46,4 +44,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Preferences;
+export default Help;

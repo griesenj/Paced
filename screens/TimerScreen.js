@@ -5,48 +5,33 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import { locateIndex } from '../helpers/finders';
 import { storeDataItem } from '../helpers/fb-paced';
 
+// TODO: If time allows, determine how to unsplit after ending the run?
+// Would probably need to leave timer running and log finish time as a new state
+// FIXME: Need way to prevent timer from starting if splits are empty **************
+// FIXME: Determine how to handle "no prior run" data for displaying times (init w/ null value?)
+
 const TimerScreen = ({ route, navigation }) => {
    
-    const [timer, setTimer] = useState(0);
-    const [active, setActive] = useState(false);
-    const [paused, setPaused] = useState(false);
-    const [completed, setCompleted] = useState(false);
-    const [splitPosition, setSplitPosition] = useState(0);
-
-    // TODO: If time allows, determine how to unsplit after ending the run?
-    // Would probably need to leave timer running and log finish time as a new state
-
-    // FIXME: Need way to prevent timer from starting if splits are empty *******************************
-
     const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;
     const [currentGame] = useState(receivedCurrentGame);
     const [currentCategory] = useState(receivedCurrentCategory);
     const [timerPacedData, setTimerPacedData] = useState(receivedPacedData);
 
-    const categoryArray = timerPacedData[locateIndex(timerPacedData, 'title', currentGame)].category;
-    const splitsArray = categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
-    const [data, setData] = useState(splitsArray);
-
-
-
-
-
-    // FIXME: TESTING NEW APPROACH TO INITIALIZING DATA
-
-    // const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;
-    // const [currentGame] = useState(receivedCurrentGame);
-    // const [currentCategory] = useState(receivedCurrentCategory);
-    // const [timerPacedData, setTimerPacedData] = useState(receivedPacedData);
-
-    // const categoryArray = timerPacedData[locateIndex(timerPacedData, 'title', currentGame)].category;
-    // const splitsArray = categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
-    // const [data, setData] = useState(splitsArray);
-
-
-
-
-    const [goldChecks, setGoldChecks] = useState([]);
+    const [timer, setTimer] = useState(0);
+    const [active, setActive] = useState(false);
+    const [paused, setPaused] = useState(false);
+    const [completed, setCompleted] = useState(false);
+    const [splitPosition, setSplitPosition] = useState(0);
     const [differentials, setDifferentials] = useState([]);
+    const [goldChecks, setGoldChecks] = useState([]);
+
+    const getSplitsFromPacedData = () => {
+        var receivedDataCopy = JSON.parse(JSON.stringify(timerPacedData));
+        var categoryArray = receivedDataCopy[locateIndex(receivedDataCopy, 'title', currentGame)].category;
+        return categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
+    };
+    
+    const [data, setData] = useState(getSplitsFromPacedData());
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
@@ -62,6 +47,7 @@ const TimerScreen = ({ route, navigation }) => {
         setData(updatedData);
     };
 
+    // FIXME: TESTING RESET OF RUN DATA TO ZERO UPON SAVE
     const updateDataOnSave = () => {
         const isPb = data[splitPosition - 1].runTotal < data[splitPosition - 1].pbTotal;
         const beatGolds = goldChecks.includes(true);
@@ -381,7 +367,7 @@ const TimerScreen = ({ route, navigation }) => {
     // TODO: When timer is active, should NOT be able to exit screen (hide back/edit buttons)
     // Can watch active flag and update whenever that changes (add rending logic for touchableOpacity)
 
-    // FIXME: Route params not currently working in reverse direction
+    // NOTE: Added dependency array here to ensure it only runs a single time (timer performance hit)
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
@@ -393,7 +379,10 @@ const TimerScreen = ({ route, navigation }) => {
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('TimerSettings', { })}}
+                onPress={() => {navigation.navigate('Timer Settings', { 
+                    settingsCurrentGame: currentGame,
+                    settingsCurrentCategory: currentCategory
+                })}}
                 >
                 <Text style={styles.navHeaderButtons}> Add / Edit </Text>
                 </TouchableOpacity> 

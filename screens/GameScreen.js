@@ -8,8 +8,6 @@ import { addGame } from '../helpers/modifiers';
 //TODO: Create comparator method that dispays flatlist content alphabetically
 //TODO: For editing existing game entry, LONG PRESS --> Prepopulate fields via route params
 
-// FIXME: Need to make sure settings screen inputs do not already exist (will overwrite/duplicate otherwise)
-
 const GameScreen = ({ route, navigation }) => {
     
     const [gamePacedData, setGamePacedData] = useState([]);
@@ -37,7 +35,7 @@ const GameScreen = ({ route, navigation }) => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Preferences')}}
+                    onPress={() => {navigation.navigate('Help')}}
                 >
                     <Text style={styles.headerButtons}> Help </Text>
                 </TouchableOpacity>
@@ -49,8 +47,8 @@ const GameScreen = ({ route, navigation }) => {
                 <Text style={styles.headerButtons}> Add / Edit </Text>
                 </TouchableOpacity> 
             ),
-        }, []);
-    }, []);
+        });
+    });
 
     const ViewNoGames = () => {
         if (gamePacedData != null) {

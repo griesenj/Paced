@@ -51,7 +51,7 @@ const CategoryScreen = ({ route, navigation }) => {
                 </TouchableOpacity> 
             ),
         });
-    }, []);
+    });
 
     const renderCategories = ({item}) => {
         // FIXME: Testing display of empty array init value
