@@ -5,6 +5,7 @@ import { initLocalData, storeDataItem } from '../helpers/fb-paced';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { addSplits } from '../helpers/modifiers';
 import { locateIndex } from '../helpers/finders';
+import { noPriorRunVal } from '../helpers/constants';
 
 // TODO: If time allows, determine how to unsplit after ending the run?
 // Would probably need to leave timer running and log finish time as a new state
@@ -299,53 +300,54 @@ const TimerScreen = ({ route, navigation }) => {
 
     function ViewDifferential(props) {
         const currentIndex = props.currentIndex;
-        if (currentIndex < splitPosition) {
-            if (differentials[currentIndex] < 0) {
-                return (
-                    <Text style={[styles.differentialText, goldChecks[currentIndex] ? 
-                        {color: 'gold'} : {color: 'green'}]}>{outputTime(differentials[currentIndex])
-                    }</Text>
-                );
+
+        // Only display time differentials if a prior run has been established.
+        if (data[currentIndex].pbTotal != noPriorRunVal) {
+
+            if (currentIndex < splitPosition) {
+                if (differentials[currentIndex] < 0) {
+                    return (
+                        <Text style={[styles.differentialText, goldChecks[currentIndex] ? 
+                            {color: 'gold'} : {color: 'green'}]}>{outputTime(differentials[currentIndex])
+                        }</Text>
+                    );
+                } else {
+                    return (
+                        <Text style={[styles.differentialText, goldChecks[currentIndex] ? 
+                            {color: 'gold'} : {color: 'red'}]}>+{outputTime(differentials[currentIndex])
+                        }</Text>
+                    );
+                }
+            } else if (currentIndex == splitPosition) {
+                if (getDifferential() < 0) {
+                    return (
+                        <Text style={[styles.differentialText, {color: 'green'}]}>{
+                            outputTime(getDifferential())
+                        }</Text>
+                    );
+                } else {
+                    return (
+                        <Text style={[styles.differentialText, {color: 'red'}]}>+{
+                            outputTime(getDifferential())
+                        }</Text>
+                    );
+                }
             } else {
                 return (
-                    <Text style={[styles.differentialText, goldChecks[currentIndex] ? 
-                        {color: 'gold'} : {color: 'red'}]}>+{outputTime(differentials[currentIndex])
-                    }</Text>
-                );
+                    <Text style={styles.differentialText}> </Text>
+                )
             }
-        } else if (currentIndex == splitPosition) {
-            if (getDifferential() < 0) {
-                return (
-                    <Text style={[styles.differentialText, {color: 'green'}]}>{
-                        outputTime(getDifferential())
-                    }</Text>
-                );
-            } else {
-                return (
-                    <Text style={[styles.differentialText, {color: 'red'}]}>+{
-                        outputTime(getDifferential())
-                    }</Text>
-                );
-            }
-        } else {
-            return (
-                <Text style={styles.differentialText}> </Text>
-            )
+        
         }
+        return <View></View>;
     };
 
     const renderSplit = ({item}) => {
-        // FIXME: Testing display of empty array init value
         if (item != 'empty') {
             return (
                 <TouchableHighlight
                     activeOpacity={1.0}
                     underlayColor={"#ffefd5"}
-                    
-                    //FIXME: TESTING REMOVE LATER
-                    onPress={() => {
-                        console.log("TIMERpacedData: ", timerPacedData);
-                    }}
                 >
                     <View style={styles.splitRow}>
                         <View style={styles.splitLeft}>

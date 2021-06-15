@@ -1,4 +1,5 @@
 import { locateIndex } from './finders';
+import { noPriorRunVal } from './constants';
 import { storeDataItem } from '../helpers/fb-paced';
 
 // FIXME: How to handle empty arrays upon initialization? Currently using string placeholder of 'empty'
@@ -45,9 +46,9 @@ export const addSplits = (splitName, currentData, currentGame, currentCategory, 
     // FIXME: Need to figure out init values for gold and PB keys (either super high??? or better yet a string like "empty"?)
     const newSplitsEntry = {
         split: splitName,
-        goldSeg: 0,
-        pbSeg: 0,
-        pbTotal: 0,
+        goldSeg: noPriorRunVal,
+        pbSeg: noPriorRunVal,
+        pbTotal: noPriorRunVal,
         runSeg: 0,
         runTotal: 0,
     }
