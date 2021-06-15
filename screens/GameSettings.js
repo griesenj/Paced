@@ -34,7 +34,6 @@ const GameSettings = ({ route, navigation }) => {
     });
 
     return (
-
         // TODO: Error checking for bad inputs
         <View>
             <Text style={styles.gameSettingsText}>Add New Game</Text>
@@ -57,6 +56,7 @@ const GameSettings = ({ route, navigation }) => {
             >
                 <Text>CLICK ME FOR TEST OUTPUT</Text>
             </TouchableOpacity>
+            <Text>To edit or remove an existing game, long press the game icon in the menu.</Text>
         </View>
     );
 }

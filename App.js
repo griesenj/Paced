@@ -14,6 +14,8 @@ export default function App() {
 
   const Stack = createStackNavigator();
 
+  // TODO: Change preferences to "help" with instructions given time constraints?
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={navigatorOptions}>

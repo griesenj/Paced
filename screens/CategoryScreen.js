@@ -13,32 +13,26 @@ const CategoryScreen = ({ route, navigation }) => {
     const [categoryPacedData, setCategoryPacedData] = useState(receivedPacedData);
     const [currentGame] = useState(receivedCurrentGame);
 
+    // TODO: Update data if route object received from timer screen (meaning save has occured).
     useEffect(() => {
         try {
+            console.log('INIT CATEGORY DATA FROM FIREBASE')
             initLocalData(setCategoryPacedData);
         } catch (err) {
           console.log(err);
         }
-    }, [route.params.timerPacedData]);
+    }, []);
 
+    // FIXME: Testing unmounted component error resolution
+    useEffect(() => { return () => {}; }, []);
+
+    // TODO: Update data on firebase if details received from settings screen.
     useEffect(() => {
         if (route.params?.runTitle) {
             console.log('ROUTE PARAMS: ', route.params.runTitle);
             addCategory(route.params.runTitle, categoryPacedData, currentGame);
         }
     }, [route.params?.runTitle])
-
-    // FIXME: TEMPORARILY COMMENTED OUT - doesn't seem necessary given firebase updates above (should test)
-    // useEffect(() => {
-    //     if (route.params?.receivedPacedData) {
-    //         // console.log('Setting data from GAMESCREEN: ', route.params.receivedPacedData)
-    //         // setCategoryPacedData(route.params.receivedPacedData);
-    //     }
-    //     if (route.params?.timerPacedData) {
-    //         // console.log('Setting data from TIMERSCREEN: ', route.params.timerPacedData)
-    //         // setCategoryPacedData(route.params.timerPacedData);
-    //     }
-    // }, [route.params?.receivedPacedData, route.params?.timerPacedData]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -80,14 +74,13 @@ const CategoryScreen = ({ route, navigation }) => {
                     </View>
                 </TouchableOpacity>
             )
-        } else {
-            return (
-                <View style={{alignItems: 'center', marginTop: 20}}>
-                    <Text style={styles.categoryText}>No existing splits!</Text>
-                    <Text style={styles.categoryText}>Add via the "Edit" menu option.</Text>
-                </View>
-            )
         }
+        return (
+            <View style={{alignItems: 'center', marginTop: 20}}>
+                <Text style={styles.categoryText}>No existing categories!</Text>
+                <Text style={styles.categoryText}>Fix via the "Add / Edit" menu option.</Text>
+            </View>
+        )
     };
     
     const renderSeparator = () => {

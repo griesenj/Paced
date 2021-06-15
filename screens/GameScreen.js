@@ -20,11 +20,11 @@ const GameScreen = ({ route, navigation }) => {
         } catch (err) {
           console.log(err);
         }
+        console.log('INIT GAME DATA FROM FIREBASE');
         initLocalData(setGamePacedData);
     }, []);
 
     // TODO: WATCH FOR RECEIVED PARAMS FROM SETTINGS SCREEN, UPDATE LOCAL DATA & REFRESH IF RECEIVED
-
     useEffect(() => {
         if (route.params?.title || route.params?.imageUrl) {
 
@@ -39,7 +39,7 @@ const GameScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                     onPress={() => {navigation.navigate('Preferences')}}
                 >
-                    <Text style={styles.headerButtons}> Preferences </Text>
+                    <Text style={styles.headerButtons}> Help </Text>
                 </TouchableOpacity>
             ),
             headerRight: () => (
@@ -52,7 +52,19 @@ const GameScreen = ({ route, navigation }) => {
         }, []);
     }, []);
 
-    const renderGames = ({item}) => {
+    const ViewNoGames = () => {
+        if (gamePacedData != null) {
+            return <View></View>
+        }
+        return (
+            <View style={{alignItems: 'center', marginTop: 20}}>
+                <Text style={{fontSize: 20}}>No existing games!</Text>
+                <Text style={{fontSize: 16}}>Fix via the "Add / Edit" menu option.</Text>
+            </View>
+        )
+    }
+
+    const renderGames = ({item}) => {       
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -72,6 +84,7 @@ const GameScreen = ({ route, navigation }) => {
             </TouchableOpacity>
         )
     };
+
     const renderSeparator = () => {
         return (
             <View style={{
@@ -83,6 +96,7 @@ const GameScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <ViewNoGames/>
             <View style={styles.gamesListContainer}>
                 <FlatList
                     ItemSeparatorComponent={renderSeparator}

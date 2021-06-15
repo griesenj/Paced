@@ -10,7 +10,11 @@ export const addGame = (title, imageUrl, currentData) => {
         category: ['empty'],
         imageUrl: imageUrl
     }
-    var dataCopy = JSON.parse(JSON.stringify(currentData));
+    
+    var dataCopy = [];
+    if (currentData != null) {
+        dataCopy = JSON.parse(JSON.stringify(currentData));
+    }
     dataCopy.push(newGameEntry);
     storeDataItem(dataCopy);
 };
@@ -27,6 +31,11 @@ export const addCategory = (run, currentData, currentGame) => {
         splits: ['empty'],
     }
     var dataCopy = JSON.parse(JSON.stringify(currentData));
+
+    if (dataCopy[locateIndex(dataCopy, 'title', currentGame)].category == 'empty') {
+        dataCopy[locateIndex(dataCopy, 'title', currentGame)].category = [];
+    }
+    
     dataCopy[locateIndex(dataCopy, 'title', currentGame)].category.push(newCategoryEntry);
     storeDataItem(dataCopy);
 };

@@ -26,6 +26,25 @@ const TimerScreen = ({ route, navigation }) => {
     const categoryArray = timerPacedData[locateIndex(timerPacedData, 'title', currentGame)].category;
     const splitsArray = categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
     const [data, setData] = useState(splitsArray);
+
+
+
+
+
+    // FIXME: TESTING NEW APPROACH TO INITIALIZING DATA
+
+    // const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;
+    // const [currentGame] = useState(receivedCurrentGame);
+    // const [currentCategory] = useState(receivedCurrentCategory);
+    // const [timerPacedData, setTimerPacedData] = useState(receivedPacedData);
+
+    // const categoryArray = timerPacedData[locateIndex(timerPacedData, 'title', currentGame)].category;
+    // const splitsArray = categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits;
+    // const [data, setData] = useState(splitsArray);
+
+
+
+
     const [goldChecks, setGoldChecks] = useState([]);
     const [differentials, setDifferentials] = useState([]);
 
@@ -345,7 +364,7 @@ const TimerScreen = ({ route, navigation }) => {
         return (
             <View style={{alignItems: 'center', marginTop: 20}}>
                 <Text style={styles.splitNameText}>No existing splits!</Text>
-                <Text style={styles.splitTimeText}>Add via the "Edit" menu option.</Text>
+                <Text style={styles.splitTimeText}>Fix via the "Add / Edit" menu option.</Text>
             </View>
         )
     };
@@ -376,7 +395,7 @@ const TimerScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                 onPress={() => {navigation.navigate('TimerSettings', { })}}
                 >
-                <Text style={styles.navHeaderButtons}> Edit </Text>
+                <Text style={styles.navHeaderButtons}> Add / Edit </Text>
                 </TouchableOpacity> 
             ),
             headerTitle: () => (
