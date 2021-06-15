@@ -1,8 +1,7 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Input } from 'react-native-elements';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const GameSettings = ({ route, navigation }) => {
 

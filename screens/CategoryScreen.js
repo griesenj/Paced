@@ -4,6 +4,7 @@ import { locateEntry, locateIndex } from '../helpers/finders';
 
 import { Image } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { addCategory } from '../helpers/modifiers';
 import { initLocalData } from '../helpers/fb-paced';
 
 const CategoryScreen = ({ route, navigation }) => {
@@ -14,7 +15,6 @@ const CategoryScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         try {
-            console.log('SETTING CATEGORY PACED DATA');
             initLocalData(setCategoryPacedData);
         } catch (err) {
           console.log(err);
@@ -22,31 +22,36 @@ const CategoryScreen = ({ route, navigation }) => {
     }, [route.params.timerPacedData]);
 
     useEffect(() => {
-        if (route.params?.receivedPacedData) {
-            // console.log('Setting data from GAMESCREEN: ', route.params.receivedPacedData)
-            // setCategoryPacedData(route.params.receivedPacedData);
+        if (route.params?.runTitle) {
+            console.log('ROUTE PARAMS: ', route.params.runTitle);
+            addCategory(route.params.runTitle, categoryPacedData, currentGame);
         }
-        if (route.params?.timerPacedData) {
-            // console.log('Setting data from TIMERSCREEN: ', route.params.timerPacedData)
-            // setCategoryPacedData(route.params.timerPacedData);
-        }
-    }, [route.params?.receivedPacedData, route.params?.timerPacedData]);
+    }, [route.params?.runTitle])
+
+    // FIXME: TEMPORARILY COMMENTED OUT - doesn't seem necessary given firebase updates above (should test)
+    // useEffect(() => {
+    //     if (route.params?.receivedPacedData) {
+    //         // console.log('Setting data from GAMESCREEN: ', route.params.receivedPacedData)
+    //         // setCategoryPacedData(route.params.receivedPacedData);
+    //     }
+    //     if (route.params?.timerPacedData) {
+    //         // console.log('Setting data from TIMERSCREEN: ', route.params.timerPacedData)
+    //         // setCategoryPacedData(route.params.timerPacedData);
+    //     }
+    // }, [route.params?.receivedPacedData, route.params?.timerPacedData]);
 
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Games', { categoryPacedData })}}
+                    onPress={() => {navigation.navigate('Games')}}
                 >
                     <Text style={styles.headerButtons}> Back </Text>
                 </TouchableOpacity>
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {
-                    console.log('categoryPacedData: ', categoryPacedData);
-                    // navigation.navigate('CategorySettings')
-                }}
+                    onPress={() => {navigation.navigate('Category Settings', { settingsCurrentGame: currentGame })}}
                 >
                 <Text style={styles.headerButtons}> Add / Edit </Text>
                 </TouchableOpacity> 
@@ -55,28 +60,34 @@ const CategoryScreen = ({ route, navigation }) => {
     }, []);
 
     const renderCategories = ({item}) => {
-        return (           
-            <TouchableOpacity
-                onPress={() => {{
 
-                    // TODO: REMOVE
-                    // console.log(route.params);
+        // FIXME: Testing display of empty array init value
+        if (item != 'empty') {
+            return (    
+                <TouchableOpacity
+                    onPress={() => {{
+    
+                        // TODO: REMOVE
+                        // console.log(route.params);
+    
+                        navigation.navigate('Timer', { receivedPacedData: categoryPacedData, receivedCurrentGame: currentGame, 
+                            receivedCurrentCategory: item.run })
+                    };
+                    }}
+                >
+                    <View style={styles.categoryRow}>
+                        <Image 
+                            style={styles.imagePlaceholder}
+                            source={{uri: categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].imageUrl}}
+                            resizeMode={'contain'}
+                            />
+                        <Text style={styles.categoryText}>{item.run}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
 
-                    navigation.navigate('Timer', { receivedPacedData: categoryPacedData, receivedCurrentGame: currentGame, 
-                        receivedCurrentCategory: item.run })
-                };
-                }}
-            >
-                <View style={styles.categoryRow}>
-                    <Image 
-                        style={styles.imagePlaceholder}
-                        source={{uri: categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].imageUrl}}
-                        resizeMode={'contain'}
-                        />
-                    <Text style={styles.categoryText}>{item.run}</Text>
-                </View>
-            </TouchableOpacity>
-        )
+        }
+        return (<View></View>)
     };
     const renderSeparator = () => {
         return (
