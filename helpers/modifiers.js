@@ -2,6 +2,7 @@ import { locateIndex } from './finders';
 import { storeDataItem } from '../helpers/fb-paced';
 
 // FIXME: How to handle empty arrays upon initialization? Currently using string placeholder of 'empty'
+// This is problem, empty key persists within firebase; need to somehow delete it when adding first item
 
 export const addGame = (title, imageUrl, currentData) => {
     const newGameEntry = {

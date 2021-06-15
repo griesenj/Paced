@@ -16,6 +16,8 @@ const TimerScreen = ({ route, navigation }) => {
     // TODO: If time allows, determine how to unsplit after ending the run?
     // Would probably need to leave timer running and log finish time as a new state
 
+    // FIXME: Need way to prevent timer from starting if splits are empty *******************************
+
     const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;
     const [currentGame] = useState(receivedCurrentGame);
     const [currentCategory] = useState(receivedCurrentCategory);
@@ -311,31 +313,40 @@ const TimerScreen = ({ route, navigation }) => {
     };
 
     const renderSplit = ({item}) => {
+        // FIXME: Testing display of empty array init value
+        if (item != 'empty') {
+            return (
+                <TouchableHighlight
+                    activeOpacity={1.0}
+                    underlayColor={"#ffefd5"}
+                    
+                    //FIXME: TESTING REMOVE LATER
+                    onPress={() => {
+                        console.log("TIMERpacedData: ", timerPacedData);
+                    }}
+                >
+                    <View style={styles.splitRow}>
+                        <View style={styles.splitLeft}>
+                            <Text style={styles.splitNameText}>{item.split}</Text>
+                            <Text style={styles.splitTimeText}> 
+                                PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}
+                            </Text>
+                            <Text style={styles.splitTimeText}> 
+                                Run | Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
+                            </Text>
+                        </View>
+                        <View style={styles.splitRight}>
+                            <ViewDifferential currentIndex={data.indexOf(item)}/>
+                        </View>
+                    </View>
+                </TouchableHighlight>
+            )
+        }
         return (
-            <TouchableHighlight
-                activeOpacity={1.0}
-                underlayColor={"#ffefd5"}
-                
-                //FIXME: TESTING REMOVE LATER
-                onPress={() => {
-                    console.log("TIMERpacedData: ", timerPacedData);
-                }}
-            >
-                <View style={styles.splitRow}>
-                    <View style={styles.splitLeft}>
-                        <Text style={styles.splitNameText}>{item.split}</Text>
-                        <Text style={styles.splitTimeText}> 
-                            PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}
-                        </Text>
-                        <Text style={styles.splitTimeText}> 
-                            Run | Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
-                        </Text>
-                    </View>
-                    <View style={styles.splitRight}>
-                        <ViewDifferential currentIndex={data.indexOf(item)}/>
-                    </View>
-                </View>
-            </TouchableHighlight>
+            <View style={{alignItems: 'center', marginTop: 20}}>
+                <Text style={styles.splitNameText}>No existing splits!</Text>
+                <Text style={styles.splitTimeText}>Add via the "Edit" menu option.</Text>
+            </View>
         )
     };
 

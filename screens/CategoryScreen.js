@@ -60,16 +60,11 @@ const CategoryScreen = ({ route, navigation }) => {
     }, []);
 
     const renderCategories = ({item}) => {
-
         // FIXME: Testing display of empty array init value
         if (item != 'empty') {
             return (    
                 <TouchableOpacity
-                    onPress={() => {{
-    
-                        // TODO: REMOVE
-                        // console.log(route.params);
-    
+                    onPress={() => {{    
                         navigation.navigate('Timer', { receivedPacedData: categoryPacedData, receivedCurrentGame: currentGame, 
                             receivedCurrentCategory: item.run })
                     };
@@ -85,10 +80,16 @@ const CategoryScreen = ({ route, navigation }) => {
                     </View>
                 </TouchableOpacity>
             )
-
+        } else {
+            return (
+                <View style={{alignItems: 'center', marginTop: 20}}>
+                    <Text style={styles.categoryText}>No existing splits!</Text>
+                    <Text style={styles.categoryText}>Add via the "Edit" menu option.</Text>
+                </View>
+            )
         }
-        return (<View></View>)
     };
+    
     const renderSeparator = () => {
         return (
             <View style={{
