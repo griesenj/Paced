@@ -1,14 +1,12 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { initLocalData, initPacedDB, storeDataItem } from '../helpers/fb-paced';
-import { locateEntry, locateIndex } from '../helpers/finders';
+import { initLocalData, initPacedDB } from '../helpers/fb-paced';
 
-import {HeaderTitle} from '@react-navigation/stack';
 import { Image } from 'react-native-elements';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import { sampleData } from './SampleData';
+import { addGame } from '../helpers/modifiers';
 
 //TODO: Create comparator method that dispays flatlist content alphabetically
+//TODO: For editing existing game entry, LONG PRESS --> Prepopulate fields via route params
 
 const GameScreen = ({ route, navigation }) => {
     
@@ -23,13 +21,16 @@ const GameScreen = ({ route, navigation }) => {
         initLocalData(setGamePacedData);
     }, []);
 
-    useEffect(() => {
-        if (route.params?.categoryPacedData) {
-            // console.log('Setting new value (pacedData): ', route.params.pacedData)
-            setGamePacedData(route.params.categoryPacedData);
-        }
-    }, [route.params?.categoryPacedData])
+    // TODO: WATCH FOR RECEIVED PARAMS FROM SETTINGS SCREEN, UPDATE LOCAL DATA & REFRESH IF RECEIVED
 
+    useEffect(() => {
+        if (route.params?.title || route.params?.imageUrl) {
+
+            console.log('ROUTE PARAMS: ', route.params.title, route.params.imageUrl);
+            addGame(route.params.title, route.params.imageUrl, gamePacedData);
+        }
+    }, [route.params?.title, route.params?.imageUrl])
+    
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
@@ -41,7 +42,7 @@ const GameScreen = ({ route, navigation }) => {
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('Game Settings')}}
+                    onPress={() => {navigation.navigate('Game Settings')}}
                 >
                 <Text style={styles.headerButtons}> Add / Edit </Text>
                 </TouchableOpacity> 
@@ -53,7 +54,9 @@ const GameScreen = ({ route, navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    {navigation.navigate('Categories', { receivedPacedData: gamePacedData, receivedCurrentGame: item.title })};
+                    {navigation.navigate('Categories', { 
+                        receivedPacedData: gamePacedData, receivedCurrentGame: item.title 
+                    })};
                 }}
             >
                 <View style={styles.gameRow}>

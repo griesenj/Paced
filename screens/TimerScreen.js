@@ -16,9 +16,9 @@ const TimerScreen = ({ route, navigation }) => {
     // TODO: If time allows, determine how to unsplit after ending the run?
     // Would probably need to leave timer running and log finish time as a new state
 
-    const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;  // TODO: Remove setter?
-    const [currentGame, setCurrentGame] = useState(receivedCurrentGame);  // TODO: Remove setter?
-    const [currentCategory, setCurrentCategory] = useState(receivedCurrentCategory);  // TODO: Remove setter?
+    const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;
+    const [currentGame] = useState(receivedCurrentGame);
+    const [currentCategory] = useState(receivedCurrentCategory);
     const [timerPacedData, setTimerPacedData] = useState(receivedPacedData);
 
     const categoryArray = timerPacedData[locateIndex(timerPacedData, 'title', currentGame)].category;
@@ -65,11 +65,9 @@ const TimerScreen = ({ route, navigation }) => {
         }
 
         // TODO: TESTING ONLY
-        // console.log("DATA TO SAVE: ", saveData);
         updateTimerPacedData(saveData);
         setData(saveData);
         resetTimer();
-        // storeDataItem(saveData);
     };
 
     // TODO: Make sure this works properly - adds saved splits to paced object passed between

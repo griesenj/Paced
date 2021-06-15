@@ -1,10 +1,15 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import { Input } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const GameSettings = ({ route, navigation }) => {
 
+    const [title, setTitle] = useState();
+    const [imageUrl, setImageUrl] = useState();
+
+    // FIXME: Removed arrays from this useEffect, suddenly seems to be working. Maybe leave in place only for timeScreen?
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
@@ -16,20 +21,43 @@ const GameSettings = ({ route, navigation }) => {
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('Games')}}
+                    onPress={() => {
+                        navigation.navigate('Games', {
+                            title,
+                            imageUrl
+                        });
+                    }}
                 >
-                <Text style={styles.headerButtons}> Save </Text>
+                    <Text style={styles.headerButtons}> Save </Text>
                 </TouchableOpacity> 
             ),
-        }, []);
-    }, []);
+        });
+    });
 
     return (
-        <View>
-            <Text style={styles.gameSettingsText}>Game Settings</Text>
 
-            <Text>Add a new game</Text>
-            <Text>Edit an existing game</Text>
+        // TODO: Error checking for bad inputs
+        <View>
+            <Text style={styles.gameSettingsText}>Add New Game</Text>
+            <Input
+                placeholder="Game Title"
+                // ref={initialField}
+                value={title}
+                onChangeText={(val) => setTitle(val)}
+            />
+            <Input
+                placeholder="Game Art URL"
+                // ref={initialField}
+                value={imageUrl}
+                onChangeText={(val) => setImageUrl(val)}
+            />
+            <TouchableOpacity style={styles.gameSettingsText}
+                onPress={() => {
+                    console.log(title, imageUrl);
+                }}
+            >
+                <Text>CLICK ME FOR TEST OUTPUT</Text>
+            </TouchableOpacity>
         </View>
     );
 }

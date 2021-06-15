@@ -10,7 +10,7 @@ const CategoryScreen = ({ route, navigation }) => {
 
     const { receivedPacedData, receivedCurrentGame } = route.params;
     const [categoryPacedData, setCategoryPacedData] = useState(receivedPacedData);
-    const [currentGame, setCurrentGame] = useState(receivedCurrentGame); // TODO: Remove setter? Probably not needed
+    const [currentGame] = useState(receivedCurrentGame);
 
     useEffect(() => {
         try {
