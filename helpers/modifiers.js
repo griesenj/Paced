@@ -63,3 +63,43 @@ export const addSplits = (splitName, currentData, currentGame, currentCategory, 
     setSplitsFunc(categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits);
     storeDataItem(dataCopy);
 };
+
+export const addSplitsFromJSON = (qrArrayJSON, currentData, currentGame, currentCategory, setOverallStateFunc, setSplitsFunc) => {
+    var dataCopy = JSON.parse(JSON.stringify(currentData));
+    var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
+
+    if (categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits == 'empty') {
+        categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits = [];
+    }
+
+    categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits = qrArrayJSON;
+    setOverallStateFunc(dataCopy);
+    setSplitsFunc(categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits);
+    storeDataItem(dataCopy);
+}
+
+export const converQrSplitsToJSON = (validQr) => {
+    var newSplitsArr = [];
+    var splitJSON = {
+        split: '',
+        goldSeg: 0,
+        pbSeg: 0,
+        pbTotal: 0,
+        runSeg: 0,
+        runTotal: 0,
+    };
+
+    var lines = validQr.split('\n');
+    var line = "";
+    for (var i = 0; i < lines.length; i++) {
+        line = lines[i];
+        fields = line.split(',');
+        splitJSON.split = fields[0];
+        splitJSON.goldSeg = fields[1];
+        splitJSON.pbSeg = fields[2];
+        splitJSON.pbTotal = fields[3];
+
+        newSplitsArr.push(JSON.parse(JSON.stringify(splitJSON)));
+    }
+    return newSplitsArr;
+}

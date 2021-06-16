@@ -1,11 +1,11 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { initLocalData, storeDataItem } from '../helpers/fb-paced';
+import { addSplits, addSplitsFromJSON, converQrSplitsToJSON } from '../helpers/modifiers';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { addSplits } from '../helpers/modifiers';
 import { locateIndex } from '../helpers/finders';
 import { noPriorRunVal } from '../helpers/constants';
+import { storeDataItem } from '../helpers/fb-paced';
 
 // TODO: If time allows, determine how to unsplit after ending the run?
 // Would probably need to leave timer running and log finish time as a new state
@@ -40,7 +40,12 @@ const TimerScreen = ({ route, navigation }) => {
             console.log('ROUTE PARAMS: ', route.params.splitName);
             addSplits(route.params.splitName, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
         };
-    }, [route.params?.splitName])
+        if (route.params?.scannedData) {
+            console.log('ROUTE PARAMS: ', route.params.scannedData);
+            const jsonSplits = converQrSplitsToJSON(route.params.scannedData);
+            addSplitsFromJSON(jsonSplits, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
+        }
+    }, [route.params?.splitName, route.params?.scannedData]);
 
     const updateDataOnSplit = (index, currentRunAttributes) => {
         const updatedData = data.map(item => {
