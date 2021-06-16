@@ -1,4 +1,4 @@
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -9,6 +9,18 @@ const ScannerScreen = ({ navigation }) => {
     const [scanned, setScanned] = useState(false);
 
     useEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity
+                    onPress={() => {navigation.navigate('Timer Settings')}}
+                >
+                    <Text style={styles.headerButtons}> Back </Text>
+                </TouchableOpacity>
+            ),
+        });
+    }, []);
+
+    useEffect(() => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
@@ -17,7 +29,9 @@ const ScannerScreen = ({ navigation }) => {
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        alert(`QR Code with type ${type} and data ${data} has been scanned` )
+
+        // alert(`QR Code with type ${type} and data ${data} has been scanned` )
+        navigation.navigate('Timer Settings', { data });
     };
 
     if (hasPermission === null) {
@@ -34,7 +48,6 @@ const ScannerScreen = ({ navigation }) => {
                 style={StyleSheet.absoluteFillObject}
             />
             {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-            <Text>Hello There</Text>
         </View>
     );
 }
@@ -46,7 +59,7 @@ const styles = StyleSheet.create({
     },
     scannerButtonText: {
         fontWeight: 'bold',
-        fontSize: 500,
+        fontSize: 64,
     },
     timerSettingsText: {
         fontSize: 32,
