@@ -1,7 +1,6 @@
+import { Button, Input } from 'react-native-elements';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-
-import { Input } from 'react-native-elements';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const TimerSettings = ({ route, navigation }) => {
 
@@ -60,57 +59,87 @@ const TimerSettings = ({ route, navigation }) => {
         }
     }
 
+    const DataHeader = () => {
+        if (scannedDataValid(scannedData)) {
+            return (
+                <View>
+                    <Text style={styles.timerSettingsHeaderText}>Imported QR Data</Text>
+                    <Text>Please review and click save to import splits.</Text>
+                </View>
+            )
+        } else if (scannedData != null) {
+            return (
+                <View>
+                    <Text style={styles.timerSettingsHeaderText}>Imported QR Data</Text>
+                    <Text style={styles.warningMessage}>WARNING: The data is not correctly formatted.</Text>
+                </View>
+            )
+        } else {
+            return <View></View>
+        }
+    }
+
     const DataView = () => {
-        if (scannedData != undefined) {
-            return <Text>{scannedData}</Text>
+        if (scannedData != null) {
+            return <Text style={styles.scrollViewText}>{scannedData}</Text>
         }
         return <View></View>
     }
 
     return (
         // TODO: Error checking for bad inputs
-        <View>
-            <Text style={styles.timerSettingsText}>Add New Split</Text>
+        <View style={styles.container}>
+            <Text style={styles.timerSettingsHeaderText}>Add New Split</Text>
             <Input
                 placeholder="Split Name"
                 // ref={initialField}
                 value={splitName}
                 onChangeText={(val) => setSplitName(val)}
             />
-            <TouchableOpacity
+            {/* <Button
                 onPress={() => {
-                    // console.log(splitName);
-
+                    console.log(splitName);
                     console.log(scannedDataValid(scannedData));
-
                 }}
-            >
-                <Text style={styles.timerSettingsText}>CLICK ME FOR TEST OUTPUT</Text>
-            </TouchableOpacity>
-            <Text>Add existing splits (QR Code)</Text>
-            <Text>Note: Be sure to reference the split formatting requirements prior to generating your QR code.</Text>
-            <Text>WARNING: This will delete your existing splits.</Text>
-
-            <Text>Visit our Help menu for more information!</Text>
-            <TouchableOpacity
+                title= "Test Output"
+                color="#ff5c5c"
+            /> */}
+            <Text style={styles.timerSettingsHeaderText}>Add via QR Code</Text>
+            <Text>Please reference the split formatting guidelines outlined in the help menu prior to generating your QR code.</Text>
+            <Text style={styles.warningMessage}>{'\n'}WARNING: This will delete your existing splits!</Text>
+            <TouchableOpacity style={styles.scannerButton}
                 onPress={() => {
                     navigation.navigate('Scanner');
                 }}
             >
-                <Text style={styles.scannerButtonText}>SCAN CODE</Text>
+                <Text style={styles.scannerButtonText}>SCAN</Text>
             </TouchableOpacity>
-            <Text>QR Data (Save to Import Splits)</Text>
-            <DataView/>
+            <DataHeader/>
+            <ScrollView style={styles.scrollViewContainer}>
+                <DataView/>
+            </ScrollView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        margin: 5,
+        flex:1,
+    },
     scannerButtonText: {
         fontWeight: 'bold',
-        fontSize: 64,
+        fontSize: 36,
+        padding: 5,
+        alignSelf: 'center',
+        color: 'white'
     },
-    timerSettingsText: {
+    scannerButton: {
+        backgroundColor: 'darkblue',
+        margin: 20,
+        borderRadius: 10,
+    },
+    timerSettingsHeaderText: {
         fontSize: 32,
     },
     headerButtons: {
@@ -119,6 +148,17 @@ const styles = StyleSheet.create({
         fontSize: 14,
         padding: 10,
     },
+    scrollViewContainer: {
+    },
+    scrollViewText: {
+        fontSize: 20,
+        color: 'darkgreen',
+        margin: 5,
+    },
+    warningMessage: {
+        color: 'red',
+        fontWeight: 'bold'
+    }
 });
 
 export default TimerSettings;
