@@ -6,6 +6,7 @@ import Help from './screens/Help';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
+import ScannerScreen from './screens/ScannerScreen';
 import TimerScreen from './screens/TimerScreen';
 import TimerSettings from './screens/TimerSettings';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -27,6 +28,7 @@ export default function App() {
         <Stack.Screen name="Category Settings" component={CategorySettings}/>
         <Stack.Screen name="Timer" component={TimerScreen}/>
         <Stack.Screen name="Timer Settings" component={TimerSettings}/>
+        <Stack.Screen name="Scanner" component={ScannerScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

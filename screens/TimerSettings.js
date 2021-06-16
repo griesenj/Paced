@@ -34,25 +34,36 @@ const TimerSettings = ({ navigation }) => {
     return (
         // TODO: Error checking for bad inputs
         <View>
-            <Text style={styles.categorySettingsText}>Add New Split</Text>
+            <Text style={styles.timerSettingsText}>Add New Split</Text>
             <Input
                 placeholder="Split Name"
                 // ref={initialField}
                 value={splitName}
                 onChangeText={(val) => setSplitName(val)}
             />
-            <TouchableOpacity style={styles.timerSettingsText}
+            <TouchableOpacity
                 onPress={() => {
                     console.log(splitName);
                 }}
             >
-                <Text>CLICK ME FOR TEST OUTPUT</Text>
+                <Text style={styles.timerSettingsText}>CLICK ME FOR TEST OUTPUT</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('Scanner');
+                }}
+            >
+                <Text style={styles.scannerButtonText}>SCAN QR CODE</Text>
             </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    scannerButtonText: {
+        fontWeight: 'bold',
+        fontSize: 64,
+    },
     timerSettingsText: {
         fontSize: 32,
     },
