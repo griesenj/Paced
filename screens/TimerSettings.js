@@ -3,15 +3,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Input } from 'react-native-elements';
 
-const TimerSettings = ({ route, navigation }) => {
-
-    const { settingsCurrentGame } = route.params;
-    const { settingsCurrentCategory } = route.params;
-    const [currentGame, setCurrentGame] = useState(settingsCurrentGame);
-    const [currentCategory, setCurrentCategory] = useState(settingsCurrentCategory);
+const TimerSettings = ({ navigation }) => {
 
     const [splitName, setSplitName] = useState();
 
+    // TODO: Need to add ability to add multiple splits from the settings screen at a time (also provide index position for ordering?)
     const [numSplits, setNumSplits] = useState(1);
 
     useEffect(() => {
@@ -38,7 +34,7 @@ const TimerSettings = ({ route, navigation }) => {
     return (
         // TODO: Error checking for bad inputs
         <View>
-            <Text style={styles.categorySettingsText}>Add New Category</Text>
+            <Text style={styles.categorySettingsText}>Add New Split</Text>
             <Input
                 placeholder="Split Name"
                 // ref={initialField}

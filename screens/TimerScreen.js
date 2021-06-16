@@ -398,10 +398,7 @@ const TimerScreen = ({ route, navigation }) => {
             ),
             headerRight: () => (
                 <TouchableOpacity
-                onPress={() => {navigation.navigate('Timer Settings', { 
-                    settingsCurrentGame: currentGame,
-                    settingsCurrentCategory: currentCategory
-                })}}
+                onPress={() => {navigation.navigate('Timer Settings')}}
                 >
                 <Text style={styles.navHeaderButtons}> Add / Edit </Text>
                 </TouchableOpacity> 

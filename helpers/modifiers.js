@@ -42,8 +42,6 @@ export const addCategory = (run, currentData, currentGame) => {
 };
 
 export const addSplits = (splitName, currentData, currentGame, currentCategory, setOverallStateFunc, setSplitsFunc) => {
-
-    // FIXME: Need to figure out init values for gold and PB keys (either super high??? or better yet a string like "empty"?)
     const newSplitsEntry = {
         split: splitName,
         goldSeg: noPriorRunVal,
@@ -54,17 +52,13 @@ export const addSplits = (splitName, currentData, currentGame, currentCategory, 
     }
     
     var dataCopy = JSON.parse(JSON.stringify(currentData));
-    
-    dataCopy[locateIndex(dataCopy, 'title', currentGame)].category
     var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
 
     if (categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits == 'empty') {
         categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits = [];
     }
+
     categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits.push(newSplitsEntry);
-
-    console.log(dataCopy);
-
     setOverallStateFunc(dataCopy);
     setSplitsFunc(categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits);
     storeDataItem(dataCopy);

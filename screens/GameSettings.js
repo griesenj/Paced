@@ -3,12 +3,14 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Input } from 'react-native-elements';
 
-const GameSettings = ({ route, navigation }) => {
+const GameSettings = ({ navigation }) => {
 
     const [title, setTitle] = useState();
     const [imageUrl, setImageUrl] = useState();
 
-    // FIXME: Removed arrays from this useEffect, suddenly seems to be working. Maybe leave in place only for timeScreen?
+    // FIXME: Need to make sure settings screen inputs do not already exist (will overwrite/duplicate otherwise)
+    // TODO: Error checking for bad inputs
+
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
@@ -34,7 +36,6 @@ const GameSettings = ({ route, navigation }) => {
     });
 
     return (
-        // TODO: Error checking for bad inputs
         <View>
             <Text style={styles.gameSettingsText}>Add New Game</Text>
             <Input

@@ -22,7 +22,6 @@ const GameScreen = ({ route, navigation }) => {
         initLocalData(setGamePacedData);
     }, []);
 
-    // TODO: WATCH FOR RECEIVED PARAMS FROM SETTINGS SCREEN, UPDATE LOCAL DATA & REFRESH IF RECEIVED
     useEffect(() => {
         if (route.params?.title || route.params?.imageUrl) {
 
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
     },
     gamesListContainer: {
         height: 100,
-        flex: 12, // TODO: Fix this once temporary button is removed
+        flex: 1,
     },
     gameRow: {
         flexDirection: 'row',

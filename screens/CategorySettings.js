@@ -3,10 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Input } from 'react-native-elements';
 
-const CategorySettings = ({ route, navigation }) => {
-
-    const { settingsCurrentGame } = route.params;
-    const [currentGame, setCurrentGame] = useState(settingsCurrentGame);
+const CategorySettings = ({ navigation }) => {
+    
     const [runTitle, setRunTitle] = useState();
 
     useEffect(() => {

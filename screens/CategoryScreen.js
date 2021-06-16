@@ -1,11 +1,10 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { locateEntry, locateIndex } from '../helpers/finders';
 
 import { Image } from 'react-native-elements';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { addCategory } from '../helpers/modifiers';
 import { initLocalData } from '../helpers/fb-paced';
+import { locateIndex } from '../helpers/finders';
 
 const CategoryScreen = ({ route, navigation }) => {
 
@@ -22,9 +21,6 @@ const CategoryScreen = ({ route, navigation }) => {
           console.log(err);
         }
     }, []);
-
-    // FIXME: Testing unmounted component error resolution
-    useEffect(() => { return () => {}; }, []);
 
     // TODO: Update data on firebase if details received from settings screen.
     useEffect(() => {
@@ -45,7 +41,7 @@ const CategoryScreen = ({ route, navigation }) => {
             ),
             headerRight: () => (
                 <TouchableOpacity
-                    onPress={() => {navigation.navigate('Category Settings', { settingsCurrentGame: currentGame })}}
+                    onPress={() => {navigation.navigate('Category Settings')}}
                 >
                 <Text style={styles.headerButtons}> Add / Edit </Text>
                 </TouchableOpacity> 
@@ -54,7 +50,6 @@ const CategoryScreen = ({ route, navigation }) => {
     });
 
     const renderCategories = ({item}) => {
-        // FIXME: Testing display of empty array init value
         if (item != 'empty') {
             return (    
                 <TouchableOpacity
@@ -116,7 +111,7 @@ const styles = StyleSheet.create({
     },
     categoryListContainer: {
         height: 100,
-        flex: 12, // TODO: Fix this once temporary button is removed
+        flex: 1,
     },
     categoryRow: {
         flexDirection: 'row',
@@ -139,7 +134,6 @@ const styles = StyleSheet.create({
     imagePlaceholder: {
         height: 75,
         width: 100,
-        // backgroundColor: 'black',
     },
 });
 
