@@ -1,6 +1,6 @@
 import { Button, Input } from 'react-native-elements';
+import { Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const TimerSettings = ({ route, navigation }) => {
 
@@ -87,30 +87,31 @@ const TimerSettings = ({ route, navigation }) => {
     }
 
     return (
-        // TODO: Error checking for bad inputs
-        <View style={styles.container}>
-            <Text style={styles.timerSettingsHeaderText}>Add New Split</Text>
-            <Input
-                placeholder="Split Name"
-                // ref={initialField}
-                value={splitName}
-                onChangeText={(val) => setSplitName(val)}
-            />
-            <Text style={styles.timerSettingsHeaderText}>Add via QR Code</Text>
-            <Text>Please reference the split formatting guidelines outlined in the help menu prior to generating your QR code.</Text>
-            <Text style={styles.warningMessage}>{'\n'}WARNING: This will delete your existing splits!</Text>
-            <TouchableOpacity style={styles.scannerButton}
-                onPress={() => {
-                    navigation.navigate('Scanner');
-                }}
-            >
-                <Text style={styles.scannerButtonText}>SCAN</Text>
-            </TouchableOpacity>
-            <DataHeader/>
-            <ScrollView style={styles.scrollViewContainer}>
-                <DataView/>
-            </ScrollView>
-        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <Text style={styles.timerSettingsHeaderText}>Add New Split</Text>
+                <Input
+                    placeholder="Split Name"
+                    // ref={initialField}
+                    value={splitName}
+                    onChangeText={(val) => setSplitName(val)}
+                />
+                <Text style={styles.timerSettingsHeaderText}>Add via QR Code</Text>
+                <Text>Please reference the split formatting guidelines outlined in the help menu prior to generating your QR code.</Text>
+                <Text style={styles.warningMessage}>{'\n'}WARNING: This will delete your existing splits!</Text>
+                <TouchableOpacity style={styles.scannerButton}
+                    onPress={() => {
+                        navigation.navigate('Scanner');
+                    }}
+                >
+                    <Text style={styles.scannerButtonText}>SCAN</Text>
+                </TouchableOpacity>
+                <DataHeader/>
+                <ScrollView style={styles.scrollViewContainer}>
+                    <DataView/>
+                </ScrollView>
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -133,6 +134,7 @@ const styles = StyleSheet.create({
     },
     timerSettingsHeaderText: {
         fontSize: 32,
+        fontWeight: '600',
     },
     headerButtons: {
         color: 'white',

@@ -1,5 +1,5 @@
+import { Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Input } from 'react-native-elements';
 
@@ -31,14 +31,16 @@ const CategorySettings = ({ navigation }) => {
     });
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.categorySettingsHeaderText}>Add New Category</Text>
-            <Input
-                placeholder="Run Title"
-                value={runTitle}
-                onChangeText={(val) => setRunTitle(val)}
-            />
-        </View>
+        <TouchableWithoutFeedback onPress ={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <Text style={styles.categorySettingsHeaderText}>Add New Category</Text>
+                <Input
+                    placeholder="Run Title"
+                    value={runTitle}
+                    onChangeText={(val) => setRunTitle(val)}
+                />
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -49,6 +51,7 @@ const styles = StyleSheet.create({
     },
     categorySettingsHeaderText: {
         fontSize: 32,
+        fontWeight: '600',
     },
     categorySettingsText: {
         fontSize: 32,

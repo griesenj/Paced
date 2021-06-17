@@ -21,9 +21,16 @@ export const addGame = (title, imageUrl, currentData) => {
 };
 
 export const removeGame = (title, currentData) => {
+    var dataCopy = JSON.parse(JSON.stringify(currentData));
+    dataCopy.splice(locateIndex(dataCopy, "title", title), 1);
+    storeDataItem(dataCopy);
 };
 
-export const editGame = (title, currentData) => {
+export const editGame = (originalTitle, newTitle, imageUrl, currentData) => {
+    var dataCopy = JSON.parse(JSON.stringify(currentData));
+    dataCopy[locateIndex(dataCopy, "title", originalTitle)].imageUrl = imageUrl;
+    dataCopy[locateIndex(dataCopy, "title", originalTitle)].title = newTitle;
+    storeDataItem(dataCopy);
 };
 
 export const addCategory = (run, currentData, currentGame) => {

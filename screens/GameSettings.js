@@ -1,5 +1,5 @@
+import { Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Input } from 'react-native-elements';
 
@@ -8,16 +8,19 @@ const GameSettings = ({ route, navigation }) => {
     const [title, setTitle] = useState("");
     const [imageUrl, setImageUrl] = useState("");
 
-    // const { receivedTitle, receivedImageUrl } = route.params;
+    const [receivedItemToUpdate, setReceivedItemToUpdate] = useState();
+    const [editOrDelete, setEditOrDelete] = useState(false);
 
     // FIXME: Need to make sure settings screen inputs do not already exist (will overwrite/duplicate otherwise)
 
-    // useEffect(() => {
-
-    //     setTitle(route.params.receivedTitle);
-    //     setImageUrl(route.params)
-
-    // }, [route.params?.receivedTitle, route.params?.receivedImageUrl])
+    useEffect(() => {
+        if (route.params?.item) {
+            setReceivedItemToUpdate(route.params.item);
+            setTitle(route.params.item.title);
+            setImageUrl(route.params.item.imageUrl);
+            setEditOrDelete(true);
+        };
+    }, [route.params?.item]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -31,11 +34,22 @@ const GameSettings = ({ route, navigation }) => {
             headerRight: () => (
                 <TouchableOpacity
                     onPress={() => {
-                        if (title != "") {
+                        if (editOrDelete) {
                             navigation.navigate('Games', {
                                 title,
-                                imageUrl
+                                imageUrl,
+                                editOrDelete,
+                                receivedItemToUpdate,
                             });
+                        } else {
+                            if (title != "") {
+                                navigation.navigate('Games', {
+                                    title,
+                                    imageUrl,
+                                    editOrDelete,
+                                    receivedItemToUpdate,
+                                });
+                            }
                         }
                     }}
                 >
@@ -45,20 +59,63 @@ const GameSettings = ({ route, navigation }) => {
         });
     });
 
-    return (
-        <View style={styles.container}>
+    const HeaderText = () => {
+        if (editOrDelete) {
+            return (
+                <Text style={styles.gameSettingsHeaderText}>Edit Game</Text>
+            );
+        }
+        return (
             <Text style={styles.gameSettingsHeaderText}>Add New Game</Text>
-            <Input
-                placeholder="Game Title"
-                value={title}
-                onChangeText={(val) => setTitle(val)}
-            />
-            <Input
-                placeholder="Game Art URL"
-                value={imageUrl}
-                onChangeText={(val) => setImageUrl(val)}
-            />
-        </View>
+        )
+    }
+
+    const FooterText = () => {
+        if (editOrDelete) {
+            return (
+                <View>
+                    <Text style={styles.gameSettingsText}>To Delete a game, tap the "Clear" button below 
+                    and then tap "Save".</Text>
+                    <Text style={styles.warningMessage}>{'\n'}WARNING: This will delete all categories and 
+                    splits associated with this game!</Text>
+                </View>
+            );
+        }
+        return <View></View>
+    }
+
+    return (
+        <TouchableWithoutFeedback onPress ={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <HeaderText/>
+                <Input
+                    placeholder="Game Title"
+                    value={title}
+                    onChangeText={(val) => setTitle(val)}
+                />
+                <Input
+                    placeholder="Game Art URL"
+                    value={imageUrl}
+                    onChangeText={(val) => setImageUrl(val)}
+                />
+                {/* <TouchableOpacity
+                    onPress={() => {
+                        console.log(editOrDelete);
+                    }}
+                >
+                    <Text> Click Me For Output </Text>
+                </TouchableOpacity> */}
+                <FooterText/>
+                <TouchableOpacity style={styles.clearButton}
+                    onPress={() => {
+                        setTitle("");
+                        setImageUrl("");
+                    }}
+                >
+                    <Text style={styles.clearButtonText}>CLEAR</Text>
+                </TouchableOpacity>
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -69,15 +126,32 @@ const styles = StyleSheet.create({
     },
     gameSettingsHeaderText: {
         fontSize: 32,
+        fontWeight: '600',
     },
     gameSettingsText: {
-        fontSize: 32,
+        fontSize: 18,
     },
     headerButtons: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 14,
         padding: 10,
+    },
+    warningMessage: {
+        color: 'red',
+        fontWeight: 'bold'
+    },
+    clearButtonText: {
+        fontWeight: 'bold',
+        fontSize: 36,
+        padding: 5,
+        alignSelf: 'center',
+        color: 'white'
+    },
+    clearButton: {
+        backgroundColor: 'darkblue',
+        margin: 20,
+        borderRadius: 10,
     },
 });
 

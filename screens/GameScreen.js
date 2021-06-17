@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
+import { addGame, editGame, removeGame } from '../helpers/modifiers';
 import { initLocalData, initPacedDB } from '../helpers/fb-paced';
 
 import { Image } from 'react-native-elements';
-import { addGame } from '../helpers/modifiers';
 
 //TODO: Create comparator method that dispays flatlist content alphabetically
 //TODO: For editing existing game entry, LONG PRESS --> Prepopulate fields via route params
@@ -11,7 +11,7 @@ import { addGame } from '../helpers/modifiers';
 const GameScreen = ({ route, navigation }) => {
     
     const [gamePacedData, setGamePacedData] = useState([]);
-    
+
     useEffect(() => {
         try {
           initPacedDB();
@@ -23,11 +23,18 @@ const GameScreen = ({ route, navigation }) => {
     }, []);
 
     useEffect(() => {
-        if (route.params?.title || route.params?.imageUrl) {
+        if (route.params?.editOrDelete == false) {
             (route.params.imageUrl != "") ? addGame(route.params.title, route.params.imageUrl, gamePacedData) :
             addGame(route.params.title, ".", gamePacedData);
+        } else {
+            if (route.params?.title != "" && route.params?.imageUrl != "") {
+                // editGame(route.params.receivedItemToUpdate.title, route.params.title, route.params.imageUrl, gamePacedData);
+            } else {
+                console.log('RECEIVEDITEM - REMOVE: ', route.params.receivedItemToUpdate);
+                removeGame(route.params.receivedItemToUpdate.title, gamePacedData);
+            }
         }
-    }, [route.params?.title, route.params?.imageUrl])
+    }, [route.params?.title, route.params?.imageUrl, route.params?.editOrDelete, route.params?.receivedItemToUpdate]);
     
     useEffect(() => {
         navigation.setOptions({
@@ -67,6 +74,11 @@ const GameScreen = ({ route, navigation }) => {
                     {navigation.navigate('Categories', { 
                         receivedPacedData: gamePacedData, receivedCurrentGame: item.title 
                     })};
+                }}
+                onLongPress={() => {
+                    navigation.navigate('Game Settings', {
+                        item,
+                    });
                 }}
             >
                 <View style={styles.gameRow}>
