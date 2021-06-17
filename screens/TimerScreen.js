@@ -2,6 +2,7 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import React, { useEffect, useState } from 'react';
 import { addSplits, addSplitsFromJSON, converQrSplitsToJSON } from '../helpers/modifiers';
 
+import { Image } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { locateIndex } from '../helpers/finders';
 import { noPriorRunVal } from '../helpers/constants';
@@ -347,6 +348,17 @@ const TimerScreen = ({ route, navigation }) => {
         return <View></View>;
     };
 
+    function ViewPbSplitTime(props) {
+        const currentIndex = props.currentIndex;
+
+        if (data[currentIndex].pbTotal != noPriorRunVal) {
+            return (
+                <Text style={styles.splitTimeText}>{outputTime(data[currentIndex].pbTotal)}</Text>
+            );
+        }
+        return <View></View>;
+    }
+
     const renderSplit = ({item}) => {
         if (item != 'empty') {
             return (
@@ -355,14 +367,25 @@ const TimerScreen = ({ route, navigation }) => {
                     underlayColor={"#ffefd5"}
                 >
                     <View style={styles.splitRow}>
+                        <View style={styles.splitIcon}>
+                            <Image 
+                                style={styles.splitIconImagePlaceholder}
+                                source={{uri: 'https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1e/OoT_Spiritual_Stone_of_Water_Model.png/revision/latest?cb=20101211015551'}}
+                                resizeMode={'center'}
+                                />
+                        </View>
                         <View style={styles.splitLeft}>
                             <Text style={styles.splitNameText}>{item.split}</Text>
-                            <Text style={styles.splitTimeText}> 
+                            {/* <Text style={styles.splitTimeText}> 
                                 PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}
-                            </Text>
+                            </Text> */}
                             <Text style={styles.splitTimeText}> 
-                                Run | Seg: {outputTime(item.runSeg)} : Total: {outputTime(item.runTotal)}
+                                Segment: {outputTime(item.runSeg)}
                             </Text>
+                            <Text style={styles.splitTimeText}>Total: {outputTime(item.runTotal)}</Text>
+                        </View>
+                        <View style={styles.splitCenter}>
+                            <ViewPbSplitTime currentIndex={data.indexOf(item)}/>
                         </View>
                         <View style={styles.splitRight}>
                             <ViewDifferential currentIndex={data.indexOf(item)}/>
@@ -468,16 +491,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
     },
+    splitIcon: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        flex: 1,
+    },
     splitLeft: {
         flexDirection: 'column',
-        flex: 5,
+        flex: 4,
     },
     splitRight: {
         justifyContent: 'center',
         flex: 2,
     },
+    splitCenter: {
+        justifyContent: 'center',
+        flex: 2,
+    },
     splitNameText: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
         padding: 2,
@@ -486,7 +518,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'white',
         // marginLeft: 5,
-        padding: 3,
+        padding: 2,
     },
     timerContainer: {
         flex: 1,
@@ -516,6 +548,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
     },
+    splitIconImagePlaceholder: {
+        height: 30,
+        width: 30,
+        marginLeft: 3,
+        flex: 1,
+        justifyContent: 'center',
+        alignSelf: 'center',
+    },
     saveButton: {
         backgroundColor: 'darkgreen',
         flex: 1,
@@ -544,7 +584,7 @@ const styles = StyleSheet.create({
     },
     differentialText: {
         color: 'white',
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: 'bold',
     }, 
     navHeaderTitle: {

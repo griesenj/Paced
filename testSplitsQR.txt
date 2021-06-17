@@ -1,0 +1,50 @@
+Ghoma,50,50,50
+Zelda,50,50,50
+Cucco Bottle,50,50,50
+Dampe PLZ,50,50,50
+Goron Bracelet,50,50,50
+Dodongo,50,50,50
+Silver Scale,50,50,50
+Don't Forget FishFood,50,50,50
+Boomerang,50,50,50
+Barinade,50,50,50
+Epona's Song,50,50,50
+Master Sword,50,50,50
+Hookshot,50,50,50
+Cojiro,50,50,50
+Goron Tunic,50,50,50
+Minuet of Forest,50,50,50
+Iron Boots,50,50,50
+Bow,50,50,50
+Phantom Gannon,50,50,50
+Longshot,50,50,50
+Morpha,50,50,50
+Gold Scale,50,50,50
+Gerudo Card,50,50,50
+Requiem of Spirit,50,50,50
+Hammer Time,50,50,50
+Volvagia,50,50,50
+Big Quiver,50,50,50
+Child 2,50,50,50
+Stick Upgrade (1),50,50,50
+Bomb Bag (30),50,50,50
+Din's Fire,50,50,50
+Simon Says HP,50,50,50
+Lens of Truth,50,50,50
+Lens Minigame HP,50,50,50
+Nut Upgrade (1),50,50,50
+Silver Gauntlets,50,50,50
+Adult 2,50,50,50
+Poacher's Saw,50,50,50
+Ice Arrows,50,50,50
+Horseback Archery,50,50,50
+Zora's Tunic,50,50,50
+OH BABY!!!,50,50,50
+Mirror Shield,50,50,50
+Twinrova,50,50,50
+Hover Boots,50,50,50
+Bongo Bongo,50,50,50
+Poe Bottle,50,50,50
+Trials,50,50,50
+Gannondorf,50,50,50
+Gannon,50,50,50

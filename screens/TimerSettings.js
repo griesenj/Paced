@@ -96,14 +96,6 @@ const TimerSettings = ({ route, navigation }) => {
                 value={splitName}
                 onChangeText={(val) => setSplitName(val)}
             />
-            {/* <Button
-                onPress={() => {
-                    console.log(splitName);
-                    console.log(scannedDataValid(scannedData));
-                }}
-                title= "Test Output"
-                color="#ff5c5c"
-            /> */}
             <Text style={styles.timerSettingsHeaderText}>Add via QR Code</Text>
             <Text>Please reference the split formatting guidelines outlined in the help menu prior to generating your QR code.</Text>
             <Text style={styles.warningMessage}>{'\n'}WARNING: This will delete your existing splits!</Text>
