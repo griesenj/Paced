@@ -12,8 +12,6 @@ const TimerSettings = ({ route, navigation }) => {
 
     useEffect(() => {
         if (route.params?.data) {
-            // CODE TO CONVERT DATA TO SPLIT OBJECT FORMAT
-            console.log('QR Data: ', route.params.data);
             setScannedData(route.params.data);
         }
     }, [route.params?.data])
@@ -81,7 +79,13 @@ const TimerSettings = ({ route, navigation }) => {
 
     const DataView = () => {
         if (scannedData != null) {
-            return <Text style={styles.scrollViewText}>{scannedData}</Text>
+            return  (
+                <ScrollView style={styles.scrollViewContainer}>
+                    <View onStartShouldSetResponder={() => true}>
+                        <Text style={styles.scrollViewText}>{scannedData}</Text>
+                    </View>
+                </ScrollView>
+            )  
         }
         return <View></View>
     }
@@ -92,7 +96,6 @@ const TimerSettings = ({ route, navigation }) => {
                 <Text style={styles.timerSettingsHeaderText}>Add New Split</Text>
                 <Input
                     placeholder="Split Name"
-                    // ref={initialField}
                     value={splitName}
                     onChangeText={(val) => setSplitName(val)}
                 />
@@ -107,9 +110,7 @@ const TimerSettings = ({ route, navigation }) => {
                     <Text style={styles.scannerButtonText}>SCAN</Text>
                 </TouchableOpacity>
                 <DataHeader/>
-                <ScrollView style={styles.scrollViewContainer}>
-                    <DataView/>
-                </ScrollView>
+                <DataView/>
             </View>
         </TouchableWithoutFeedback>
     );

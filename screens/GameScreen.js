@@ -26,15 +26,19 @@ const GameScreen = ({ route, navigation }) => {
         if (route.params?.editOrDelete == false) {
             (route.params.imageUrl != "") ? addGame(route.params.title, route.params.imageUrl, gamePacedData) :
             addGame(route.params.title, ".", gamePacedData);
-        } else {
+        }
+        if (route.params?.editOrDelete == true) {
             if (route.params?.title != "" && route.params?.imageUrl != "") {
-                // editGame(route.params.receivedItemToUpdate.title, route.params.title, route.params.imageUrl, gamePacedData);
+                console.log('thing', route.params?.receivedItemToUpdate);
+                editGame(route.params.receivedItemToUpdate.title, route.params.title, route.params.imageUrl, gamePacedData);
             } else {
                 console.log('RECEIVEDITEM - REMOVE: ', route.params.receivedItemToUpdate);
                 removeGame(route.params.receivedItemToUpdate.title, gamePacedData);
             }
         }
     }, [route.params?.title, route.params?.imageUrl, route.params?.editOrDelete, route.params?.receivedItemToUpdate]);
+
+    // route.params?.title, route.params?.imageUrl, route.params?.editOrDelete, 
     
     useEffect(() => {
         navigation.setOptions({
