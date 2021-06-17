@@ -3,13 +3,21 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Input } from 'react-native-elements';
 
-const GameSettings = ({ navigation }) => {
+const GameSettings = ({ route, navigation }) => {
 
-    const [title, setTitle] = useState();
-    const [imageUrl, setImageUrl] = useState();
+    const [title, setTitle] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+
+    // const { receivedTitle, receivedImageUrl } = route.params;
 
     // FIXME: Need to make sure settings screen inputs do not already exist (will overwrite/duplicate otherwise)
-    // TODO: Error checking for bad inputs
+
+    // useEffect(() => {
+
+    //     setTitle(route.params.receivedTitle);
+    //     setImageUrl(route.params)
+
+    // }, [route.params?.receivedTitle, route.params?.receivedImageUrl])
 
     useEffect(() => {
         navigation.setOptions({
@@ -23,10 +31,12 @@ const GameSettings = ({ navigation }) => {
             headerRight: () => (
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('Games', {
-                            title,
-                            imageUrl
-                        });
+                        if (title != "") {
+                            navigation.navigate('Games', {
+                                title,
+                                imageUrl
+                            });
+                        }
                     }}
                 >
                     <Text style={styles.headerButtons}> Save </Text>
@@ -36,33 +46,30 @@ const GameSettings = ({ navigation }) => {
     });
 
     return (
-        <View>
-            <Text style={styles.gameSettingsText}>Add New Game</Text>
+        <View style={styles.container}>
+            <Text style={styles.gameSettingsHeaderText}>Add New Game</Text>
             <Input
                 placeholder="Game Title"
-                // ref={initialField}
                 value={title}
                 onChangeText={(val) => setTitle(val)}
             />
             <Input
                 placeholder="Game Art URL"
-                // ref={initialField}
                 value={imageUrl}
                 onChangeText={(val) => setImageUrl(val)}
             />
-            <TouchableOpacity style={styles.gameSettingsText}
-                onPress={() => {
-                    console.log(title, imageUrl);
-                }}
-            >
-                <Text>CLICK ME FOR TEST OUTPUT</Text>
-            </TouchableOpacity>
-            <Text>To edit or remove an existing game, long press the game icon in the menu.</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        margin: 5,
+        flex:1,
+    },
+    gameSettingsHeaderText: {
+        fontSize: 32,
+    },
     gameSettingsText: {
         fontSize: 32,
     },

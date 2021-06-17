@@ -5,7 +5,7 @@ import { Input } from 'react-native-elements';
 
 const CategorySettings = ({ navigation }) => {
     
-    const [runTitle, setRunTitle] = useState();
+    const [runTitle, setRunTitle] = useState("");
 
     useEffect(() => {
         navigation.setOptions({
@@ -19,7 +19,9 @@ const CategorySettings = ({ navigation }) => {
             headerRight: () => (
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('Categories', { runTitle });
+                        if (runTitle != "") {
+                            navigation.navigate('Categories', { runTitle });
+                        }
                     }}
                 >
                     <Text style={styles.headerButtons}> Save </Text>
@@ -29,28 +31,25 @@ const CategorySettings = ({ navigation }) => {
     });
 
     return (
-
-        // TODO: Error checking for bad inputs
-        <View>
-            <Text style={styles.categorySettingsText}>Add New Category</Text>
+        <View style={styles.container}>
+            <Text style={styles.categorySettingsHeaderText}>Add New Category</Text>
             <Input
                 placeholder="Run Title"
-                // ref={initialField}
                 value={runTitle}
                 onChangeText={(val) => setRunTitle(val)}
             />
-            <TouchableOpacity style={styles.categorySettingsText}
-                onPress={() => {
-                    console.log(runTitle);
-                }}
-            >
-                <Text>CLICK ME FOR TEST OUTPUT</Text>
-            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        margin: 5,
+        flex:1,
+    },
+    categorySettingsHeaderText: {
+        fontSize: 32,
+    },
     categorySettingsText: {
         fontSize: 32,
     },

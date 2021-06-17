@@ -24,9 +24,8 @@ const GameScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (route.params?.title || route.params?.imageUrl) {
-
-            console.log('ROUTE PARAMS: ', route.params.title, route.params.imageUrl);
-            addGame(route.params.title, route.params.imageUrl, gamePacedData);
+            (route.params.imageUrl != "") ? addGame(route.params.title, route.params.imageUrl, gamePacedData) :
+            addGame(route.params.title, ".", gamePacedData);
         }
     }, [route.params?.title, route.params?.imageUrl])
     
