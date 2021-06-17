@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     },
     gameSettingsText: {
         fontSize: 18,
+        fontWeight: '500',
     },
     headerButtons: {
         color: 'white',

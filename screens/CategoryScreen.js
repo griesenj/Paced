@@ -1,8 +1,8 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
+import { addCategory, editCategory, removeCategory } from '../helpers/modifiers';
 
 import { Image } from 'react-native-elements';
-import { addCategory } from '../helpers/modifiers';
 import { categoryComparator } from '../helpers/comparators';
 import { initLocalData } from '../helpers/fb-paced';
 import { locateIndex } from '../helpers/finders';
@@ -15,7 +15,7 @@ const CategoryScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         try {
-            console.log('INIT CATEGORY DATA FROM FIREBASE')
+            console.log('INIT CATEGORY FROM FIREBASE');
             initLocalData(setCategoryPacedData);
         } catch (err) {
           console.log(err);
@@ -23,11 +23,19 @@ const CategoryScreen = ({ route, navigation }) => {
     }, []);
 
     useEffect(() => {
-        if (route.params?.runTitle) {
-            console.log('ROUTE PARAMS: ', route.params.runTitle);
-            addCategory(route.params.runTitle, categoryPacedData, currentGame);
+        if (route.params?.editOrDelete == false) {
+            if (route.params.runTitle != "") {
+                addCategory(route.params.runTitle, currentGame, categoryPacedData);
+            }
         }
-    }, [route.params?.runTitle])
+        if (route.params?.editOrDelete == true) {
+            if (route.params?.runTitle != "") {
+                editCategory(route.params.runTitle, route.params.receivedItemToUpdate, currentGame, categoryPacedData);
+            } else {
+                removeCategory(route.params.receivedItemToUpdate, currentGame, categoryPacedData);
+            }
+        }
+    }, [route.params?.runTitle, route.params?.editOrDelete, route.params?.receivedItemToUpdate]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -52,10 +60,19 @@ const CategoryScreen = ({ route, navigation }) => {
         if (item != 'empty') {
             return (    
                 <TouchableOpacity
-                    onPress={() => {{    
-                        navigation.navigate('Timer', { receivedPacedData: categoryPacedData, receivedCurrentGame: currentGame, 
-                            receivedCurrentCategory: item.run })
-                    };
+                    onPress={() => {    
+                        navigation.navigate('Timer', { 
+                            receivedPacedData: categoryPacedData, receivedCurrentGame: currentGame, 
+                            receivedCurrentCategory: item.run 
+                        });
+                    }}
+                    onLongPress={() => {
+
+                        console.log('CurrentGame: ', currentGame);
+
+                        navigation.navigate('Category Settings', {
+                            item,
+                        });
                     }}
                 >
                     <View style={styles.categoryRow}>

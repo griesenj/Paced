@@ -16,7 +16,7 @@ const GameScreen = ({ route, navigation }) => {
         } catch (err) {
           console.log(err);
         }
-        console.log('INIT GAME DATA FROM FIREBASE');
+        console.log('INIT GAME FROM FIREBASE');
         initLocalData(setGamePacedData);
     }, []);
 
@@ -27,10 +27,8 @@ const GameScreen = ({ route, navigation }) => {
         }
         if (route.params?.editOrDelete == true) {
             if (route.params?.title != "" && route.params?.imageUrl != "") {
-                console.log('thing', route.params?.receivedItemToUpdate);
                 editGame(route.params.receivedItemToUpdate.title, route.params.title, route.params.imageUrl, gamePacedData);
             } else {
-                console.log('RECEIVEDITEM - REMOVE: ', route.params.receivedItemToUpdate);
                 removeGame(route.params.receivedItemToUpdate.title, gamePacedData);
             }
         }
@@ -71,9 +69,9 @@ const GameScreen = ({ route, navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    {navigation.navigate('Categories', { 
+                    navigation.navigate('Categories', { 
                         receivedPacedData: gamePacedData, receivedCurrentGame: item.title 
-                    })};
+                    });
                 }}
                 onLongPress={() => {
                     navigation.navigate('Game Settings', {

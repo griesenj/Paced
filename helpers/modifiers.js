@@ -2,9 +2,6 @@ import { locateIndex } from './finders';
 import { noPriorRunVal } from './constants';
 import { storeDataItem } from '../helpers/fb-paced';
 
-// FIXME: How to handle empty arrays upon initialization? Currently using string placeholder of 'empty'
-// This is problem, empty key persists within firebase; need to somehow delete it when adding first item
-
 export const addGame = (title, imageUrl, currentData) => {
     const newGameEntry = {
         title: title,
@@ -33,7 +30,7 @@ export const editGame = (originalTitle, newTitle, imageUrl, currentData) => {
     storeDataItem(dataCopy);
 };
 
-export const addCategory = (run, currentData, currentGame) => {
+export const addCategory = (run, currentGame, currentData) => {
     const newCategoryEntry = {
         run: run,
         splits: ['empty'],
@@ -45,6 +42,20 @@ export const addCategory = (run, currentData, currentGame) => {
     }
     
     dataCopy[locateIndex(dataCopy, 'title', currentGame)].category.push(newCategoryEntry);
+    storeDataItem(dataCopy);
+};
+
+export const removeCategory = (categoryToUpdate, currentGame, currentData) => {
+    var dataCopy = JSON.parse(JSON.stringify(currentData));
+    var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
+    categoryArray.splice(locateIndex(categoryArray, "run", categoryToUpdate.run), 1);
+    storeDataItem(dataCopy);
+};
+
+export const editCategory = (newRun, categoryToUpdate, currentGame, currentData) => {
+    var dataCopy = JSON.parse(JSON.stringify(currentData));
+    var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
+    categoryArray[locateIndex(categoryArray, "run", categoryToUpdate.run)].run = newRun;
     storeDataItem(dataCopy);
 };
 
