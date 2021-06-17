@@ -13,9 +13,9 @@ export function initPacedDB() {
 
 export function initLocalData(updateFunc) {
   const ref = firebase.database().ref('pacedData/');
-  ref.on('value', (snapshot) => {
-    updateFunc(snapshot.val());
-  });
+    ref.on('value', (snapshot) => {
+      updateFunc(snapshot.val());
+    });
 }
 
 export function storeDataItem(item) {

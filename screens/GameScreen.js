@@ -4,9 +4,7 @@ import { addGame, editGame, removeGame } from '../helpers/modifiers';
 import { initLocalData, initPacedDB } from '../helpers/fb-paced';
 
 import { Image } from 'react-native-elements';
-
-//TODO: Create comparator method that dispays flatlist content alphabetically
-//TODO: For editing existing game entry, LONG PRESS --> Prepopulate fields via route params
+import { gameComparator } from '../helpers/comparators';
 
 const GameScreen = ({ route, navigation }) => {
     
@@ -37,8 +35,6 @@ const GameScreen = ({ route, navigation }) => {
             }
         }
     }, [route.params?.title, route.params?.imageUrl, route.params?.editOrDelete, route.params?.receivedItemToUpdate]);
-
-    // route.params?.title, route.params?.imageUrl, route.params?.editOrDelete, 
     
     useEffect(() => {
         navigation.setOptions({
@@ -113,8 +109,8 @@ const GameScreen = ({ route, navigation }) => {
                 <FlatList
                     ItemSeparatorComponent={renderSeparator}
                     keyExtractor={(item) => item.title}
-                    data={gamePacedData}
-                    extraData={gamePacedData}
+                    data={gamePacedData.sort(gameComparator)}
+                    extraData={gamePacedData.sort(gameComparator)}
                     renderItem={renderGames}
                 />
             </View>

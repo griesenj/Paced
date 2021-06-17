@@ -11,8 +11,6 @@ const GameSettings = ({ route, navigation }) => {
     const [receivedItemToUpdate, setReceivedItemToUpdate] = useState();
     const [editOrDelete, setEditOrDelete] = useState(false);
 
-    // FIXME: Need to make sure settings screen inputs do not already exist (will overwrite/duplicate otherwise)
-
     useEffect(() => {
         if (route.params?.item) {
             setReceivedItemToUpdate(route.params.item);
@@ -98,13 +96,6 @@ const GameSettings = ({ route, navigation }) => {
                     value={imageUrl}
                     onChangeText={(val) => setImageUrl(val)}
                 />
-                {/* <TouchableOpacity
-                    onPress={() => {
-                        console.log(editOrDelete);
-                    }}
-                >
-                    <Text> Click Me For Output </Text>
-                </TouchableOpacity> */}
                 <FooterText/>
                 <TouchableOpacity style={styles.clearButton}
                     onPress={() => {

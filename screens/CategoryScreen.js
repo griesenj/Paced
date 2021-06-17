@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Image } from 'react-native-elements';
 import { addCategory } from '../helpers/modifiers';
+import { categoryComparator } from '../helpers/comparators';
 import { initLocalData } from '../helpers/fb-paced';
 import { locateIndex } from '../helpers/finders';
 
@@ -93,8 +94,8 @@ const CategoryScreen = ({ route, navigation }) => {
                     <FlatList
                         ItemSeparatorComponent={renderSeparator}
                         keyExtractor={(item) => item.run}
-                        data={categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].category}
-                        extraData={categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].category}
+                        data={categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].category.sort(categoryComparator)}
+                        extraData={categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].category.sort(categoryComparator)}
                         renderItem={renderCategories}
                     />
                 </View>
