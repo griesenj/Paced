@@ -13,7 +13,6 @@ const CategoryScreen = ({ route, navigation }) => {
     const [categoryPacedData, setCategoryPacedData] = useState(receivedPacedData);
     const [currentGame] = useState(receivedCurrentGame);
 
-    // TODO: Update data if route object received from timer screen (meaning save has occured).
     useEffect(() => {
         try {
             console.log('INIT CATEGORY DATA FROM FIREBASE')
@@ -23,7 +22,6 @@ const CategoryScreen = ({ route, navigation }) => {
         }
     }, []);
 
-    // TODO: Update data on firebase if details received from settings screen.
     useEffect(() => {
         if (route.params?.runTitle) {
             console.log('ROUTE PARAMS: ', route.params.runTitle);

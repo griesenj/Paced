@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
-const Help = ({ route, navigation }) => {
+const HelpScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         navigation.setOptions({
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Help;
+export default HelpScreen;

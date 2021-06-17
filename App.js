@@ -2,7 +2,7 @@ import CategoryScreen from './screens/CategoryScreen';
 import CategorySettings from './screens/CategorySettings';
 import GameScreen from './screens/GameScreen';
 import GameSettings from './screens/GameSettings';
-import Help from './screens/Help';
+import HelpScreen from './screens/HelpScreen';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
@@ -22,7 +22,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={navigatorOptions}>        
         <Stack.Screen name="Games" component={GameScreen}/>
-        <Stack.Screen name="Help" component={Help}/>
+        <Stack.Screen name="Help" component={HelpScreen}/>
         <Stack.Screen name="Game Settings" component={GameSettings}/>
         <Stack.Screen name="Categories" component={CategoryScreen}/>
         <Stack.Screen name="Category Settings" component={CategorySettings}/>
