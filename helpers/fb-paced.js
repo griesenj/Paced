@@ -36,3 +36,20 @@ export function createNewUser(email, password, logUserId) {
     logUserId(response.user.uid);
   })
 }
+
+export function getExistingUserId(email, logUserId) {
+  const ref = firebase.database().ref('users');
+  ref.on('value', (snapshot) => {
+    var data = snapshot.val();
+    for (var i in data) {
+      if (data[i]["email"] == email) {
+        logUserId(data[i]["id"]);
+      }
+    }
+  });
+
+  // var query = firebase.database().ref('users');
+  // query.once('value').then((snapshot) => {
+  //   console.log("Snapshot: ", snapshot);
+  // })
+};

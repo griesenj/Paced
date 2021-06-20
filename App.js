@@ -9,6 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import ScannerScreen from './screens/ScannerScreen';
+import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import TimerScreen from './screens/TimerScreen';
 import TimerSettings from './screens/TimerSettings';
@@ -40,6 +41,7 @@ export default function App() {
       <Stack.Navigator screenOptions={navigatorOptions}>     
         <Stack.Screen options={{headerShown: false}} name="Home" component={HomeScreen}/>
         <Stack.Screen options={{headerShown: false}} name="Sign Up" component={SignUpScreen}/>
+        <Stack.Screen options={{headerShown: false}} name="Sign In" component={SignInScreen}/>
         
         <Stack.Screen name="Games" component={GameScreen}/>
         <Stack.Screen name="Help" component={HelpScreen}/>
