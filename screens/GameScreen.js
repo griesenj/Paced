@@ -7,7 +7,7 @@ import { Image } from 'react-native-elements';
 import { gameComparator } from '../helpers/comparators';
 
 const GameScreen = ({ route, navigation }) => {
-    
+
     const [gamePacedData, setGamePacedData] = useState([]);
 
     useEffect(() => {

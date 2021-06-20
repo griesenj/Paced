@@ -184,7 +184,9 @@ const TimerScreen = ({ route, navigation }) => {
 
     const resetTimer = () => {
         resetTimerNoWipe();
-        setData(wipeCurrentRunValues(data));
+        if (data[0] != 'empty') {
+            setData(wipeCurrentRunValues(data));
+        }
     };
 
     const resetTimerNoWipe = () => {
@@ -198,7 +200,7 @@ const TimerScreen = ({ route, navigation }) => {
     }
 
     const processSplit = () => {
-        if (active && !paused) {
+        if (active && !paused && data[0] != 'empty') {
             updateDataOnSplit(splitPosition, {runTotal: timer, runSeg: getSegmentTime()})
             updateDifferentialsOnSplit(getDifferential());
             updateGoldChecksOnSplit();
