@@ -8,14 +8,16 @@ const SignUpScreen = ({ route, navigation }) => {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [authenticated, setAuthenticated] = useState(false);
     const [userId, setUserId] = useState();
 
     useEffect(() => {
-        if (authenticated) {
-            navigation.navigate("Games", { id: userId });
+        if (userId) {
+
+            console.log('USER ID SIGNUPSCREEN: ', userId);
+
+            navigation.navigate("Games", { user: userId });
         }
-    }, [authenticated]);
+    }, [userId]);
     
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -35,7 +37,7 @@ const SignUpScreen = ({ route, navigation }) => {
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        createNewUser(email, password, setAuthenticated, setUserId)
+                        createNewUser(email, password, setUserId)
                     }}
                 >
                     <Text style={styles.clearButtonText}> CREATE ACCOUNT </Text>

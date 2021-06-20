@@ -18,7 +18,8 @@ const GameScreen = ({ route, navigation }) => {
         //   console.log(err);
         // }
         console.log('Initialized user data on Game Screen');
-        initLocalData(setGamePacedData);
+        console.log('User ID from signUp:', user);
+        initLocalData(user, setGamePacedData);
     }, []);
 
     useEffect(() => {
