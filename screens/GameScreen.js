@@ -9,14 +9,15 @@ import { gameComparator } from '../helpers/comparators';
 const GameScreen = ({ route, navigation }) => {
 
     const [gamePacedData, setGamePacedData] = useState([]);
+    const { user } = route.params;
 
     useEffect(() => {
-        try {
-          initPacedDB();
-        } catch (err) {
-          console.log(err);
-        }
-        console.log('INIT GAME FROM FIREBASE');
+        // try {
+        //   initPacedDB();
+        // } catch (err) {
+        //   console.log(err);
+        // }
+        console.log('Initialized user data on Game Screen');
         initLocalData(setGamePacedData);
     }, []);
 

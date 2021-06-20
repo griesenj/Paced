@@ -1,4 +1,5 @@
 import "firebase/database";
+import "firebase/auth";
 
 import * as firebase from "firebase";
 
@@ -19,6 +20,19 @@ export function initLocalData(updateFunc) {
 }
 
 export function storeDataItem(item) {
-  // console.log('storing ...', item)
   firebase.database().ref("pacedData/").set(item);
+}
+
+export function createNewUser(email, password, authenticate, logId) {
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then(response => {
+    firebase.database().ref(`users/${response.user.uid}`).set({
+      id: response.user.uid,
+      email: email,
+      password: password,
+      data: 'WELCOME, TO THE WORLD OF TOMOROWWWWW'
+    })
+    authenticate(true);
+    logId(response.user.uid);
+  })
 }
