@@ -1,4 +1,3 @@
-import { LogBox, StatusBar } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import CategoryScreen from './screens/application/CategoryScreen';
@@ -7,6 +6,7 @@ import GameScreen from './screens/application/GameScreen';
 import GameSettings from './screens/application/GameSettings';
 import HelpScreen from './screens/application/HelpScreen';
 import HomeScreen from './screens/authentication/HomeScreen';
+import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import ScannerScreen from './screens/application/ScannerScreen';
 import SignInScreen from './screens/authentication/SignInScreen';
@@ -35,31 +35,7 @@ export default function App() {
   }, [init]);
 
   // FIXME: Temporarily disabling unmounted component warnings for presentation purposes.
-  // LogBox.ignoreAllLogs();
-
-  // FIXME: Need to figure out authentication before launching main app stack
-  // return signedIn ? ( 
-  //   <NavigationContainer>
-  //     <Stack.Navigator screenOptions={navigatorOptions}>     
-  //       <Stack.Screen name="Games" component={GameScreen}/>
-  //       <Stack.Screen name="Help" component={HelpScreen}/>
-  //       <Stack.Screen name="Game Settings" component={GameSettings}/>
-  //       <Stack.Screen name="Categories" component={CategoryScreen}/>
-  //       <Stack.Screen name="Category Settings" component={CategorySettings}/>
-  //       <Stack.Screen name="Timer" component={TimerScreen}/>
-  //       <Stack.Screen name="Timer Settings" component={TimerSettings}/>
-  //       <Stack.Screen name="Scanner" component={ScannerScreen}/>
-  //     </Stack.Navigator>
-  //   </NavigationContainer>
-  // ) : (
-  //   <NavigationContainer>
-  //     <Stack.Navigator screenOptions={navigatorOptions}>     
-  //       <Stack.Screen options={{headerShown: false}} name="Home" component={HomeScreen}/>
-  //       <Stack.Screen options={{headerShown: false}} name="Sign Up" component={SignUpScreen}/>
-  //       <Stack.Screen options={{headerShown: false}} name="Sign In" component={SignInScreen}/>
-  //     </Stack.Navigator>
-  //   </NavigationContainer>
-  // );
+  LogBox.ignoreAllLogs();
 
   return (
     <NavigationContainer>
