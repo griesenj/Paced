@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1089932552948",
+    "firebase_url": "https://paced-3245f-default-rtdb.firebaseio.com",
+    "project_id": "paced-3245f",
+    "storage_bucket": "paced-3245f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089932552948:android:d97f24a203d8243abf4ca1",
+        "android_client_info": {
+          "package_name": "jg.gvsu.paced"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089932552948-211hfvua8dcffj39jdjlnrbv1ofob9r7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBLl2GzfYhg4RpXIBRH5AH9GYC1Vj5WmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089932552948-211hfvua8dcffj39jdjlnrbv1ofob9r7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1089932552948-p1ssbih73qfnrfj0n44uc0h339uee527.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jg.gvsu.paced"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

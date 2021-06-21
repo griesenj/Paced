@@ -1,3 +1,7 @@
+import "firebase/database";
+
+import * as Analytics from 'expo-firebase-analytics';
+
 import React, { useEffect, useState } from 'react';
 
 import CategoryScreen from './screens/application/CategoryScreen';
@@ -16,10 +20,29 @@ import TimerSettings from './screens/application/TimerSettings';
 import { createStackNavigator } from '@react-navigation/stack';
 import { initPacedDB } from './helpers/fb-paced';
 
+// Gets the current screen from navigation state
+const getActiveRouteName = state => {
+  const route = state.routes[state.index];
+  if (route.state) {
+    // Dive into nested navigators
+    return getActiveRouteName(route.state);
+  }
+  return route.name;
+};
+
 export default function App() {
 
+  const routeNameRef = React.useRef();
+  const navigationRef = React.useRef();
+
+  React.useEffect(() => {
+    const state = navigationRef.current.getRootState();
+
+    // Save the initial route name
+    routeNameRef.current = getActiveRouteName(state);
+  }, []);
+
   const [init, setInit] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
   const Stack = createStackNavigator();
   
   useEffect(() => {
@@ -29,7 +52,6 @@ export default function App() {
       } catch (err) {
         console.log(err);
       }
-      console.log('Initialized Firebase DB');
       setInit(true);
     }
   }, [init]);
@@ -38,7 +60,16 @@ export default function App() {
   LogBox.ignoreAllLogs();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+        onStateChange={(state) => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = getActiveRouteName(state);
+          if (previousRouteName !== currentRouteName) {
+            Analytics.setCurrentScreen(currentRouteName, currentRouteName);
+          }
+        }}
+    >
       <Stack.Navigator screenOptions={navigatorOptions}>
         <Stack.Screen options={{headerShown: false}} name="Home" component={HomeScreen}/>
         <Stack.Screen options={{headerShown: false}} name="Sign Up" component={SignUpScreen}/>

@@ -17,15 +17,33 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "jg.gvsu.paced",
+      "buildNumber": "1.0.0",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "package": "jg.gvsu.paced",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyDbAWbsptpu7i20q_7n3EmFuWAKfXDtCD0",
+          "authDomain": "paced-3245f.firebaseapp.com",
+          "databaseURL": "https://paced-3245f-default-rtdb.firebaseio.com",
+          "projectId": "paced-3245f",
+          "storageBucket": "paced-3245f.appspot.com",
+          "messagingSenderId": "1089932552948",
+          "appId": "1:1089932552948:web:f3c18393d0b4f46cbf4ca1",
+          "measurementId": "G-P6WGEXHG0V"
+        }
+      },
       "favicon": "./assets/favicon.png"
     }
   }

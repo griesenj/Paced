@@ -30,12 +30,10 @@ export function signIn(email, password, logUserId, logError) {
   };
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then(response => {
-      console.log(response.user.uid);
       logUserId(response.user.uid);
       logError();
     })
     .catch(error => {
-      console.log(error);
       logError(error);
     });
 };
@@ -55,7 +53,6 @@ export function signUp(email, password, logUserId, logError) {
       logUserId(response.user.uid);
     })
     .catch(error => {
-      console.log(error);
       logError(error);
     });
 }

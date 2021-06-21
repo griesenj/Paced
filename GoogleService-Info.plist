@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1089932552948-p1ssbih73qfnrfj0n44uc0h339uee527.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1089932552948-p1ssbih73qfnrfj0n44uc0h339uee527</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBDF3q1tD8eklcfLK109jZHxNtA2LOlvOg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1089932552948</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>jg.gvsu.paced</string>
+	<key>PROJECT_ID</key>
+	<string>paced-3245f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>paced-3245f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1089932552948:ios:d668620627090218bf4ca1</string>
+	<key>DATABASE_URL</key>
+	<string>https://paced-3245f-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
