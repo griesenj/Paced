@@ -2,7 +2,7 @@ import { Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback,
 import React, { useEffect, useState } from 'react';
 
 import { Input } from 'react-native-elements';
-import { getExistingUserId } from '../../helpers/fb-paced';
+import { signIn } from '../../helpers/fb-paced';
 
 const SignInScreen = ({ route, navigation }) => {
 
@@ -37,7 +37,7 @@ const SignInScreen = ({ route, navigation }) => {
                 </View>
                 <TouchableOpacity style={styles.button}
                     onPress={() => {
-                        getExistingUserId(email, setUserId);
+                        signIn(email, password, setUserId);
                     }}
                 >
                     <Text style={styles.buttonText}> Submit </Text>

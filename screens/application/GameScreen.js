@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { addGame, editGame, removeGame } from '../../helpers/modifiers';
 
@@ -95,6 +95,7 @@ const GameScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar  barStyle="light-content" translucent={true} />
             <View style={styles.gamesListContainer}>
                 <FlatList
                     ItemSeparatorComponent={renderSeparator}

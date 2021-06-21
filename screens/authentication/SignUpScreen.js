@@ -2,7 +2,7 @@ import { FlatList, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithou
 import React, { useEffect, useState } from 'react';
 
 import { Input } from 'react-native-elements';
-import { createNewUser } from '../../helpers/fb-paced';
+import { signUp } from '../../helpers/fb-paced';
 
 const SignUpScreen = ({ route, navigation }) => {
 
@@ -37,7 +37,7 @@ const SignUpScreen = ({ route, navigation }) => {
                 </View>
                 <TouchableOpacity style={styles.button}
                     onPress={() => {
-                        createNewUser(email, password, setUserId)
+                        signUp(email, password, setUserId)
                     }}
                 >
                     <Text style={styles.buttonText}> Submit </Text>

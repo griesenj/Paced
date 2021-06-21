@@ -1,3 +1,4 @@
+import { LogBox, StatusBar } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import CategoryScreen from './screens/application/CategoryScreen';
@@ -6,7 +7,6 @@ import GameScreen from './screens/application/GameScreen';
 import GameSettings from './screens/application/GameSettings';
 import HelpScreen from './screens/application/HelpScreen';
 import HomeScreen from './screens/authentication/HomeScreen';
-import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import ScannerScreen from './screens/application/ScannerScreen';
 import SignInScreen from './screens/authentication/SignInScreen';
@@ -78,12 +78,11 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-
-
 }
 
 const navigatorOptions = {
   headerTitleAlign: 'center',
   headerStyle: {backgroundColor: '#242424'},
   headerTitleStyle: {color: 'white', fontWeight: 'bold'},
+  gestureEnabled: false,
 };

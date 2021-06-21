@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const HelpScreen = ({ route, navigation }) => {
+const HelpScreen = ({ navigation }) => {
 
     useEffect(() => {
         navigation.setOptions({
@@ -10,6 +10,13 @@ const HelpScreen = ({ route, navigation }) => {
                     onPress={() => {navigation.navigate('Games')}}
                 >
                     <Text style={styles.headerButtons}> Back </Text>
+                </TouchableOpacity>
+            ),
+            headerRight: () => (
+                <TouchableOpacity
+                    onPress={() => {navigation.navigate('Home')}}
+                >
+                    <Text style={styles.headerButtons}> Log Out </Text>
                 </TouchableOpacity>
             ),
         }, []);
