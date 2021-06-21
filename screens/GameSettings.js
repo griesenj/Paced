@@ -72,7 +72,7 @@ const GameSettings = ({ route, navigation }) => {
         if (editOrDelete) {
             return (
                 <View>
-                    <Text style={styles.gameSettingsText}>To Delete a game, tap the "Clear" button below 
+                    <Text style={styles.gameSettingsText}>To delete a game, tap the "Clear" button below 
                     and then tap "Save".</Text>
                     <Text style={styles.warningMessage}>{'\n'}WARNING: This will delete all categories and 
                     splits associated with this game!</Text>

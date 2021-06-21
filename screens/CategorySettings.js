@@ -68,7 +68,7 @@ const CategorySettings = ({ route, navigation }) => {
         if (editOrDelete) {
             return (
                 <View>
-                    <Text style={styles.categorySettingsText}>To Delete a category, tap the "Clear" button below 
+                    <Text style={styles.categorySettingsText}>To delete a category, tap the "Clear" button below 
                     and then tap "Save".</Text>
                     <Text style={styles.warningMessage}>{'\n'}WARNING: This will delete all splits associated 
                     with this category!</Text>
