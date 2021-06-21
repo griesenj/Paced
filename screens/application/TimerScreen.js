@@ -1,12 +1,12 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { addSplits, addSplitsFromJSON, convertQrSplitsToJSON } from '../helpers/modifiers';
+import { addSplits, addSplitsFromJSON, convertQrSplitsToJSON } from '../../helpers/modifiers';
 
 import { Image } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { locateIndex } from '../helpers/finders';
-import { noPriorRunVal } from '../helpers/constants';
-import { storeDataItem } from '../helpers/fb-paced';
+import { locateIndex } from '../../helpers/finders';
+import { noPriorRunVal } from '../../helpers/constants';
+import { storeDataItem } from '../../helpers/fb-paced';
 
 const TimerScreen = ({ route, navigation }) => {
    

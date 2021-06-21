@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-import CategoryScreen from './screens/CategoryScreen';
-import CategorySettings from './screens/CategorySettings';
-import GameScreen from './screens/GameScreen';
-import GameSettings from './screens/GameSettings';
-import HelpScreen from './screens/HelpScreen';
-import HomeScreen from './screens/HomeScreen';
+import CategoryScreen from './screens/application/CategoryScreen';
+import CategorySettings from './screens/application/CategorySettings';
+import GameScreen from './screens/application/GameScreen';
+import GameSettings from './screens/application/GameSettings';
+import HelpScreen from './screens/application/HelpScreen';
+import HomeScreen from './screens/authentication/HomeScreen';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import ScannerScreen from './screens/ScannerScreen';
-import SignInScreen from './screens/SignInScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import TimerScreen from './screens/TimerScreen';
-import TimerSettings from './screens/TimerSettings';
+import ScannerScreen from './screens/application/ScannerScreen';
+import SignInScreen from './screens/authentication/SignInScreen';
+import SignUpScreen from './screens/authentication/SignUpScreen';
+import TimerScreen from './screens/application/TimerScreen';
+import TimerSettings from './screens/application/TimerSettings';
 import { createStackNavigator } from '@react-navigation/stack';
 import { initPacedDB } from './helpers/fb-paced';
 

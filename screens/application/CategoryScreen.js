@@ -1,11 +1,11 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { addCategory, editCategory, removeCategory } from '../helpers/modifiers';
+import { addCategory, editCategory, removeCategory } from '../../helpers/modifiers';
 
 import { Image } from 'react-native-elements';
-import { categoryComparator } from '../helpers/comparators';
-import { initLocalData } from '../helpers/fb-paced';
-import { locateIndex } from '../helpers/finders';
+import { categoryComparator } from '../../helpers/comparators';
+import { initLocalData } from '../../helpers/fb-paced';
+import { locateIndex } from '../../helpers/finders';
 
 const CategoryScreen = ({ route, navigation }) => {
 

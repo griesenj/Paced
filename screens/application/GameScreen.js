@@ -1,10 +1,10 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { addGame, editGame, removeGame } from '../helpers/modifiers';
+import { addGame, editGame, removeGame } from '../../helpers/modifiers';
 
 import { Image } from 'react-native-elements';
-import { gameComparator } from '../helpers/comparators';
-import { initLocalData } from '../helpers/fb-paced';
+import { gameComparator } from '../../helpers/comparators';
+import { initLocalData } from '../../helpers/fb-paced';
 
 const GameScreen = ({ route, navigation }) => {
 

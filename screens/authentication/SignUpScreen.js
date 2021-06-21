@@ -2,7 +2,7 @@ import { FlatList, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithou
 import React, { useEffect, useState } from 'react';
 
 import { Input } from 'react-native-elements';
-import { createNewUser } from '../helpers/fb-paced';
+import { createNewUser } from '../../helpers/fb-paced';
 
 const SignUpScreen = ({ route, navigation }) => {
 
