@@ -1,13 +1,19 @@
 import { Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 
+import { Image } from 'react-native-elements';
 import React from 'react';
 
 const HomeScreen = ({ navigation }) => {
 
+    const logo = require("../../assets/paced-logo.png");
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
-                <Text style={styles.titleText}> PACED </Text>
+                <Image
+                    style={{ width: 282, height: 96, marginBottom: 20}}
+                    source={logo}
+                />
                 <TouchableOpacity style={styles.button}
                     onPress={() => {navigation.navigate("Sign In")}}
                 >

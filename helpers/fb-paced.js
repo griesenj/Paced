@@ -1,10 +1,10 @@
-import "firebase/database";
-import "firebase/auth";
+// import "firebase/database";
+// import "firebase/auth";
 
 import * as firebase from "firebase";
 
 import { firebaseConfig } from "./fb-credentials";
-import { sampleData } from "../defaults/SampleData";
+import { sampleData } from "../data/SampleData";
 
 // FIXME: STARTED REALTIME DB IN TEST MODE - NEED TO UPDATE READ/WRITE RULES EVENTUALLY (30 day limit)
 
