@@ -21,6 +21,9 @@ export function initLocalData(userId, updateFunc) {
 }
 
 export function storeDataItem(userId, item) {
+
+console.log('USER ID: ', userId);
+
   firebase.database().ref(`users/${userId}/pacedData/`).set(item);
 }
 

@@ -100,7 +100,7 @@ const TimerScreen = ({ route, navigation }) => {
 
         pacedCopy[gameIndex].category[categoryIndex].splits = savedData;
         setTimerPacedData(pacedCopy);
-        storeDataItem(pacedCopy);
+        storeDataItem(user, pacedCopy);
     };
 
     const updateDifferentialsOnSplit = (differential) => {
@@ -229,29 +229,29 @@ const TimerScreen = ({ route, navigation }) => {
     };
 
     const outputTime = (time) => {
-        var hours, minutes, seconds, centiseconds = 0;
+        var hours, minutes, seconds, deciseconds = 0;
 
         if (time < 0) {
             hours = Math.abs(Math.ceil(time / 36000));
             minutes = Math.abs(Math.ceil(time / 600) % 60);
             seconds = Math.abs(Math.ceil(time / 10) % 60);
-            centiseconds = parseInt(time.toString().slice(-1));
+            deciseconds = parseInt(time.toString().slice(-1));
         } else {
             hours = Math.floor(time / 36000);
             minutes = Math.floor(time / 600) % 60;
             seconds = Math.floor(time / 10) % 60;
-            centiseconds = parseInt(time.toString().slice(-1));
+            deciseconds = parseInt(time.toString().slice(-1));
         }
 
         if (hours == 0 && minutes == 0) {
-            return (time < 0) ? `-${seconds}.${centiseconds}` : 
-            `${seconds}.${centiseconds}`;
+            return (time < 0) ? `-${seconds}.${deciseconds}` : 
+            `${seconds}.${deciseconds}`;
         } else if (hours == 0) {
-            return (time < 0) ? `-${minutes}:${padNumber(seconds)}.${centiseconds}` : 
-            `${minutes}:${padNumber(seconds)}.${centiseconds}`;
+            return (time < 0) ? `-${minutes}:${padNumber(seconds)}.${deciseconds}` : 
+            `${minutes}:${padNumber(seconds)}.${deciseconds}`;
         } else {
-            return (time < 0) ? `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${centiseconds}` : 
-            `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${centiseconds}`;
+            return (time < 0) ? `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${deciseconds}` : 
+            `${hours}:${padNumber(minutes)}:${padNumber(seconds)}.${deciseconds}`;
         }
     };
 

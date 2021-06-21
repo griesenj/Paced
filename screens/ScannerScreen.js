@@ -27,10 +27,8 @@ const ScannerScreen = ({ navigation }) => {
         })();
     }, []);
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = ({ data }) => {
         setScanned(true);
-
-        // alert(`QR Code with type ${type} and data ${data} has been scanned` )
         navigation.navigate('Timer Settings', { data });
     };
 
