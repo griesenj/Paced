@@ -42,6 +42,13 @@ const SignInScreen = ({ route, navigation }) => {
                 >
                     <Text style={styles.buttonText}> SUBMIT </Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, {backgroundColor: '#242424'}]}
+                    onPress={() => {
+                        navigation.navigate("Home");
+                    }}
+                >
+                    <Text style={styles.buttonText}> Back </Text>
+                </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
     );
@@ -75,7 +82,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     button: {
-        backgroundColor: '#242424',
+        backgroundColor: 'darkblue',
         width: 200,
         margin: 10,
         borderRadius: 10,

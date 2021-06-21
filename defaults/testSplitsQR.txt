@@ -48,3 +48,42 @@ Poe Bottle,50,50,50
 Trials,50,50,50
 Gannondorf,50,50,50
 Gannon,50,50,50
+
+BOB (1),1490,1490,1490
+WF (5),2540,2540,4040
+CCM (8),2060,2060,6100
+Bowser 1,1240,1240,7340
+LLL (9),790,790,8130
+SSL (11),1010,1010,9140
+HMC (15),2200,2200,11340
+DDD (16),2670,2670,14010
+Bowser 2,1930,1930,15940
+Bowser 3,4590,4590,20530
+
+Mumbo's Mountain,50,50,50
+Treasure Trove Cove,50,50,100
+TTC Early,50,50,150
+Treasure Trove Cove,50,50,200
+Clanker's Cavern,50,50,250
+FP Early,50,50,300
+Freezeezy Peak,50,50,350
+450 Skip,50,50,400
+Mad Monster Mansion,50,50,450
+640 Skip,50,50,500
+Click Clock Wood,50,50,550
+Spring 1,50,50,600
+Summer,50,50,650
+Fall,50,50,700
+Click Clock Wood,50,50,750
+Rusty Bucket Bay,50,50,800
+Enter RBB,50,50,850
+Rusty Bucket Bay,50,50,900
+Gobi's Valley,50,50,950
+Enter GV,50,50,1000
+Gobi's Valley,50,50,1050
+Bubblegloop Swamp,50,50,1100
+Enter BGS,50,50,1150
+Bubblegloop Swamp,50,50,1200
+Furnace Fun,50,50,1250
+DoG,50,50,1300
+Grunty Fight,50,50,1350

@@ -32,11 +32,12 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 76,
         fontWeight: '600',
+        marginBottom: 10,
     },
     buttonText: {
         fontWeight: '400',
-        fontSize: 26,
-        padding: 5,
+        fontSize: 18,
+        padding: 10,
         textAlign: 'center',
         color: 'white'
     },
