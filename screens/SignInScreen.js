@@ -19,7 +19,7 @@ const SignInScreen = ({ route, navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
-                <Text style={styles.preferencesText}> Log In </Text>
+                <Text style={styles.titleText}> Sign In </Text>
                 <View style={styles.inputContainer}>
                     <Input
                         placeholder="Email"
@@ -35,12 +35,12 @@ const SignInScreen = ({ route, navigation }) => {
                         secureTextEntry={true}
                     />
                 </View>
-                <TouchableOpacity
+                <TouchableOpacity style={styles.button}
                     onPress={() => {
                         getExistingUserId(email, setUserId);
                     }}
                 >
-                    <Text style={styles.clearButtonText}> LOG IN </Text>
+                    <Text style={styles.buttonText}> SUBMIT </Text>
                 </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
@@ -56,15 +56,30 @@ const styles = StyleSheet.create({
     inputContainer: {
         width: 300,
     },
-    preferencesText: {
-        fontSize: 32,
-    },
     headerButtons: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 14,
         padding: 10,
-    }
+    },
+    titleText: {
+        fontSize: 32,
+        fontWeight: '600',
+        marginBottom: 10,
+    },
+    buttonText: {
+        fontWeight: '400',
+        fontSize: 18,
+        padding: 10,
+        textAlign: 'center',
+        color: 'white'
+    },
+    button: {
+        backgroundColor: '#242424',
+        width: 200,
+        margin: 10,
+        borderRadius: 10,
+    },
 });
 
 export default SignInScreen;

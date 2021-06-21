@@ -19,7 +19,7 @@ const SignUpScreen = ({ route, navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
-                <Text style={styles.preferencesText}> Create Account</Text>
+                <Text style={styles.titleText}> Create Account</Text>
                 <View style={styles.inputContainer}>
                     <Input
                         placeholder="Email"
@@ -35,12 +35,12 @@ const SignUpScreen = ({ route, navigation }) => {
                         secureTextEntry={true}
                     />
                 </View>
-                <TouchableOpacity
+                <TouchableOpacity style={styles.button}
                     onPress={() => {
                         createNewUser(email, password, setUserId)
                     }}
                 >
-                    <Text style={styles.clearButtonText}> CREATE ACCOUNT </Text>
+                    <Text style={styles.buttonText}> SUBMIT </Text>
                 </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
@@ -56,15 +56,30 @@ const styles = StyleSheet.create({
     inputContainer: {
         width: 300,
     },
-    preferencesText: {
+    titleText: {
         fontSize: 32,
+        fontWeight: '600',
+        marginBottom: 10,
     },
     headerButtons: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 14,
         padding: 10,
-    }
+    },
+    buttonText: {
+        fontWeight: '400',
+        fontSize: 18,
+        padding: 10,
+        textAlign: 'center',
+        color: 'white'
+    },
+    button: {
+        backgroundColor: '#242424',
+        width: 200,
+        margin: 10,
+        borderRadius: 10,
+    },
 });
 
 export default SignUpScreen;

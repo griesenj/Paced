@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     warningMessage: {
         color: 'red',
         fontWeight: 'bold'
-    }
+    },
 });
 
 export default TimerSettings;

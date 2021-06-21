@@ -21,7 +21,6 @@ export const removeGame = (userId, title, currentData) => {
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     dataCopy.splice(locateIndex(dataCopy, "title", title), 1);
 
-    // FIXME: TESTING
     if (dataCopy.length == 0) {
         dataCopy.push('empty');
     }
