@@ -50,41 +50,37 @@ const GameScreen = ({ route, navigation }) => {
         });
     });
 
-    const ViewNoGames = () => {
-        if (gamePacedData != null) {
-            return <View></View>
+    const renderGames = ({item}) => {     
+        if (item != 'empty')   {
+            return (
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('Categories', { 
+                            receivedPacedData: gamePacedData, receivedCurrentGame: item.title, user: user,
+                        });
+                    }}
+                    onLongPress={() => {
+                        navigation.navigate('Game Settings', {
+                            item,
+                        });
+                    }}
+                >
+                    <View style={styles.gameRow}>
+                        <Image 
+                            style={styles.imagePlaceholder}
+                            source={{uri: item.imageUrl}}
+                            resizeMode={'contain'}
+                            />
+                        <Text style={styles.gameText}>{item.title}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
         }
         return (
             <View style={{alignItems: 'center', marginTop: 20}}>
-                <Text style={{fontSize: 20}}>No existing games!</Text>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>No existing games!</Text>
                 <Text style={{fontSize: 16}}>Fix via the "Add / Edit" menu option.</Text>
             </View>
-        )
-    }
-
-    const renderGames = ({item}) => {       
-        return (
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('Categories', { 
-                        receivedPacedData: gamePacedData, receivedCurrentGame: item.title, user: user,
-                    });
-                }}
-                onLongPress={() => {
-                    navigation.navigate('Game Settings', {
-                        item,
-                    });
-                }}
-            >
-                <View style={styles.gameRow}>
-                    <Image 
-                        style={styles.imagePlaceholder}
-                        source={{uri: item.imageUrl}}
-                        resizeMode={'contain'}
-                        />
-                    <Text style={styles.gameText}>{item.title}</Text>
-                </View>
-            </TouchableOpacity>
         )
     };
 
@@ -99,7 +95,6 @@ const GameScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ViewNoGames/>
             <View style={styles.gamesListContainer}>
                 <FlatList
                     ItemSeparatorComponent={renderSeparator}

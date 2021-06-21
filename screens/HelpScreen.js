@@ -1,14 +1,7 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react';
-
-import { Input } from 'react-native-elements';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import { createNewUser } from '../helpers/fb-paced';
+import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const HelpScreen = ({ route, navigation }) => {
-
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
 
     useEffect(() => {
         navigation.setOptions({
@@ -18,13 +11,6 @@ const HelpScreen = ({ route, navigation }) => {
                 >
                     <Text style={styles.headerButtons}> Back </Text>
                 </TouchableOpacity>
-            ),
-            headerRight: () => (
-                <TouchableOpacity
-                onPress={() => {navigation.navigate('Games')}}
-                >
-                <Text style={styles.headerButtons}> Save </Text>
-                </TouchableOpacity> 
             ),
         }, []);
     }, []);

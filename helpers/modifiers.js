@@ -10,7 +10,7 @@ export const addGame = (userId, title, imageUrl, currentData) => {
     }
     
     var dataCopy = [];
-    if (currentData != null) {
+    if (currentData != 'empty') {
         dataCopy = JSON.parse(JSON.stringify(currentData));
     }
     dataCopy.push(newGameEntry);
@@ -20,6 +20,12 @@ export const addGame = (userId, title, imageUrl, currentData) => {
 export const removeGame = (userId, title, currentData) => {
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     dataCopy.splice(locateIndex(dataCopy, "title", title), 1);
+
+    // FIXME: TESTING
+    if (dataCopy.length == 0) {
+        dataCopy.push('empty');
+    }
+
     storeDataItem(userId, dataCopy);
 };
 
@@ -49,6 +55,11 @@ export const removeCategory = (userId, categoryToUpdate, currentGame, currentDat
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
     categoryArray.splice(locateIndex(categoryArray, "run", categoryToUpdate.run), 1);
+
+    if (categoryArray.length == 0) {
+        categoryArray.push('empty');
+    }
+
     storeDataItem(userId, dataCopy);
 };
 

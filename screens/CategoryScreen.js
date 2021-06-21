@@ -85,8 +85,8 @@ const CategoryScreen = ({ route, navigation }) => {
         }
         return (
             <View style={{alignItems: 'center', marginTop: 20}}>
-                <Text style={styles.categoryText}>No existing categories!</Text>
-                <Text style={styles.categoryText}>Fix via the "Add / Edit" menu option.</Text>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>No existing categories!</Text>
+                <Text style={{fontSize: 16}}>Fix via the "Add / Edit" menu option.</Text>
             </View>
         )
     };

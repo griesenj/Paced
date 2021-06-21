@@ -393,8 +393,8 @@ const TimerScreen = ({ route, navigation }) => {
         }
         return (
             <View style={{alignItems: 'center', marginTop: 20}}>
-                <Text style={styles.splitNameText}>No existing splits!</Text>
-                <Text style={styles.splitTimeText}>Fix via the "Add / Edit" menu option.</Text>
+                <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>No existing splits!</Text>
+                <Text style={{color: 'white', fontSize: 16}}>Fix via the "Add / Edit" menu option.</Text>
             </View>
         )
     };
