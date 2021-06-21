@@ -1,10 +1,10 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { addGame, editGame, removeGame } from '../helpers/modifiers';
-import { initLocalData, initPacedDB } from '../helpers/fb-paced';
 
 import { Image } from 'react-native-elements';
 import { gameComparator } from '../helpers/comparators';
+import { initLocalData } from '../helpers/fb-paced';
 
 const GameScreen = ({ route, navigation }) => {
 
@@ -12,11 +12,6 @@ const GameScreen = ({ route, navigation }) => {
     const { user } = route.params;
 
     useEffect(() => {
-        // try {
-        //   initPacedDB();
-        // } catch (err) {
-        //   console.log(err);
-        // }
         console.log('Initialized user data on Game Screen');
         console.log('User ID from signUp:', user);
         initLocalData(user, setGamePacedData);
@@ -24,14 +19,14 @@ const GameScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (route.params?.editOrDelete == false) {
-            (route.params.imageUrl != "") ? addGame(route.params.title, route.params.imageUrl, gamePacedData) :
-            addGame(route.params.title, ".", gamePacedData);
+            (route.params.imageUrl != "") ? addGame(user, route.params.title, route.params.imageUrl, gamePacedData) :
+            addGame(user, route.params.title, ".", gamePacedData);
         }
         if (route.params?.editOrDelete == true) {
             if (route.params?.title != "" && route.params?.imageUrl != "") {
-                editGame(route.params.receivedItemToUpdate.title, route.params.title, route.params.imageUrl, gamePacedData);
+                editGame(user, route.params.receivedItemToUpdate.title, route.params.title, route.params.imageUrl, gamePacedData);
             } else {
-                removeGame(route.params.receivedItemToUpdate.title, gamePacedData);
+                removeGame(user, route.params.receivedItemToUpdate.title, gamePacedData);
             }
         }
     }, [route.params?.title, route.params?.imageUrl, route.params?.editOrDelete, route.params?.receivedItemToUpdate]);
@@ -72,7 +67,7 @@ const GameScreen = ({ route, navigation }) => {
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('Categories', { 
-                        receivedPacedData: gamePacedData, receivedCurrentGame: item.title 
+                        receivedPacedData: gamePacedData, receivedCurrentGame: item.title, user: user,
                     });
                 }}
                 onLongPress={() => {

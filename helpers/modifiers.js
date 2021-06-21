@@ -2,7 +2,7 @@ import { locateIndex } from './finders';
 import { noPriorRunVal } from './constants';
 import { storeDataItem } from '../helpers/fb-paced';
 
-export const addGame = (title, imageUrl, currentData) => {
+export const addGame = (userId, title, imageUrl, currentData) => {
     const newGameEntry = {
         title: title,
         category: ['empty'],
@@ -14,23 +14,23 @@ export const addGame = (title, imageUrl, currentData) => {
         dataCopy = JSON.parse(JSON.stringify(currentData));
     }
     dataCopy.push(newGameEntry);
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 };
 
-export const removeGame = (title, currentData) => {
+export const removeGame = (userId, title, currentData) => {
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     dataCopy.splice(locateIndex(dataCopy, "title", title), 1);
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 };
 
-export const editGame = (originalTitle, newTitle, imageUrl, currentData) => {
+export const editGame = (userId, originalTitle, newTitle, imageUrl, currentData) => {
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     dataCopy[locateIndex(dataCopy, "title", originalTitle)].imageUrl = imageUrl;
     dataCopy[locateIndex(dataCopy, "title", originalTitle)].title = newTitle;
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 };
 
-export const addCategory = (run, currentGame, currentData) => {
+export const addCategory = (userId, run, currentGame, currentData) => {
     const newCategoryEntry = {
         run: run,
         splits: ['empty'],
@@ -42,24 +42,24 @@ export const addCategory = (run, currentGame, currentData) => {
     }
     
     dataCopy[locateIndex(dataCopy, 'title', currentGame)].category.push(newCategoryEntry);
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 };
 
-export const removeCategory = (categoryToUpdate, currentGame, currentData) => {
+export const removeCategory = (userId, categoryToUpdate, currentGame, currentData) => {
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
     categoryArray.splice(locateIndex(categoryArray, "run", categoryToUpdate.run), 1);
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 };
 
-export const editCategory = (newRun, categoryToUpdate, currentGame, currentData) => {
+export const editCategory = (userId, newRun, categoryToUpdate, currentGame, currentData) => {
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
     categoryArray[locateIndex(categoryArray, "run", categoryToUpdate.run)].run = newRun;
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 };
 
-export const addSplits = (splitName, currentData, currentGame, currentCategory, setOverallStateFunc, setSplitsFunc) => {
+export const addSplits = (userId, splitName, currentData, currentGame, currentCategory, setOverallStateFunc, setSplitsFunc) => {
     const newSplitsEntry = {
         split: splitName,
         goldSeg: noPriorRunVal,
@@ -79,10 +79,10 @@ export const addSplits = (splitName, currentData, currentGame, currentCategory, 
     categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits.push(newSplitsEntry);
     setOverallStateFunc(dataCopy);
     setSplitsFunc(categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits);
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 };
 
-export const addSplitsFromJSON = (qrArrayJSON, currentData, currentGame, currentCategory, setOverallStateFunc, setSplitsFunc) => {
+export const addSplitsFromJSON = (userId, qrArrayJSON, currentData, currentGame, currentCategory, setOverallStateFunc, setSplitsFunc) => {
     var dataCopy = JSON.parse(JSON.stringify(currentData));
     var categoryArray = dataCopy[locateIndex(dataCopy, 'title', currentGame)].category;
 
@@ -93,10 +93,10 @@ export const addSplitsFromJSON = (qrArrayJSON, currentData, currentGame, current
     categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits = qrArrayJSON;
     setOverallStateFunc(dataCopy);
     setSplitsFunc(categoryArray[locateIndex(categoryArray, 'run', currentCategory)].splits);
-    storeDataItem(dataCopy);
+    storeDataItem(userId, dataCopy);
 }
 
-export const converQrSplitsToJSON = (validQr) => {
+export const convertQrSplitsToJSON = (validQr) => {
     var newSplitsArr = [];
     var splitJSON = {
         split: '',

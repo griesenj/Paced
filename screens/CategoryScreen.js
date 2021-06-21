@@ -9,30 +9,27 @@ import { locateIndex } from '../helpers/finders';
 
 const CategoryScreen = ({ route, navigation }) => {
 
-    const { receivedPacedData, receivedCurrentGame } = route.params;
+    const { receivedPacedData, receivedCurrentGame, user } = route.params;
     const [categoryPacedData, setCategoryPacedData] = useState(receivedPacedData);
     const [currentGame] = useState(receivedCurrentGame);
 
     useEffect(() => {
-        try {
-            console.log('INIT CATEGORY FROM FIREBASE');
-            initLocalData(setCategoryPacedData);
-        } catch (err) {
-          console.log(err);
-        }
+        console.log('Initialized user data on Category Screen');
+        console.log('User ID from gameScreen:', user);
+        initLocalData(user, setCategoryPacedData);
     }, []);
 
     useEffect(() => {
         if (route.params?.editOrDelete == false) {
             if (route.params.runTitle != "") {
-                addCategory(route.params.runTitle, currentGame, categoryPacedData);
+                addCategory(user, route.params.runTitle, currentGame, categoryPacedData);
             }
         }
         if (route.params?.editOrDelete == true) {
             if (route.params?.runTitle != "") {
-                editCategory(route.params.runTitle, route.params.receivedItemToUpdate, currentGame, categoryPacedData);
+                editCategory(user, route.params.runTitle, route.params.receivedItemToUpdate, currentGame, categoryPacedData);
             } else {
-                removeCategory(route.params.receivedItemToUpdate, currentGame, categoryPacedData);
+                removeCategory(user, route.params.receivedItemToUpdate, currentGame, categoryPacedData);
             }
         }
     }, [route.params?.runTitle, route.params?.editOrDelete, route.params?.receivedItemToUpdate]);
@@ -63,7 +60,7 @@ const CategoryScreen = ({ route, navigation }) => {
                     onPress={() => {    
                         navigation.navigate('Timer', { 
                             receivedPacedData: categoryPacedData, receivedCurrentGame: currentGame, 
-                            receivedCurrentCategory: item.run 
+                            receivedCurrentCategory: item.run, user: user,
                         });
                     }}
                     onLongPress={() => {

@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { addSplits, addSplitsFromJSON, converQrSplitsToJSON } from '../helpers/modifiers';
+import { addSplits, addSplitsFromJSON, convertQrSplitsToJSON } from '../helpers/modifiers';
 
 import { Image } from 'react-native-elements';
 import { TouchableHighlight } from 'react-native-gesture-handler';
@@ -8,14 +8,9 @@ import { locateIndex } from '../helpers/finders';
 import { noPriorRunVal } from '../helpers/constants';
 import { storeDataItem } from '../helpers/fb-paced';
 
-// TODO: If time allows, determine how to unsplit after ending the run?
-// Would probably need to leave timer running and log finish time as a new state
-// FIXME: Need way to prevent timer from starting if splits are empty **************
-// FIXME: Determine how to handle "no prior run" data for displaying times (init w/ null value?)
-
 const TimerScreen = ({ route, navigation }) => {
    
-    const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData } = route.params;
+    const { receivedCurrentGame, receivedCurrentCategory, receivedPacedData, user } = route.params;
     const [currentGame] = useState(receivedCurrentGame);
     const [currentCategory] = useState(receivedCurrentCategory);
     const [timerPacedData, setTimerPacedData] = useState(receivedPacedData);
@@ -39,12 +34,12 @@ const TimerScreen = ({ route, navigation }) => {
     useEffect(() => {
         if (route.params?.splitName) {
             console.log('ROUTE PARAMS: ', route.params.splitName);
-            addSplits(route.params.splitName, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
+            addSplits(user, route.params.splitName, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
         };
         if (route.params?.scannedData) {
             console.log('ROUTE PARAMS: ', route.params.scannedData);
-            const jsonSplits = converQrSplitsToJSON(route.params.scannedData);
-            addSplitsFromJSON(jsonSplits, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
+            const jsonSplits = convertQrSplitsToJSON(route.params.scannedData);
+            addSplitsFromJSON(user, jsonSplits, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
         }
     }, [route.params?.splitName, route.params?.scannedData]);
 

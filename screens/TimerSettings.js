@@ -5,9 +5,6 @@ import React, { useEffect, useState } from 'react';
 const TimerSettings = ({ route, navigation }) => {
 
     const [splitName, setSplitName] = useState("");
-
-    // TODO: Need to add ability to add multiple splits from the settings screen at a time (also index ordering?)
-    const [numSplits, setNumSplits] = useState(1);
     const [scannedData, setScannedData] = useState(null);
 
     useEffect(() => {

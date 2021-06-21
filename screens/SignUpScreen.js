@@ -12,9 +12,6 @@ const SignUpScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (userId) {
-
-            console.log('USER ID SIGNUPSCREEN: ', userId);
-
             navigation.navigate("Games", { user: userId });
         }
     }, [userId]);
@@ -28,11 +25,14 @@ const SignUpScreen = ({ route, navigation }) => {
                         placeholder="Email"
                         value={email}
                         onChangeText={(val) => setEmail(val)}
+                        autoCapitalize="none"
                     />
                     <Input
                         placeholder="Password"
                         value={password}
                         onChangeText={(val) => setPassword(val)}
+                        autoCapitalize="none"
+                        secureTextEntry={true}
                     />
                 </View>
                 <TouchableOpacity

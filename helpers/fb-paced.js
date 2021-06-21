@@ -20,8 +20,8 @@ export function initLocalData(userId, updateFunc) {
     });
 }
 
-export function storeDataItem(item) {
-  firebase.database().ref("pacedData/").set(item);
+export function storeDataItem(userId, item) {
+  firebase.database().ref(`users/${userId}/pacedData/`).set(item);
 }
 
 export function createNewUser(email, password, logUserId) {
@@ -30,9 +30,8 @@ export function createNewUser(email, password, logUserId) {
     firebase.database().ref(`users/${response.user.uid}`).set({
       id: response.user.uid,
       email: email,
-      password: password,
       pacedData: sampleData,
-    })
+    });
     logUserId(response.user.uid);
   })
 }
@@ -47,9 +46,4 @@ export function getExistingUserId(email, logUserId) {
       }
     }
   });
-
-  // var query = firebase.database().ref('users');
-  // query.once('value').then((snapshot) => {
-  //   console.log("Snapshot: ", snapshot);
-  // })
 };
