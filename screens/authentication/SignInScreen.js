@@ -76,12 +76,6 @@ const styles = StyleSheet.create({
     inputContainer: {
         width: 300,
     },
-    headerButtons: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 14,
-        padding: 10,
-    },
     titleText: {
         fontSize: 32,
         fontWeight: '600',

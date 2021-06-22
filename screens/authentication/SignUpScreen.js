@@ -1,4 +1,4 @@
-import { FlatList, Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
 
 import { Input } from 'react-native-elements';
@@ -80,12 +80,6 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: '600',
         marginBottom: 10,
-    },
-    headerButtons: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 14,
-        padding: 10,
     },
     buttonText: {
         fontWeight: '400',

@@ -1,12 +1,9 @@
-// import "firebase/database";
-// import "firebase/auth";
-
 import * as firebase from "firebase";
 
 import { firebaseConfig } from "./fb-credentials";
 import { sampleData } from "../data/SampleData";
 
-// FIXME: STARTED REALTIME DB IN TEST MODE - NEED TO UPDATE READ/WRITE RULES EVENTUALLY (30 day limit)
+// FIXME: Started realtime DB in test mode - will need to update read/write rules eventually (30 day limit)
 
 export function initPacedDB() {
   firebase.initializeApp(firebaseConfig);

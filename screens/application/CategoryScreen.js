@@ -14,8 +14,6 @@ const CategoryScreen = ({ route, navigation }) => {
     const [currentGame] = useState(receivedCurrentGame);
 
     useEffect(() => {
-        console.log('Initialized user data on Category Screen');
-        console.log('User ID from gameScreen:', user);
         initLocalData(user, setCategoryPacedData);
     }, []);
 
@@ -64,9 +62,6 @@ const CategoryScreen = ({ route, navigation }) => {
                         });
                     }}
                     onLongPress={() => {
-
-                        console.log('CurrentGame: ', currentGame);
-
                         navigation.navigate('Category Settings', {
                             item,
                         });
@@ -74,7 +69,7 @@ const CategoryScreen = ({ route, navigation }) => {
                 >
                     <View style={styles.categoryRow}>
                         <Image 
-                            style={styles.imagePlaceholder}
+                            style={styles.categoryImage}
                             source={{uri: categoryPacedData[locateIndex(categoryPacedData, 'title', currentGame)].imageUrl}}
                             resizeMode={'contain'}
                             />
@@ -144,7 +139,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         padding: 10,
     },
-    imagePlaceholder: {
+    categoryImage: {
         height: 75,
         width: 100,
     },

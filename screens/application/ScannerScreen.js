@@ -55,13 +55,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'black',
     },
-    scannerButtonText: {
-        fontWeight: 'bold',
-        fontSize: 64,
-    },
-    timerSettingsText: {
-        fontSize: 32,
-    },
     headerButtons: {
         color: 'white',
         fontWeight: 'bold',

@@ -33,11 +33,9 @@ const TimerScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (route.params?.splitName) {
-            console.log('ROUTE PARAMS: ', route.params.splitName);
             addSplits(user, route.params.splitName, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
         };
         if (route.params?.scannedData) {
-            console.log('ROUTE PARAMS: ', route.params.scannedData);
             const jsonSplits = convertQrSplitsToJSON(route.params.scannedData);
             addSplitsFromJSON(user, jsonSplits, timerPacedData, currentGame, currentCategory, setTimerPacedData, setData);
         }
@@ -366,16 +364,13 @@ const TimerScreen = ({ route, navigation }) => {
                     <View style={styles.splitRow}>
                         <View style={styles.splitIcon}>
                             <Image 
-                                style={styles.splitIconImagePlaceholder}
+                                style={styles.splitIconImage}
                                 source={{uri: 'https://static.wikia.nocookie.net/zelda_gamepedia_en/images/1/1e/OoT_Spiritual_Stone_of_Water_Model.png/revision/latest?cb=20101211015551'}}
                                 resizeMode={'center'}
                                 />
                         </View>
                         <View style={styles.splitLeft}>
                             <Text style={styles.splitNameText}>{item.split}</Text>
-                            {/* <Text style={styles.splitTimeText}> 
-                                PB | Seg: {outputTime(item.pbSeg)} : Total: {outputTime(item.pbTotal)}
-                            </Text> */}
                             <Text style={styles.splitTimeText}> 
                                 Segment: {outputTime(item.runSeg)}
                             </Text>
@@ -408,10 +403,7 @@ const TimerScreen = ({ route, navigation }) => {
         );
     };
 
-    // TODO: When timer is active, should NOT be able to exit screen (hide back/edit buttons)
-    // Can watch active flag and update whenever that changes (add rending logic for touchableOpacity)
-
-    // NOTE: Added dependency array here to ensure it only runs a single time (timer performance hit)
+    // NOTE: Added dependency array here to ensure it only runs a single time (prevents timer performance hit)
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
@@ -514,7 +506,6 @@ const styles = StyleSheet.create({
     splitTimeText: {
         fontSize: 14,
         color: 'white',
-        // marginLeft: 5,
         padding: 2,
     },
     timerContainer: {
@@ -534,18 +525,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-
-    // TODO: Consolidate duplicative styles for reuse
-    
-    splitButtonText: {
-        fontSize: 40,
-        fontWeight: 'bold',
-        color: 'black',
-        flexDirection: 'row',
-        marginBottom: 10,
-    },
-    splitIconImagePlaceholder: {
+    },   
+    splitIconImage: {
         height: 30,
         width: 30,
         marginLeft: 3,

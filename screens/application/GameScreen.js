@@ -12,8 +12,6 @@ const GameScreen = ({ route, navigation }) => {
     const { user } = route.params;
 
     useEffect(() => {
-        console.log('Initialized user data on Game Screen');
-        console.log('User ID from signUp:', user);
         initLocalData(user, setGamePacedData);
     }, []);
 
@@ -67,7 +65,7 @@ const GameScreen = ({ route, navigation }) => {
                 >
                     <View style={styles.gameRow}>
                         <Image 
-                            style={styles.imagePlaceholder}
+                            style={styles.gameImage}
                             source={{uri: item.imageUrl}}
                             resizeMode={'contain'}
                             />
@@ -138,7 +136,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         padding: 10,
     },
-    imagePlaceholder: {
+    gameImage: {
         height: 75,
         width: 100,
     },

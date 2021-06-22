@@ -1,6 +1,7 @@
-import { Button, Input } from 'react-native-elements';
 import { Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
+
+import { Input } from 'react-native-elements';
 
 const TimerSettings = ({ route, navigation }) => {
 
@@ -77,7 +78,7 @@ const TimerSettings = ({ route, navigation }) => {
     const DataView = () => {
         if (scannedData != null) {
             return  (
-                <ScrollView style={styles.scrollViewContainer}>
+                <ScrollView>
                     <View onStartShouldSetResponder={() => true}>
                         <Text style={styles.scrollViewText}>{scannedData}</Text>
                     </View>
@@ -139,8 +140,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
         padding: 10,
-    },
-    scrollViewContainer: {
     },
     scrollViewText: {
         fontSize: 20,
