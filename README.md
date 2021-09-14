@@ -1,5 +1,5 @@
 # Paced
-Video game speedrun timer developed for mobile with React Native.
+Video game speedrun timer developed for mobile with JavaScript and React Native.
 
 ## Features
 - Detailed user instructions provided on "Help" menu
@@ -35,20 +35,5 @@ Video game speedrun timer developed for mobile with React Native.
 | ![Paced10](https://i.imgur.com/sQHoRsg.png) | ![Paced11](https://i.imgur.com/gD1b4NK.png) | ![Paced12](https://i.imgur.com/HjbEUNG.png) |
 |:---:|:---:|:---:|
 
-| ![Paced13](https://i.imgur.com/NgGbmRk.jpeg) | ![Paced14](https://i.imgur.com/khvZ0eu.png) |
-|:---:|:---:|
-
-https://i.imgur.com/tANWfze.png
-https://i.imgur.com/YdB2Gni.png
-https://i.imgur.com/oGymQXB.png
-https://i.imgur.com/1Hn9UBB.png
-https://i.imgur.com/n2Lp95e.png
-https://i.imgur.com/Cc9hJr0.png
-https://i.imgur.com/U3gUw9B.png
-https://i.imgur.com/QmDYK5q.png
-https://i.imgur.com/fw1TOya.png
-https://i.imgur.com/sQHoRsg.png
-https://i.imgur.com/gD1b4NK.png
-https://i.imgur.com/HjbEUNG.png
-https://i.imgur.com/NgGbmRk.jpeg
-https://i.imgur.com/khvZ0eu.png
+| ![Paced13](https://i.imgur.com/NgGbmRk.jpeg) | ![Paced14](https://i.imgur.com/khvZ0eu.png) |  |
+|:---:|:---:|:---:|
