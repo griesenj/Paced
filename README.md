@@ -24,6 +24,12 @@ Video game speedrun timer developed for mobile with React Native.
 - Live application demo can be found in the second half of the [following presentation video](https://youtu.be/5up4RnrGAmk).
 
 | ![Paced1](https://i.imgur.com/tANWfze.png) | ![Paced2](https://i.imgur.com/YdB2Gni.png) |
+| ![Paced3](https://i.imgur.com/oGymQXB.png) | ![Paced4](https://i.imgur.com/1Hn9UBB.png) |
+| ![Paced1](https://i.imgur.com/tANWfze.png) | ![Paced2](https://i.imgur.com/YdB2Gni.png) |
+| ![Paced1](https://i.imgur.com/tANWfze.png) | ![Paced2](https://i.imgur.com/YdB2Gni.png) |
+| ![Paced1](https://i.imgur.com/tANWfze.png) | ![Paced2](https://i.imgur.com/YdB2Gni.png) |
+| ![Paced1](https://i.imgur.com/tANWfze.png) | ![Paced2](https://i.imgur.com/YdB2Gni.png) |
+| ![Paced1](https://i.imgur.com/tANWfze.png) | ![Paced2](https://i.imgur.com/YdB2Gni.png) |
 |:---:|:---:|
 
 https://i.imgur.com/tANWfze.png
