@@ -35,5 +35,5 @@ Video game speedrun timer developed for mobile with JavaScript and React Native.
 | ![Paced10](https://i.imgur.com/sQHoRsg.png) | ![Paced11](https://i.imgur.com/gD1b4NK.png) | ![Paced12](https://i.imgur.com/HjbEUNG.png) |
 |:---:|:---:|:---:|
 
-| ![Paced13](https://i.imgur.com/NgGbmRk.jpeg) | ![Paced14](https://i.imgur.com/khvZ0eu.png) |  |
-|:---:|:---:|:---:|
+| ![Paced13](https://i.imgur.com/NgGbmRk.jpeg) | ![Paced14](https://i.imgur.com/khvZ0eu.png) |
+|:---:|:---:|
