@@ -14,7 +14,6 @@ Video game speedrun timer developed for mobile with JavaScript and React Native.
 ## Technologies
 - JavaScript
 - React Native
-- NodeJS
 - Expo GO
 - Firebase (cloud data persistence)
 - Windows Subsystem for Linux (WSL2)
